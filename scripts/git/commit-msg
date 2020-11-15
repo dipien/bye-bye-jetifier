@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# This hook script performs the following tasks:
+# - Skips continuous integration when a commit has changes that don't affect the build
+
+# https://circleci.com/blog/circleci-hacks-automate-the-decision-to-skip-builds-using-a-git-hook/
+function skip_ci_if_needed()
+{
+    if [[ ! -a .ciignore ]]; then
+       return # If .ciignore doesn't exists, just quit this function
+    fi
+
+    is_amend=$(ps -ocommand= -p $PPID | grep -e '--amend')
+    if [[ -n "$is_amend" ]]; then
+        return # It's a commit amending, just quit this function
+    fi
+
+    changes=( `git diff --name-only --cached` )
+
+    # Load the patterns we want to skip into an array
+    while IFS= read -r line; do
+        # ignore comments and empty lines
+        if [[ ! "$line" =~ ^#.*$ ]] && [[ ! -z "$line" ]]; then
+            blacklist+=("$line")
+        fi
+    done < .ciignore
+
+    for i in "${blacklist[@]}"
+    do
+         # Remove the current pattern from the list of changes
+        changes=( ${changes[@]/$i/} )
+
+        if [[ ${#changes[@]} -eq 0 ]]; then
+            # If we've exhausted the list of changes before we've finished going
+            # through patterns, that's okay, just quit the loop
+            break
+        fi
+    done
+
+    if [[ ${#changes[@]} -gt 0 ]]; then
+        # If there's still changes left, then we have stuff to build, leave the commit alone.
+        return
+    fi
+
+    # Append "[skip ci]" to the commit message
+    echo "[skip ci]" >> $1
+    return
+}
+
+# main
+
+commit_msg=$1
+
+skip_ci_if_needed $commit_msg
+
+exit 0

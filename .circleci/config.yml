@@ -1,0 +1,183 @@
+version: 2.1
+
+references:
+
+  working_dir: &working_dir
+                 ~/project
+
+executors:
+  jdk_executor:
+    working_directory: *working_dir
+    docker:
+      - image: circleci/openjdk:11-jdk
+    environment:
+      JVM_OPTS: -Xmx3200m
+      GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.caching=true
+
+commands:
+  restore_gradle_cache:
+    steps:
+      - restore_cache:
+          keys:
+            - v1-gradle_cache-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}-{{ .Branch }}-{{ checksum "buildSrc/src/main/kotlin/Libs.kt" }}-{{ checksum "buildSrc/src/main/kotlin/BuildLibs.kt" }}
+            - v1-gradle_cache-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}-{{ .Branch }}
+            - v1-gradle_cache-
+
+  save_gradle_cache:
+    steps:
+      - save_cache:
+          key: v1-gradle_cache-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}-{{ .Branch }}-{{ checksum "buildSrc/src/main/kotlin/Libs.kt" }}-{{ checksum "buildSrc/src/main/kotlin/BuildLibs.kt" }}
+          paths:
+            - ~/.gradle
+
+  attach_to_workspace:
+    steps:
+      - attach_workspace:
+          at: ~/
+
+  persist_gradle_build_cache:
+    steps:
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - gradle-build-cache
+
+jobs:
+  gradleCache:
+    executor: jdk_executor
+    steps:
+      - checkout
+      - restore_gradle_cache
+      - run:
+          name: Download dependencies
+          command: ./gradlew dependencies --stacktrace
+      - save_gradle_cache
+      - persist_gradle_build_cache
+
+  ktlint:
+    executor: jdk_executor
+    steps:
+      - checkout
+      - restore_gradle_cache
+      - run:
+          name: Ktlint
+          command: ./gradlew ktlint --stacktrace
+
+  security:
+    executor: jdk_executor
+    steps:
+      - checkout
+      - restore_gradle_cache
+      - run:
+          name: Verify the integrity of the Gradle Wrapper JAR
+          command: |
+            # https://docs.gradle.org/current/userguide/gradle_wrapper.html#wrapper_checksum_verification
+            cd gradle/wrapper
+            gradleVersion=$(grep "distributionUrl" gradle-wrapper.properties | grep -Po "(\d+\.)+\d+")
+            curl --location --output gradle-wrapper.jar.sha256 https://services.gradle.org/distributions/gradle-${gradleVersion}-wrapper.jar.sha256
+            echo "  gradle-wrapper.jar" >> gradle-wrapper.jar.sha256
+            sha256sum --check gradle-wrapper.jar.sha256
+
+  build:
+    executor: jdk_executor
+    steps:
+      - checkout
+      - restore_gradle_cache
+      - attach_to_workspace
+      - run:
+          name: Assemble
+          command: ./gradlew assemble --stacktrace
+      - persist_gradle_build_cache
+      - store_artifacts:
+          path: ./build/libs
+          destination: jars
+
+  test:
+    executor: jdk_executor
+    steps:
+      - checkout
+      - restore_gradle_cache
+      - attach_to_workspace
+      - run:
+          name: Run tests
+          command: ./gradlew test --stacktrace
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/junit/
+            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/junit/ \;
+          when: always
+      - store_test_results:
+          path: ~/junit
+      - store_artifacts:
+          path: ./build/reports/tests/test
+          destination: tests
+
+  validatePlugins:
+    executor: jdk_executor
+    steps:
+      - checkout
+      - restore_gradle_cache
+      - attach_to_workspace
+      - run:
+          name: Validate plugins
+          command: ./gradlew validatePlugins --stacktrace
+
+  publish:
+    executor: jdk_executor
+    steps:
+      - checkout
+      - restore_gradle_cache
+      - attach_to_workspace
+      - run:
+          name: Uploading to Nexus Sonatype
+          command: ./gradlew publish -PLOCAL_UPLOAD=false --refresh-dependencies --stacktrace
+
+  upgradeDependencies:
+    executor: jdk_executor
+    steps:
+      - checkout
+      - restore_gradle_cache
+      - add_ssh_keys:
+          fingerprints:
+            - "83:20:2b:71:67:9c:01:43:fe:ad:82:dc:e0:b6:b4:61"
+      - run:
+          name: Upgrade Dependencies
+          command: ./gradlew upgradeDependencies -PpullRequestEnabled=true --stacktrace
+
+workflows:
+  commit:
+    jobs:
+      - gradleCache
+      - security
+      - ktlint
+      - build:
+          requires:
+            - gradleCache
+      - test:
+          requires:
+            - build
+      - validatePlugins:
+          requires:
+            - build
+      - publish:
+          filters:
+            branches:
+              only:
+                - master
+                - production
+          requires:
+            - ktlint
+            - test
+            - validatePlugins
+            - security
+  weekly:
+    triggers:
+      - schedule:
+          cron: "0 0 * * 0"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - upgradeDependencies

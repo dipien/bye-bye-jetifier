@@ -1,0 +1,7 @@
+if (System.getenv("CI") == "true") {
+	buildCache {
+		local {
+			directory = new File(System.getProperty("user.home"), "/gradle-build-cache")
+		}
+	}
+}

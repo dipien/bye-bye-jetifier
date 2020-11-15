@@ -1,0 +1,108 @@
+ext.PROJECT_NAME = "Bye bye Jetifier"
+ext.ARTIFACT_ID = "bye-bye-jetifier"
+group = "com.dipien"
+
+apply plugin: "com.jdroidtools.gradle.plugin"
+apply plugin: "com.gradle.plugin-publish"
+
+buildscript {
+	dependencies {
+		classpath(BuildLibs.JDROID_GRADLE_PROJECT_PLUGIN)
+	}
+}
+
+dependencies {
+	testImplementation(Libs.JUNIT)
+}
+
+gradlePlugin {
+	plugins {
+		byeByeJetifierPlugin {
+			id = "com.dipien.byebyejetifier"
+			implementationClass = "com.dipien.byebyejetifier.ByeByeJetifierGradlePlugin"
+		}
+	}
+}
+
+pluginBundle {
+	website = "https://byebyejetifier.dipien.com/"
+	vcsUrl = "https://https://github.com/dipien/bye-bye-jetifier"
+	description = "Say bye-bye to Android Jetifier"
+	tags = ["gradle", "plugin", "jetifier", "android"]
+
+	plugins {
+		byeByeJetifierPlugin {
+			displayName = "Bye bye Jetifier"
+		}
+	}
+}
+
+jdroid {
+	publishingPom = new Action<org.gradle.api.publish.maven.MavenPom>() {
+		@Override
+		public void execute(org.gradle.api.publish.maven.MavenPom mavenPom) {
+			mavenPom.getName().set("bye-bye-jetifier");
+			mavenPom.getDescription().set("Say bye-bye to Android Jetifier");
+
+			mavenPom.getUrl().set("https://byebyejetifier.dipien.com");
+			mavenPom.getInceptionYear().set("2020");
+			mavenPom.organization(new Action<MavenPomOrganization>() {
+				@Override
+				public void execute(MavenPomOrganization mavenPomOrganization) {
+					mavenPomOrganization.getName().set("Dipien");
+					mavenPomOrganization.getUrl().set("https://dipien.com");
+				}
+
+			});
+			mavenPom.licenses(new Action<MavenPomLicenseSpec>() {
+				@Override
+				public void execute(MavenPomLicenseSpec mavenPomLicenseSpec) {
+					mavenPomLicenseSpec.license(new Action<MavenPomLicense>() {
+						@Override
+						public void execute(MavenPomLicense mavenPomLicense) {
+							mavenPomLicense.getName().set("The Apache License, Version 2.0");
+							mavenPomLicense.getUrl().set("http://www.apache.org/licenses/LICENSE-2.0.txt");
+							mavenPomLicense.getDistribution().set("repo");
+						}
+
+					});
+				}
+
+			});
+			mavenPom.developers(new Action<MavenPomDeveloperSpec>() {
+				@Override
+				public void execute(MavenPomDeveloperSpec mavenPomDeveloperSpec) {
+					mavenPomDeveloperSpec.developer(new Action<MavenPomDeveloper>() {
+						@Override
+						public void execute(MavenPomDeveloper mavenPomDeveloper) {
+							mavenPomDeveloper.getName().set("Maxi Rosson");
+							mavenPomDeveloper.getEmail().set("maxi@dipien.com");
+						}
+
+					});
+				}
+
+			});
+
+			mavenPom.scm(new Action<MavenPomScm>() {
+				@Override
+				public void execute(MavenPomScm mavenPomScm) {
+					mavenPomScm.getConnection().set("scm:git:" + jdroid.getRepositorySshUrl());
+					mavenPomScm.getDeveloperConnection().set("scm:git:" + jdroid.getRepositorySshUrl());
+					mavenPomScm.getUrl().set(jdroid.getRepositorySshUrl());
+				}
+
+			});
+			mavenPom.issueManagement(new Action<MavenPomIssueManagement>() {
+				@Override
+				public void execute(MavenPomIssueManagement mavenPomIssueManagement) {
+					mavenPomIssueManagement.getSystem().set("GitHub");
+					mavenPomIssueManagement.getUrl().set(jdroid.getRepositoryUrl() + "/issues");
+				}
+
+			});
+
+		}
+
+	};
+}

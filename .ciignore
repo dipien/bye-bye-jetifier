@@ -1,0 +1,11 @@
+# If a commit has changes that only affect the files specified here, then we add "[skip ci]" to the commit message
+# so that Circle Ci doesn't execute the continuous integration.
+**.md
+scripts/**
+wiki/**
+.gitignore
+**/.gitignore
+.editorconfig
+.gitattributes
+.github/**
+.idea/**
