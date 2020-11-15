@@ -1,5 +1,7 @@
 buildscript {
+	ext.kotlin_version = "1.4.10"
 	repositories {
+		google()
 		jcenter()
 		String localMavenRepo = project.hasProperty('LOCAL_MAVEN_REPO') ? project.ext.get('LOCAL_MAVEN_REPO') : System.getenv('LOCAL_MAVEN_REPO')
 		if (localMavenRepo != null) {
@@ -10,26 +12,18 @@ buildscript {
 
 	buildscript {
 		dependencies {
+			classpath("com.android.tools.build:gradle:4.1.0")
+			classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
 			classpath("com.dipien:bye-bye-jetifier:1.0.0-SNAPSHOT")
 		}
 	}
 }
-
-apply plugin: "java"
 
 allprojects {
 	repositories {
 		jcenter()
 		google()
 	}
-
-	buildscript {
-		repositories {
-			google()
-			jcenter()
-		}
-	}
-
 }
 
 apply plugin: "com.dipien.byebyejetifier"
