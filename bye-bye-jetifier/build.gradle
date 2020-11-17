@@ -27,7 +27,7 @@ gradlePlugin {
 pluginBundle {
 	website = "https://byebyejetifier.dipien.com/"
 	vcsUrl = "https://https://github.com/dipien/bye-bye-jetifier"
-	description = "Say bye-bye to Android Jetifier"
+	description = "Gradle Plugin to verify if you can keep Android Jetifier disabled"
 	tags = ["gradle", "plugin", "jetifier", "android"]
 
 	plugins {
@@ -42,7 +42,7 @@ jdroid {
 		@Override
 		public void execute(org.gradle.api.publish.maven.MavenPom mavenPom) {
 			mavenPom.getName().set("bye-bye-jetifier");
-			mavenPom.getDescription().set("Say bye-bye to Android Jetifier");
+			mavenPom.getDescription().set("Gradle Plugin to verify if you can keep Android Jetifier disabled");
 
 			mavenPom.getUrl().set("https://byebyejetifier.dipien.com");
 			mavenPom.getInceptionYear().set("2020");
