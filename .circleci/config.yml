@@ -15,20 +15,6 @@ executors:
       GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.caching=true
 
 commands:
-  restore_gradle_cache:
-    steps:
-      - restore_cache:
-          keys:
-            - v1-gradle_cache-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}-{{ .Branch }}-{{ checksum "buildSrc/src/main/kotlin/Libs.kt" }}-{{ checksum "buildSrc/src/main/kotlin/BuildLibs.kt" }}
-            - v1-gradle_cache-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}-{{ .Branch }}
-            - v1-gradle_cache-
-
-  save_gradle_cache:
-    steps:
-      - save_cache:
-          key: v1-gradle_cache-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}-{{ .Branch }}-{{ checksum "buildSrc/src/main/kotlin/Libs.kt" }}-{{ checksum "buildSrc/src/main/kotlin/BuildLibs.kt" }}
-          paths:
-            - ~/.gradle
 
   attach_to_workspace:
     steps:
@@ -43,22 +29,11 @@ commands:
             - gradle-build-cache
 
 jobs:
-  gradleCache:
-    executor: jdk_executor
-    steps:
-      - checkout
-      - restore_gradle_cache
-      - run:
-          name: Download dependencies
-          command: ./gradlew dependencies --stacktrace
-      - save_gradle_cache
-      - persist_gradle_build_cache
 
   ktlint:
     executor: jdk_executor
     steps:
       - checkout
-      - restore_gradle_cache
       - run:
           name: Ktlint
           command: ./gradlew ktlint --stacktrace
@@ -67,7 +42,6 @@ jobs:
     executor: jdk_executor
     steps:
       - checkout
-      - restore_gradle_cache
       - run:
           name: Verify the integrity of the Gradle Wrapper JAR
           command: |
@@ -82,7 +56,6 @@ jobs:
     executor: jdk_executor
     steps:
       - checkout
-      - restore_gradle_cache
       - attach_to_workspace
       - run:
           name: Assemble
@@ -96,7 +69,6 @@ jobs:
     executor: jdk_executor
     steps:
       - checkout
-      - restore_gradle_cache
       - attach_to_workspace
       - run:
           name: Run tests
@@ -117,7 +89,6 @@ jobs:
     executor: jdk_executor
     steps:
       - checkout
-      - restore_gradle_cache
       - attach_to_workspace
       - run:
           name: Validate plugins
@@ -127,7 +98,6 @@ jobs:
     executor: jdk_executor
     steps:
       - checkout
-      - restore_gradle_cache
       - attach_to_workspace
       - run:
           name: Uploading to Nexus Sonatype
@@ -137,7 +107,6 @@ jobs:
     executor: jdk_executor
     steps:
       - checkout
-      - restore_gradle_cache
       - add_ssh_keys:
           fingerprints:
             - "83:20:2b:71:67:9c:01:43:fe:ad:82:dc:e0:b6:b4:61"
@@ -148,12 +117,9 @@ jobs:
 workflows:
   commit:
     jobs:
-      - gradleCache
       - security
       - ktlint
-      - build:
-          requires:
-            - gradleCache
+      - build
       - test:
           requires:
             - build

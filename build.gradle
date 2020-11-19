@@ -1,13 +1,8 @@
 version = '1.0.0'
 
-ext.GITHUB_REPOSITORY_OWNER = "dipien"
 ext.GITHUB_REPOSITORY_NAME = "bye-bye-jetifier"
 
-ext.PUBLICATION_CONFIGURATION_ENABLED = true
-ext.JAVADOC_PUBLICATION_ENABLED = true
-ext.SOURCES_PUBLICATION_ENABLED = true
-ext.SIGNING_PUBLICATION_ENABLED = true
-
+apply plugin: "com.jdroidtools.component.builder"
 apply plugin: 'com.jdroidtools.root'
 
 buildscript {
@@ -27,10 +22,8 @@ buildscript {
 	}
 
 	dependencies {
+		classpath(BuildLibs.DIPIEN_COMPONENT_BUILDER)
 		classpath(BuildLibs.JDROID_GRADLE_ROOT_PLUGIN)
-
-		// TODO Remove this when upgraded to jdroid gradle plugin 2.4.0
-		classpath("com.gradle.publish:plugin-publish-plugin:0.11.0")
 	}
 }
 
