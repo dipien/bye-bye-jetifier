@@ -2,7 +2,7 @@ version = '1.0.0'
 
 ext.GITHUB_REPOSITORY_NAME = "bye-bye-jetifier"
 
-apply plugin: "com.jdroidtools.component.builder"
+apply plugin: "com.dipien.component.builder"
 apply plugin: 'com.jdroidtools.root'
 
 buildscript {
