@@ -1,7 +1,7 @@
 package com.dipien.byebyejetifier
 
 import com.dipien.byebyejetifier.common.AbstractTask
-import com.dipien.byebyejetifier.task.SampleTask
+import com.dipien.byebyejetifier.task.ByeByeJetifierTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -17,9 +17,10 @@ class ByeByeJetifierGradlePlugin : Plugin<Project> {
     override fun apply(project: Project) {
         extension = project.extensions.create(EXTENSION_NAME, ByeByeJetifierExtension::class.java, project)
 
-        val sampleTask = project.tasks.create(SampleTask.TASK_NAME, SampleTask::class.java)
+        val byeByeJetifierTask = project.tasks.create(ByeByeJetifierTask.TASK_NAME, ByeByeJetifierTask::class.java)
         project.afterEvaluate {
-            initTask(sampleTask)
+            byeByeJetifierTask.ignoreImportsFilePath = extension.ignoreImportsFile
+            byeByeJetifierTask.ignoreConfigsFilePath = extension.ignoreConfigsFile
         }
     }
 

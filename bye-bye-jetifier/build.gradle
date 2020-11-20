@@ -11,6 +11,9 @@ buildscript {
 }
 
 dependencies {
+	implementation(Libs.ASM)
+	implementation(Libs.ASM_UTILS)
+	implementation(Libs.ASM_COMMONS)
 	testImplementation(Libs.JUNIT)
 }
 
