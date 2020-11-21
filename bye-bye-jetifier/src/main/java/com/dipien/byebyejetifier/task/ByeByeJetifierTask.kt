@@ -1,7 +1,6 @@
 package com.dipien.byebyejetifier.task
 
 import com.dipien.byebyejetifier.archive.Archive
-import com.dipien.byebyejetifier.scanner.IgnoreFileUtil
 import com.dipien.byebyejetifier.scanner.ScannerProcessor
 import com.dipien.byebyejetifier.common.AbstractTask
 import org.gradle.api.artifacts.Configuration
@@ -19,12 +18,7 @@ open class ByeByeJetifierTask : AbstractTask() {
     companion object {
         const val TASK_NAME = "byeByeJetifier"
 
-        private val ANDROIDX_MODULES_PREFIXES = listOf("androidx")
-
-        private val OLD_MODULES_PREFIXES = listOf(
-                "android.arch",
-                "com.android.support"
-        )
+        private const val ANDROIDX_GROUP_ID_PREFIX = "androidx"
 
         // https://developer.android.com/jetpack/androidx/migrate/class-mappings#androidsupport
         private val OLD_CLASSES_PREFIXES = listOf(
@@ -41,42 +35,35 @@ open class ByeByeJetifierTask : AbstractTask() {
 
     @get:Input
     @get:Optional
-    var ignoreImportsFilePath: String? = null
+    var legacyGroupIdPrefixes: List<String> = emptyList()
 
     @get:Input
     @get:Optional
-    var ignoreConfigsFilePath: String? = null
+    var ignoredPackages: List<String> = emptyList()
+
+    @get:Input
+    @get:Optional
+    var ignoredConfigurations: List<String> = emptyList()
 
     private val scannerProcessor by lazy {
-        ScannerProcessor(logger, OLD_CLASSES_PREFIXES, ignoreImportsFilePath)
-    }
-
-    private val ignoredConfigurations by lazy {
-        val ignored = mutableSetOf(
-                "lintClassPath"
-        )
-        ignoreImportsFilePath?.let {
-            IgnoreFileUtil.loadIgnoreFile(it, ignored)
-        }
-        ignored
+        ScannerProcessor(logger, OLD_CLASSES_PREFIXES, ignoredPackages)
     }
 
     private var includeSupportLibrary = false
 
     override fun onExecute() {
-        logger.lifecycle("ignoreImportsFilePath: $ignoreImportsFilePath")
-        logger.lifecycle("ignoreConfigurationsFilePath: $ignoreConfigsFilePath")
+        logger.lifecycle("ignoredPackages: $ignoredPackages")
+        logger.lifecycle("ignoredConfigurations: $ignoredConfigurations")
 
         project.allprojects.forEach {
-            log("")
-            log("Scanning module: ${it.name}")
+            log("Scanning project: ${it.name}")
             it.doAnalyze()
         }
 
         if (scannerProcessor.thereAreSupportLibraryDependencies || includeSupportLibrary) {
             throw RuntimeException("You can not say Bye Bye Jetifier")
         } else {
-            log("No dependencies on old artifacts! You can say Bye Bye Jetifier.")
+            log("No dependencies with legacy android support usages! You can say Bye Bye Jetifier.")
         }
     }
 
@@ -124,7 +111,7 @@ open class ByeByeJetifierTask : AbstractTask() {
     }
 
     private fun ResolvedDependency.isAndroidX(): Boolean {
-        return ANDROIDX_MODULES_PREFIXES.any { moduleGroup.startsWith(it) }
+        return moduleGroup.startsWith(ANDROIDX_GROUP_ID_PREFIX)
     }
 
     private fun Configuration.getExternalDependencies(): Set<ResolvedDependency> {
@@ -169,7 +156,7 @@ open class ByeByeJetifierTask : AbstractTask() {
             moduleGroup == project.rootProject.name
 
     private fun ResolvedDependency.isOldArtifact(): Boolean =
-            OLD_MODULES_PREFIXES.any { moduleGroup.startsWith(it) }
+            legacyGroupIdPrefixes.any { moduleGroup.startsWith(it) }
 
     private fun ResolvedDependency.toResolvedArtifactSet(): Set<ResolvedArtifact> {
         return when {

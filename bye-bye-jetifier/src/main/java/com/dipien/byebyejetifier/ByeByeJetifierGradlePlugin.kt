@@ -1,6 +1,5 @@
 package com.dipien.byebyejetifier
 
-import com.dipien.byebyejetifier.common.AbstractTask
 import com.dipien.byebyejetifier.task.ByeByeJetifierTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -19,12 +18,9 @@ class ByeByeJetifierGradlePlugin : Plugin<Project> {
 
         val byeByeJetifierTask = project.tasks.create(ByeByeJetifierTask.TASK_NAME, ByeByeJetifierTask::class.java)
         project.afterEvaluate {
-            byeByeJetifierTask.ignoreImportsFilePath = extension.ignoreImportsFile
-            byeByeJetifierTask.ignoreConfigsFilePath = extension.ignoreConfigsFile
+            byeByeJetifierTask.legacyGroupIdPrefixes = extension.legacyGroupIdPrefixes
+            byeByeJetifierTask.ignoredPackages = extension.ignoredPackages
+            byeByeJetifierTask.ignoredConfigurations = extension.ignoredConfigurations
         }
-    }
-
-    private fun initTask(task: AbstractTask) {
-        task.logLevel = extension.logLevel
     }
 }

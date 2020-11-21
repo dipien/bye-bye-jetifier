@@ -10,8 +10,8 @@ import org.gradle.api.tasks.TaskAction
 
 abstract class AbstractTask : DefaultTask() {
 
-    @get:Input
-    var logLevel: LogLevel? = null
+    @get:Internal
+    var logLevel: LogLevel = LogLevel.LIFECYCLE
 
     @get:Internal
     protected lateinit var commandExecutor: CommandExecutor
@@ -24,9 +24,9 @@ abstract class AbstractTask : DefaultTask() {
     fun doExecute() {
 
         LoggerHelper.logger = logger
-        LoggerHelper.logLevel = logLevel!!
+        LoggerHelper.logLevel = logLevel
 
-        commandExecutor = CommandExecutor(project, logLevel!!)
+        commandExecutor = CommandExecutor(project, logLevel)
         onExecute()
     }
 

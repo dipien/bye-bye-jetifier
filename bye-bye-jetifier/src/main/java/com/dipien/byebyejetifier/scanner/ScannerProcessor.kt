@@ -7,13 +7,13 @@ import com.dipien.byebyejetifier.scanner.bytecode.BytecodeScanner
 import com.dipien.byebyejetifier.scanner.resource.XmlResourceScanner
 import org.gradle.api.logging.Logger
 
-class ScannerProcessor(private val logger: Logger, private val oldModulesPrefixes: List<String>, ignoreImportsFilePath: String?) : ArchiveItemVisitor {
+class ScannerProcessor(private val logger: Logger, private val oldModulesPrefixes: List<String>, ignoredPackages: List<String>) : ArchiveItemVisitor {
 
     var thereAreSupportLibraryDependencies = false
         private set
 
     private val scannerList: List<Scanner> by lazy {
-        val scannerHelper = ScannerHelper(oldModulesPrefixes, ignoreImportsFilePath)
+        val scannerHelper = ScannerHelper(oldModulesPrefixes, ignoredPackages)
         listOf(
                 BytecodeScanner(logger, scannerHelper),
                 XmlResourceScanner(logger, scannerHelper)

@@ -1,12 +1,10 @@
 package com.dipien.byebyejetifier
 
 import org.gradle.api.Project
-import org.gradle.api.logging.LogLevel
 
 open class ByeByeJetifierExtension(project: Project) {
 
-    var logLevel = LogLevel.LIFECYCLE
-
-    var ignoreImportsFile: String? = null
-    var ignoreConfigsFile: String? = null
+    var legacyGroupIdPrefixes: List<String> = listOf("android.arch", "com.android.support")
+    var ignoredConfigurations: List<String> = listOf("lintClassPath")
+    var ignoredPackages: List<String> = listOf("android.support.v4.media", "android.support.FILE_PROVIDER_PATHS")
 }
