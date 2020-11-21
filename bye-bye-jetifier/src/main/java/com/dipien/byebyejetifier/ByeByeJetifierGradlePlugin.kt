@@ -19,6 +19,7 @@ class ByeByeJetifierGradlePlugin : Plugin<Project> {
         val byeByeJetifierTask = project.tasks.create(ByeByeJetifierTask.TASK_NAME, ByeByeJetifierTask::class.java)
         project.afterEvaluate {
             byeByeJetifierTask.legacyGroupIdPrefixes = extension.legacyGroupIdPrefixes
+            byeByeJetifierTask.legacyPackagesPrefixes = extension.legacyPackagesPrefixes
             byeByeJetifierTask.ignoredPackages = extension.ignoredPackages
             byeByeJetifierTask.ignoredConfigurations = extension.ignoredConfigurations
         }

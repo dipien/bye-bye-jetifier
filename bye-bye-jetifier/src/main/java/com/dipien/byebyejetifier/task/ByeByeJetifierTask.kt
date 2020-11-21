@@ -17,25 +17,16 @@ open class ByeByeJetifierTask : AbstractTask() {
 
     companion object {
         const val TASK_NAME = "canISayByeByeJetifier"
-
         private const val ANDROIDX_GROUP_ID_PREFIX = "androidx"
-
-        // https://developer.android.com/jetpack/androidx/migrate/class-mappings#androidsupport
-        private val OLD_CLASSES_PREFIXES = listOf(
-                "com.executor",
-                "lifecycle",
-                "paging",
-                "persistence.db",
-                "persistence.room",
-                "android.databinding",
-                "android.support",
-                "android.test.espresso"
-        )
     }
 
     @get:Input
     @get:Optional
     var legacyGroupIdPrefixes: List<String> = emptyList()
+
+    @get:Input
+    @get:Optional
+    var legacyPackagesPrefixes: List<String> = emptyList()
 
     @get:Input
     @get:Optional
@@ -46,7 +37,7 @@ open class ByeByeJetifierTask : AbstractTask() {
     var ignoredConfigurations: List<String> = emptyList()
 
     private val scannerProcessor by lazy {
-        ScannerProcessor(OLD_CLASSES_PREFIXES, ignoredPackages)
+        ScannerProcessor(legacyPackagesPrefixes, ignoredPackages)
     }
 
     private var includeSupportLibrary = false
