@@ -16,7 +16,7 @@ import java.util.Queue
 open class ByeByeJetifierTask : AbstractTask() {
 
     companion object {
-        const val TASK_NAME = "byeByeJetifier"
+        const val TASK_NAME = "canISayByeByeJetifier"
 
         private const val ANDROIDX_GROUP_ID_PREFIX = "androidx"
 
