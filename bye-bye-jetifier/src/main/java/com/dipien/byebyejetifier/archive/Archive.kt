@@ -35,6 +35,14 @@ class Archive(
         visitor.visit(this)
     }
 
+    val artifactDefinition: String by lazy {
+        val splits = relativePath.toString().split("/")
+        val groupId = splits[splits.size - 5]
+        val artifactId = splits[splits.size - 4]
+        val version = splits[splits.size - 3]
+        "$groupId:$artifactId:$version"
+    }
+
     object Builder {
 
         /**

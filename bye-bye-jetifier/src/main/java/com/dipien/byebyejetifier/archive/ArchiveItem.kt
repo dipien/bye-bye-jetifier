@@ -25,7 +25,7 @@ interface ArchiveItem {
     fun isLayoutResource() = fileName.startsWith("res/layout", ignoreCase = true) &&
             fileName.endsWith(".xml", ignoreCase = true)
 
-    fun isManifestFile() = fileName.endsWith("AndroidManifest.xml", ignoreCase = true)
+    fun isAndroidManifestFile() = fileName.endsWith("AndroidManifest.xml", ignoreCase = true)
 
     fun isClassFile() = fileName.endsWith(".class", ignoreCase = true)
 }

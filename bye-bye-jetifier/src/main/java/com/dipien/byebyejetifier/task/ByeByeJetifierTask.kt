@@ -46,7 +46,7 @@ open class ByeByeJetifierTask : AbstractTask() {
     var ignoredConfigurations: List<String> = emptyList()
 
     private val scannerProcessor by lazy {
-        ScannerProcessor(logger, OLD_CLASSES_PREFIXES, ignoredPackages)
+        ScannerProcessor(OLD_CLASSES_PREFIXES, ignoredPackages)
     }
 
     private var includeSupportLibrary = false

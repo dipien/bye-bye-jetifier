@@ -1,13 +1,13 @@
 package com.dipien.byebyejetifier.scanner.bytecode
 
 import com.dipien.byebyejetifier.archive.ArchiveFile
+import com.dipien.byebyejetifier.common.LoggerHelper
 import com.dipien.byebyejetifier.scanner.Scanner
 import com.dipien.byebyejetifier.scanner.ScannerHelper
-import org.gradle.api.logging.Logger
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.commons.ClassRemapper
 
-class BytecodeScanner(private var logger: Logger, private val scannerHelper: ScannerHelper) : Scanner {
+class BytecodeScanner(private val scannerHelper: ScannerHelper) : Scanner {
 
     override fun scan(archiveFile: ArchiveFile) {
         val reader = ClassReader(archiveFile.data)
@@ -19,7 +19,7 @@ class BytecodeScanner(private var logger: Logger, private val scannerHelper: Sca
         archiveFile.dependsOnSupportLibrary = customRemapper.oldDependencies.isNotEmpty()
 
         customRemapper.oldDependencies.forEach {
-            logger.lifecycle("${archiveFile.relativePath} -> $it")
+            LoggerHelper.log("${archiveFile.relativePath} -> $it")
         }
     }
 

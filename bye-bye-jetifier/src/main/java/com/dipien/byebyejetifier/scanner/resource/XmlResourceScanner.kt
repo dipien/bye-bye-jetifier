@@ -1,9 +1,9 @@
 package com.dipien.byebyejetifier.scanner.resource
 
 import com.dipien.byebyejetifier.archive.ArchiveFile
+import com.dipien.byebyejetifier.common.LoggerHelper
 import com.dipien.byebyejetifier.scanner.Scanner
 import com.dipien.byebyejetifier.scanner.ScannerHelper
-import org.gradle.api.logging.Logger
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.nio.charset.Charset
@@ -13,7 +13,6 @@ import javax.xml.stream.XMLInputFactory
 import javax.xml.stream.XMLStreamException
 
 class XmlResourceScanner(
-    private var logger: Logger,
     private val scannerHelper: ScannerHelper
 ) : Scanner {
 
@@ -59,7 +58,7 @@ class XmlResourceScanner(
         }
 
         oldDependencies.forEach {
-            logger.lifecycle("${archiveFile.relativePath} -> $it")
+            LoggerHelper.log("${archiveFile.relativePath} -> $it")
         }
     }
 
@@ -72,7 +71,7 @@ class XmlResourceScanner(
 
                 val result = Charset.forName(xmlReader.encoding)
                 if (result == null) {
-                    logger.error("Failed to find charset for encoding ${xmlReader.encoding}")
+                    LoggerHelper.logger.error("Failed to find charset for encoding ${xmlReader.encoding}")
                     return StandardCharsets.UTF_8
                 }
                 return result
@@ -81,15 +80,15 @@ class XmlResourceScanner(
             // Workaround for b/111814958. A subset of the android.jar xml files has a header that
             // causes our encoding detection to crash. However these files are otherwise valid UTF-8
             // files so we at least try to recover by defaulting to UTF-8.
-            logger.warn("Received malformed sequence exception when trying to detect the encoding " +
+            LoggerHelper.logger.warn("Received malformed sequence exception when trying to detect the encoding " +
                     "for ${file.fileName}. Defaulting to UTF-8.")
             val tracePrinter = StringWriter()
             e.printStackTrace(PrintWriter(tracePrinter))
-            logger.warn(tracePrinter.toString())
+            LoggerHelper.logger.warn(tracePrinter.toString())
             return StandardCharsets.UTF_8
         }
     }
 
     override fun canScan(archiveFile: ArchiveFile): Boolean =
-            archiveFile.isLayoutResource() || archiveFile.isManifestFile()
+            archiveFile.isLayoutResource() || archiveFile.isAndroidManifestFile()
 }
