@@ -20,9 +20,9 @@ buildscript {
         classpath("com.dipien:bye-bye-jetifier:X.Y.Z")
     }
 }
-```
 
 apply plugin: "com.dipien.byebyejetifier"
+```
 
 ## Usage
 
