@@ -48,11 +48,12 @@ If you don't have any legacy android support library the task will finish succes
 Once you disable jetifier, you don't want to add any dependency with the support library by mistake. So, I recommend to execute this task on your CI tools as part of the PR checks.
 
 # Advanced configuration
+You can configure the plugin using the `byeByeJetifier` extension. These are the default values for each property:
 
 ```groovy
 byeByeJetifier {
     legacyGroupIdPrefixes = ["android.arch", "com.android.support"]
-    legacyPackagesPrefixes: = [
+    legacyPackagesPrefixes = [
         "com.executor",
         "lifecycle",
         "paging",
