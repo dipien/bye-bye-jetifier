@@ -20,6 +20,7 @@ buildscript {
         classpath("com.dipien:bye-bye-jetifier:X.Y.Z")
     }
 }
+```
 
 apply plugin: "com.dipien.byebyejetifier"
 
@@ -43,3 +44,34 @@ From: com.github.bumptech.glide:glide:3.8.0
 If you don't have any legacy android support library the task will finish successfully, and you can remove the android.enableJetifier flag from your gradle.properties.
 
 Once you disable jetifier, you don't want to add any dependency with the support library by mistake. So, I recommend to execute this task on your CI tools as part of the PR checks.
+
+# Advanced configuration
+
+```groovy
+byeByeJetifier {
+    legacyGroupIdPrefixes = ["android.arch", "com.android.support"]
+    legacyPackagesPrefixes: = [
+        "com.executor",
+        "lifecycle",
+        "paging",
+        "persistence.db",
+        "persistence.room",
+        "android.databinding",
+        "android.support",
+        "android.test.espresso"
+    ]
+    ignoredConfigurations = ["lintClassPath"]
+    ignoredPackages = ["android.support.v4.media", "android.support.FILE_PROVIDER_PATHS"]
+}
+```
+
+## Donations
+
+Donations are greatly appreciated.
+
+[Donate cryptocurrency](http://donations.dipien.com/)
+
+[Donate with PayPal](https://www.paypal.com/paypalme/maxirosson)
+
+----
+Follow us on [Twitter](https://twitter.com/dipien_)
