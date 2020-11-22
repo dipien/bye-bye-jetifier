@@ -9,6 +9,8 @@ import com.dipien.byebyejetifier.scanner.resource.XmlResourceScanner
 
 class ScannerProcessor(private val oldModulesPrefixes: List<String>, ignoredPackages: List<String>) : ArchiveItemVisitor {
 
+    var includeSupportLibrary = false
+
     var thereAreSupportLibraryDependencies = false
         private set
 
