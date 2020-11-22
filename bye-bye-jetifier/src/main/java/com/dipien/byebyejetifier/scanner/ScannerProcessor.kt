@@ -7,7 +7,7 @@ import com.dipien.byebyejetifier.common.LoggerHelper
 import com.dipien.byebyejetifier.scanner.bytecode.BytecodeScanner
 import com.dipien.byebyejetifier.scanner.resource.XmlResourceScanner
 
-class ScannerProcessor(private val oldModulesPrefixes: List<String>, ignoredPackages: List<String>) : ArchiveItemVisitor {
+class ScannerProcessor(private val legacyPackagesPrefixes: List<String>, private val ignoredPackages: List<String>) : ArchiveItemVisitor {
 
     var includeSupportLibrary = false
 
@@ -15,7 +15,7 @@ class ScannerProcessor(private val oldModulesPrefixes: List<String>, ignoredPack
         private set
 
     private val scannerList: List<Scanner> by lazy {
-        val scannerHelper = ScannerHelper(oldModulesPrefixes, ignoredPackages)
+        val scannerHelper = ScannerHelper(legacyPackagesPrefixes, ignoredPackages)
         listOf(BytecodeScanner(scannerHelper), XmlResourceScanner(scannerHelper))
     }
 

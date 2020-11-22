@@ -28,8 +28,7 @@ class Archive(
 
     override val fileName: String = relativePath.fileName.toString()
 
-    override fun dependsOnSupportLibrary(): Boolean =
-            files.any { it.dependsOnSupportLibrary() }
+    override fun dependsOnSupportLibrary(): Boolean = files.any { it.dependsOnSupportLibrary() }
 
     override fun accept(visitor: ArchiveItemVisitor) {
         visitor.visit(this)
@@ -59,11 +58,7 @@ class Archive(
         }
 
         @Throws(IOException::class)
-        private fun extractArchive(
-            inputStream: InputStream,
-            relativePath: Path,
-            recursive: Boolean
-        ): Archive {
+        private fun extractArchive(inputStream: InputStream, relativePath: Path, recursive: Boolean): Archive {
             val zipIn = ZipInputStream(inputStream)
             val files = mutableListOf<ArchiveItem>()
 
@@ -87,10 +82,7 @@ class Archive(
         }
 
         @Throws(IOException::class)
-        private fun extractFile(
-            zipIn: ZipInputStream,
-            relativePath: Path
-        ): ArchiveFile {
+        private fun extractFile(zipIn: ZipInputStream, relativePath: Path): ArchiveFile {
             val data = zipIn.readBytes()
             return ArchiveFile(relativePath, data)
         }

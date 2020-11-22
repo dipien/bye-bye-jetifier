@@ -1,8 +1,6 @@
 package com.dipien.byebyejetifier
 
-import org.gradle.api.Project
-
-open class ByeByeJetifierExtension(project: Project) {
+open class ByeByeJetifierExtension {
 
     var legacyGroupIdPrefixes: List<String> = listOf("android.arch", "com.android.support")
 

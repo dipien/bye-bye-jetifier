@@ -10,11 +10,8 @@ class ByeByeJetifierGradlePlugin : Plugin<Project> {
         const val EXTENSION_NAME = "byeByeJetifier"
     }
 
-    lateinit var extension: ByeByeJetifierExtension
-        private set
-
     override fun apply(project: Project) {
-        extension = project.extensions.create(EXTENSION_NAME, ByeByeJetifierExtension::class.java, project)
+        val extension = project.extensions.create(EXTENSION_NAME, ByeByeJetifierExtension::class.java)
 
         val byeByeJetifierTask = project.tasks.create(ByeByeJetifierTask.TASK_NAME, ByeByeJetifierTask::class.java)
         project.afterEvaluate {
