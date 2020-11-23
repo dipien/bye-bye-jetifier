@@ -5,13 +5,11 @@ import com.dipien.byebyejetifier.ByeByeJetifierExtension
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
-import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 
 abstract class AbstractTask : DefaultTask() {
 
     @get:Input
-    @get:Optional
     var verbose = false
 
     @TaskAction

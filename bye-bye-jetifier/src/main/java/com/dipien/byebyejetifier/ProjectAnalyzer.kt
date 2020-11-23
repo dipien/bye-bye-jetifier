@@ -46,6 +46,7 @@ class ProjectAnalyzer(
             .flatten()
             .distinct()
             .forEach {
+                LoggerHelper.log("Scanning ${it.file}")
                 val aar = it.file
                 val library = Archive.Builder.extract(aar)
                 scannerProcessor.scanLibrary(library)
