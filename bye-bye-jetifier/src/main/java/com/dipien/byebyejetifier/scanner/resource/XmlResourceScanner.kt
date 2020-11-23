@@ -2,6 +2,7 @@ package com.dipien.byebyejetifier.scanner.resource
 
 import com.dipien.byebyejetifier.archive.ArchiveFile
 import com.dipien.byebyejetifier.common.LoggerHelper
+import com.dipien.byebyejetifier.scanner.ScanResult
 import com.dipien.byebyejetifier.scanner.Scanner
 import com.dipien.byebyejetifier.scanner.ScannerHelper
 import java.io.PrintWriter
@@ -16,7 +17,7 @@ class XmlResourceScanner(
     private val scannerHelper: ScannerHelper
 ) : Scanner {
 
-    private var oldDependencies = mutableSetOf<String>()
+    private var legacyDependencies = mutableSetOf<String>()
 
     companion object {
         const val PATTERN_TYPE_GROUP = 1
@@ -42,7 +43,7 @@ class XmlResourceScanner(
             Pattern.compile("\\{@link\\s*([a-zA-Z0-9.\$_]+)(#[^}]*)?}") // @{link {candidate}#*}
     )
 
-    override fun scan(archiveFile: ArchiveFile) {
+    override fun scan(archiveFile: ArchiveFile): List<ScanResult> {
         val charset = getCharset(archiveFile)
         val dataStr = archiveFile.data.toString(charset)
 
@@ -52,14 +53,12 @@ class XmlResourceScanner(
                 val candidate = matcher.group(PATTERN_TYPE_GROUP)
                 scannerHelper.verifySupportLibraryDependency(candidate)?.let {
                     archiveFile.dependsOnSupportLibrary = true
-                    oldDependencies.add(candidate)
+                    legacyDependencies.add(candidate)
                 }
             }
         }
 
-        oldDependencies.forEach {
-            LoggerHelper.log("${archiveFile.relativePath} -> $it")
-        }
+        return legacyDependencies.map { ScanResult(archiveFile.relativePath.toString(), it) }
     }
 
     private fun getCharset(file: ArchiveFile): Charset {

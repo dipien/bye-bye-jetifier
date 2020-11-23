@@ -22,6 +22,9 @@ class ProjectAnalyzer(
     }
 
     fun analyze() {
+        LoggerHelper.log("========================================")
+        LoggerHelper.log("Project: ${project.name}")
+        LoggerHelper.log("========================================")
         val externalDependencies = project.configurations
             .filter {
                 !ignoredConfigurations.contains(it.name)
@@ -34,7 +37,7 @@ class ProjectAnalyzer(
 
         externalDependencies
             .map {
-                if (!it.isAndroidX() && !it.isOldArtifact()) {
+                if (!it.isAndroidX() && !it.isLegacyArtifact()) {
                     it.toResolvedArtifactSet()
                 } else {
                     emptySet()
@@ -50,16 +53,14 @@ class ProjectAnalyzer(
 
         externalDependencies
             .mapNotNull {
-                if (it.isOldArtifact()) {
+                if (it.isLegacyArtifact()) {
                     it
                 } else {
                     null
                 }
             }
             .forEach {
-                if (!scannerProcessor.includeSupportLibrary) {
-                    scannerProcessor.includeSupportLibrary = true
-                }
+                scannerProcessor.includeSupportLibrary = true
                 LoggerHelper.log("Old artifact: " + it.name)
             }
     }
@@ -109,7 +110,7 @@ class ProjectAnalyzer(
     private fun ResolvedDependency.isModule(): Boolean =
         moduleGroup == project.rootProject.name
 
-    private fun ResolvedDependency.isOldArtifact(): Boolean =
+    private fun ResolvedDependency.isLegacyArtifact(): Boolean =
         legacyGroupIdPrefixes.any { moduleGroup.startsWith(it) }
 
     private fun ResolvedDependency.toResolvedArtifactSet(): Set<ResolvedArtifact> {
