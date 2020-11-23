@@ -18,4 +18,5 @@ open class ByeByeJetifierExtension {
     var ignoredConfigurations: List<String> = listOf("lintClassPath")
 
     var ignoredPackages: List<String> = listOf("android.support.v4.media", "android.support.FILE_PROVIDER_PATHS")
+    var verbose = false
 }

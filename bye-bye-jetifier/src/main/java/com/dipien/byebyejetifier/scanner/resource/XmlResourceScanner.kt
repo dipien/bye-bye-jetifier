@@ -70,7 +70,7 @@ class XmlResourceScanner(
 
                 val result = Charset.forName(xmlReader.encoding)
                 if (result == null) {
-                    LoggerHelper.logger.error("Failed to find charset for encoding ${xmlReader.encoding}")
+                    LoggerHelper.error("Failed to find charset for encoding ${xmlReader.encoding}")
                     return StandardCharsets.UTF_8
                 }
                 return result
@@ -79,11 +79,11 @@ class XmlResourceScanner(
             // Workaround for b/111814958. A subset of the android.jar xml files has a header that
             // causes our encoding detection to crash. However these files are otherwise valid UTF-8
             // files so we at least try to recover by defaulting to UTF-8.
-            LoggerHelper.logger.warn("Received malformed sequence exception when trying to detect the encoding " +
+            LoggerHelper.warn("Received malformed sequence exception when trying to detect the encoding " +
                     "for ${file.fileName}. Defaulting to UTF-8.")
             val tracePrinter = StringWriter()
             e.printStackTrace(PrintWriter(tracePrinter))
-            LoggerHelper.logger.warn(tracePrinter.toString())
+            LoggerHelper.warn(tracePrinter.toString())
             return StandardCharsets.UTF_8
         }
     }

@@ -22,9 +22,9 @@ class ProjectAnalyzer(
     }
 
     fun analyze() {
-        LoggerHelper.log("========================================")
-        LoggerHelper.log("Project: ${project.name}")
-        LoggerHelper.log("========================================")
+        LoggerHelper.lifeCycle("========================================")
+        LoggerHelper.lifeCycle("Project: ${project.name}")
+        LoggerHelper.lifeCycle("========================================")
         val externalDependencies = project.configurations
             .filter {
                 !ignoredConfigurations.contains(it.name)
@@ -61,7 +61,7 @@ class ProjectAnalyzer(
             }
             .forEach {
                 scannerProcessor.includeSupportLibrary = true
-                LoggerHelper.log("Old artifact: " + it.name)
+                LoggerHelper.lifeCycle("Old artifact: " + it.name)
             }
     }
 

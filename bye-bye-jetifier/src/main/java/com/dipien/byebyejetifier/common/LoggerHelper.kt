@@ -6,13 +6,37 @@ import org.gradle.api.logging.Logger
 object LoggerHelper {
 
     lateinit var logger: Logger
-    lateinit var logLevel: LogLevel
+    var verbose = false
 
-    fun log(message: String) {
-        logger.log(logLevel, message)
+    fun lifeCycle(message: String) {
+        logger.log(LogLevel.LIFECYCLE, message)
     }
 
-    fun log(message: String, throwable: Throwable) {
-        logger.log(logLevel, message, throwable)
+    fun error(message: String) {
+        logger.log(LogLevel.ERROR, message)
+    }
+
+    fun warn(message: String) {
+        logger.log(LogLevel.WARN, message)
+    }
+
+    fun log(message: String, logLevel: LogLevel = LogLevel.INFO) {
+        logger.log(getLogLevel(logLevel), message)
+    }
+
+    fun log(message: String, throwable: Throwable, logLevel: LogLevel = LogLevel.INFO) {
+        logger.log(getLogLevel(logLevel), message, throwable)
+    }
+
+    private fun getLogLevel(logLevel: LogLevel): LogLevel {
+        return if (verbose) {
+            if (logLevel.ordinal < LogLevel.LIFECYCLE.ordinal) {
+                LogLevel.LIFECYCLE
+            } else {
+                logLevel
+            }
+        } else {
+            logLevel
+        }
     }
 }

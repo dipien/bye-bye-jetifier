@@ -3,6 +3,7 @@ package com.dipien.byebyejetifier.task
 import com.dipien.byebyejetifier.ProjectAnalyzer
 import com.dipien.byebyejetifier.scanner.ScannerProcessor
 import com.dipien.byebyejetifier.common.AbstractTask
+import com.dipien.byebyejetifier.common.LoggerHelper
 import com.dipien.byebyejetifier.scanner.ScannerHelper
 import com.dipien.byebyejetifier.scanner.bytecode.BytecodeScanner
 import com.dipien.byebyejetifier.scanner.resource.XmlResourceScanner
@@ -38,9 +39,14 @@ open class ByeByeJetifierTask : AbstractTask() {
         ScannerProcessor(scannerList)
     }
 
+    init {
+        group = "Verification"
+        description = "Verifies if you can keep Android Jetifier disabled"
+    }
+
     override fun onExecute() {
-        logger.debug("ignoredPackages: $ignoredPackages")
-        logger.debug("ignoredConfigurations: $ignoredConfigurations")
+        LoggerHelper.log("ignoredPackages: $ignoredPackages")
+        LoggerHelper.log("ignoredConfigurations: $ignoredConfigurations")
 
         project.allprojects.forEach {
             ProjectAnalyzer(it, ignoredConfigurations, legacyGroupIdPrefixes, scannerProcessor).analyze()
@@ -49,7 +55,7 @@ open class ByeByeJetifierTask : AbstractTask() {
         if (scannerProcessor.thereAreSupportLibraryDependencies || scannerProcessor.includeSupportLibrary) {
             throw RuntimeException("You can not say Bye Bye Jetifier")
         } else {
-            log("No dependencies with legacy android support usages! You can say Bye Bye Jetifier.")
+            LoggerHelper.lifeCycle("No dependencies with legacy android support usages! You can say Bye Bye Jetifier.")
         }
     }
 }

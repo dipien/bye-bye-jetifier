@@ -16,9 +16,9 @@ class ScannerProcessor(private val scannerList: List<Scanner>) : ArchiveItemVisi
     fun scanLibrary(archive: Archive) {
         archive.accept(this)
         if (archive.dependsOnSupportLibrary()) {
-            LoggerHelper.log("Artifact: ${archive.artifactDefinition}")
+            LoggerHelper.lifeCycle("Artifact: ${archive.artifactDefinition}")
             scanResults.forEach {
-                LoggerHelper.log("* ${it.relativePath} -> ${it.legacyDependency}")
+                LoggerHelper.lifeCycle("* ${it.relativePath} -> ${it.legacyDependency}")
             }
             scanResults.clear()
             thereAreSupportLibraryDependencies = true

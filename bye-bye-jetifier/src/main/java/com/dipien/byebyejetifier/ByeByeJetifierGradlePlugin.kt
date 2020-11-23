@@ -19,6 +19,7 @@ class ByeByeJetifierGradlePlugin : Plugin<Project> {
             byeByeJetifierTask.legacyPackagesPrefixes = extension.legacyPackagesPrefixes
             byeByeJetifierTask.ignoredPackages = extension.ignoredPackages
             byeByeJetifierTask.ignoredConfigurations = extension.ignoredConfigurations
+            byeByeJetifierTask.verbose = extension.verbose
         }
     }
 }
