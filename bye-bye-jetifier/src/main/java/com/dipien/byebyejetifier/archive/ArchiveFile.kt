@@ -5,10 +5,7 @@ import java.nio.file.Path
 /**
  * Represents a file in the archive that is not an archive.
  */
-class ArchiveFile(
-    relativePath: Path,
-    data: ByteArray
-) : ArchiveItem {
+class ArchiveFile(relativePath: Path, data: ByteArray) : ArchiveItem {
 
     override var relativePath = relativePath
         private set

@@ -12,9 +12,6 @@ abstract class AbstractTask : DefaultTask() {
     @get:Internal
     var logLevel: LogLevel = LogLevel.LIFECYCLE
 
-    @get:Internal
-    protected lateinit var commandExecutor: CommandExecutor
-
     init {
         group = "Bye Bye Jetifier"
     }
@@ -25,7 +22,6 @@ abstract class AbstractTask : DefaultTask() {
         LoggerHelper.logger = logger
         LoggerHelper.logLevel = logLevel
 
-        commandExecutor = CommandExecutor(project, logLevel)
         onExecute()
     }
 
