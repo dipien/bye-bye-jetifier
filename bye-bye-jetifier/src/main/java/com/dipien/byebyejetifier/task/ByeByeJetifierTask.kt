@@ -7,6 +7,7 @@ import com.dipien.byebyejetifier.common.LoggerHelper
 import com.dipien.byebyejetifier.scanner.ScannerHelper
 import com.dipien.byebyejetifier.scanner.bytecode.BytecodeScanner
 import com.dipien.byebyejetifier.scanner.resource.XmlResourceScanner
+import org.gradle.api.GradleException
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import java.lang.RuntimeException
@@ -15,6 +16,7 @@ open class ByeByeJetifierTask : AbstractTask() {
 
     companion object {
         const val TASK_NAME = "canISayByeByeJetifier"
+        const val ENABLE_JETIFIER_PROPERTY = "android.enableJetifier"
     }
 
     @get:Input
@@ -45,6 +47,13 @@ open class ByeByeJetifierTask : AbstractTask() {
     }
 
     override fun onExecute() {
+
+        if (project.hasProperty(ENABLE_JETIFIER_PROPERTY) && project.property(ENABLE_JETIFIER_PROPERTY) == "true") {
+            throw GradleException(
+                "This task needs to be run with Jetifier disabled: ./gradlew $TASK_NAME -P$ENABLE_JETIFIER_PROPERTY=false"
+            )
+        }
+
         LoggerHelper.log("ignoredPackages: $ignoredPackages")
         LoggerHelper.log("ignoredConfigurations: $ignoredConfigurations")
 

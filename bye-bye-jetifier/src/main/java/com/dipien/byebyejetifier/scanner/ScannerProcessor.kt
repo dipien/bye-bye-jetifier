@@ -14,14 +14,17 @@ class ScannerProcessor(private val scannerList: List<Scanner>) : ArchiveItemVisi
         private set
 
     fun scanLibrary(archive: Archive) {
+        LoggerHelper.lifeCycle("")
+        LoggerHelper.lifeCycle("Scanning ${archive.artifactDefinition}")
         archive.accept(this)
         if (archive.dependsOnSupportLibrary()) {
-            LoggerHelper.lifeCycle("Artifact: ${archive.artifactDefinition}")
             scanResults.forEach {
-                LoggerHelper.lifeCycle("* ${it.relativePath} -> ${it.legacyDependency}")
+                LoggerHelper.lifeCycle(" * ${it.relativePath} -> ${it.legacyDependency}")
             }
             scanResults.clear()
             thereAreSupportLibraryDependencies = true
+        } else {
+            LoggerHelper.lifeCycle(" * No legacy android support usages found")
         }
     }
 

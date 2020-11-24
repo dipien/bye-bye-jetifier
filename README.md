@@ -28,7 +28,7 @@ apply plugin: "com.dipien.byebyejetifier"
 
 To validate if your project has any dependency (including transitives) using the legacy android support library, you need to execute the following task:
 
-    ./gradlew canISayByeByeJetifier
+    ./gradlew canISayByeByeJetifier -Pandroid.enableJetifier=false
 
 If you have any legacy android support library usage in your project, the task will fail and print a report with all the details. For example:
 
