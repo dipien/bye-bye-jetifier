@@ -1,5 +1,6 @@
 package com.dipien.byebyejetifier.archive
 
+import com.dipien.byebyejetifier.scanner.ScanResult
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -30,8 +31,8 @@ class Archive(
 
     override fun dependsOnSupportLibrary(): Boolean = files.any { it.dependsOnSupportLibrary() }
 
-    override fun accept(visitor: ArchiveItemVisitor) {
-        visitor.visit(this)
+    override fun accept(visitor: ArchiveItemVisitor, scanResults: MutableList<ScanResult>) {
+        visitor.visit(this, scanResults)
     }
 
     val artifactDefinition: String by lazy {

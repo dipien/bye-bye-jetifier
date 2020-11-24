@@ -21,6 +21,10 @@ class ProjectAnalyzer(
     }
 
     fun analyze() {
+
+        var includeSupportLibrary = false
+        var thereAreSupportLibraryDependencies = false
+
         LoggerHelper.lifeCycle("========================================")
         LoggerHelper.lifeCycle("Project: ${project.name}")
         LoggerHelper.lifeCycle("========================================")
@@ -46,7 +50,17 @@ class ProjectAnalyzer(
             .distinct()
             .forEach {
                 val library = Archive.Builder.extract(it.file)
-                scannerProcessor.scanLibrary(library)
+                LoggerHelper.lifeCycle("")
+                LoggerHelper.lifeCycle("Scanning ${library.artifactDefinition}")
+                val scanResults = scannerProcessor.scanLibrary(library)
+                if (library.dependsOnSupportLibrary()) {
+                    scanResults.forEach { scanResult ->
+                        LoggerHelper.lifeCycle(" * ${scanResult.relativePath} -> ${scanResult.legacyDependency}")
+                    }
+                    thereAreSupportLibraryDependencies = true
+                } else {
+                    LoggerHelper.lifeCycle(" * No legacy android support usages found")
+                }
             }
 
         val legacyArtifacts = externalDependencies
@@ -60,12 +74,23 @@ class ProjectAnalyzer(
             .distinctBy { it.name }
 
         if (legacyArtifacts.isNotEmpty()) {
-            scannerProcessor.includeSupportLibrary = true
+            includeSupportLibrary = true
             LoggerHelper.lifeCycle("")
             LoggerHelper.lifeCycle("Legacy support dependencies:")
             legacyArtifacts.sortedBy { it.name }.forEach {
                 LoggerHelper.lifeCycle(" * ${it.name}")
             }
+        }
+
+        if (!thereAreSupportLibraryDependencies && !includeSupportLibrary) {
+            LoggerHelper.lifeCycle(" * No legacy android support usages found")
+        }
+
+        if (includeSupportLibrary) {
+            ProjectAnalyzerResult.includeSupportLibrary = true
+        }
+        if (thereAreSupportLibraryDependencies) {
+            ProjectAnalyzerResult.thereAreSupportLibraryDependencies = true
         }
     }
 

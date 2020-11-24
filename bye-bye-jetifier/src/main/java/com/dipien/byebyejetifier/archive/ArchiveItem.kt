@@ -1,5 +1,6 @@
 package com.dipien.byebyejetifier.archive
 
+import com.dipien.byebyejetifier.scanner.ScanResult
 import java.nio.file.Path
 
 /**
@@ -20,5 +21,5 @@ interface ArchiveItem {
 
     fun dependsOnSupportLibrary(): Boolean
 
-    fun accept(visitor: ArchiveItemVisitor)
+    fun accept(visitor: ArchiveItemVisitor, scanResults: MutableList<ScanResult>)
 }

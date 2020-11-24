@@ -1,5 +1,6 @@
 package com.dipien.byebyejetifier.archive
 
+import com.dipien.byebyejetifier.scanner.ScanResult
 import java.nio.file.Path
 
 /**
@@ -20,8 +21,8 @@ class ArchiveFile(relativePath: Path, data: ByteArray) : ArchiveItem {
 
     override fun dependsOnSupportLibrary(): Boolean = dependsOnSupportLibrary
 
-    override fun accept(visitor: ArchiveItemVisitor) {
-        visitor.visit(this)
+    override fun accept(visitor: ArchiveItemVisitor, scanResults: MutableList<ScanResult>) {
+        visitor.visit(this, scanResults)
     }
 
     fun isLayoutResource() = fileName.startsWith("res/layout", ignoreCase = true) &&

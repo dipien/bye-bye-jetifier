@@ -3,38 +3,22 @@ package com.dipien.byebyejetifier.scanner
 import com.dipien.byebyejetifier.archive.Archive
 import com.dipien.byebyejetifier.archive.ArchiveFile
 import com.dipien.byebyejetifier.archive.ArchiveItemVisitor
-import com.dipien.byebyejetifier.common.LoggerHelper
 
 class ScannerProcessor(private val scannerList: List<Scanner>) : ArchiveItemVisitor {
 
-    var scanResults = mutableListOf<ScanResult>()
-    var includeSupportLibrary = false
-
-    var thereAreSupportLibraryDependencies = false
-        private set
-
-    fun scanLibrary(archive: Archive) {
-        LoggerHelper.lifeCycle("")
-        LoggerHelper.lifeCycle("Scanning ${archive.artifactDefinition}")
-        archive.accept(this)
-        if (archive.dependsOnSupportLibrary()) {
-            scanResults.forEach {
-                LoggerHelper.lifeCycle(" * ${it.relativePath} -> ${it.legacyDependency}")
-            }
-            scanResults.clear()
-            thereAreSupportLibraryDependencies = true
-        } else {
-            LoggerHelper.lifeCycle(" * No legacy android support usages found")
-        }
+    fun scanLibrary(archive: Archive): List<ScanResult> {
+        val scanResults = mutableListOf<ScanResult>()
+        archive.accept(this, scanResults)
+        return scanResults
     }
 
-    override fun visit(archive: Archive) {
+    override fun visit(archive: Archive, scanResults: MutableList<ScanResult>) {
         archive.files.forEach {
-            it.accept(this)
+            it.accept(this, scanResults)
         }
     }
 
-    override fun visit(archiveFile: ArchiveFile) {
+    override fun visit(archiveFile: ArchiveFile, scanResults: MutableList<ScanResult>) {
         scannerList.forEach {
             if (it.canScan(archiveFile)) {
                 scanResults.addAll(it.scan(archiveFile))
