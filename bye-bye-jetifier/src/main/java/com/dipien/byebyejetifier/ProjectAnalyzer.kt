@@ -76,7 +76,11 @@ class ProjectAnalyzer(
             if (isCanBeResolved) {
                 firstLevelDependencies = resolvedConfiguration.firstLevelModuleDependencies
             }
-        } catch (ignored: Throwable) {
+        } catch (e: Throwable) {
+            // TODO analyze errors from Configurations whose name ends in "metadata"
+            if (!name.endsWith("Metadata")) {
+                throw e
+            }
         }
 
         val resolvedDependencies = mutableSetOf<ResolvedDependency>()
