@@ -1,6 +1,7 @@
 package com.dipien.byebyejetifier.task
 
 import com.dipien.byebyejetifier.ProjectAnalyzer
+import com.dipien.byebyejetifier.ProjectAnalyzerResult
 import com.dipien.byebyejetifier.scanner.ScannerProcessor
 import com.dipien.byebyejetifier.common.AbstractTask
 import com.dipien.byebyejetifier.common.LoggerHelper
@@ -61,7 +62,7 @@ open class ByeByeJetifierTask : AbstractTask() {
             ProjectAnalyzer(it, ignoredConfigurations, legacyGroupIdPrefixes, scannerProcessor).analyze()
         }
 
-        if (scannerProcessor.thereAreSupportLibraryDependencies || scannerProcessor.includeSupportLibrary) {
+        if (ProjectAnalyzerResult.thereAreSupportLibraryDependencies || ProjectAnalyzerResult.includeSupportLibrary) {
             throw RuntimeException("You can not say Bye Bye Jetifier")
         } else {
             LoggerHelper.lifeCycle("No dependencies with legacy android support usages! You can say Bye Bye Jetifier.")
