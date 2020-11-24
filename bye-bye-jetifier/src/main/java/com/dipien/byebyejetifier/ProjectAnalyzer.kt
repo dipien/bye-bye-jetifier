@@ -26,6 +26,7 @@ class ProjectAnalyzer(
         var thereAreSupportLibraryDependencies = false
         var hasExternalDependencies = false
 
+        LoggerHelper.lifeCycle("")
         LoggerHelper.lifeCycle("========================================")
         LoggerHelper.lifeCycle("Project: ${project.name}")
         LoggerHelper.lifeCycle("========================================")
