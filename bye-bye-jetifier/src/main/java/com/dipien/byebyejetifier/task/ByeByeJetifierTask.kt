@@ -50,9 +50,7 @@ open class ByeByeJetifierTask : AbstractTask() {
     override fun onExecute() {
 
         if (project.hasProperty(ENABLE_JETIFIER_PROPERTY) && project.property(ENABLE_JETIFIER_PROPERTY) == "true") {
-            throw GradleException(
-                "This task needs to be run with Jetifier disabled: ./gradlew $TASK_NAME -P$ENABLE_JETIFIER_PROPERTY=false"
-            )
+            throw GradleException("This task needs to be run with Jetifier disabled: ./gradlew $TASK_NAME -P$ENABLE_JETIFIER_PROPERTY=false")
         }
 
         LoggerHelper.log("ignoredPackages: $ignoredPackages")
@@ -65,7 +63,10 @@ open class ByeByeJetifierTask : AbstractTask() {
         if (ProjectAnalyzerResult.thereAreSupportLibraryDependencies || ProjectAnalyzerResult.includeSupportLibrary) {
             throw RuntimeException("You can not say Bye Bye Jetifier")
         } else {
-            LoggerHelper.lifeCycle("No dependencies with legacy android support usages! You can say Bye Bye Jetifier.")
+            LoggerHelper.lifeCycle("")
+            LoggerHelper.lifeCycle("=====================================================================================")
+            LoggerHelper.lifeCycle("* No dependencies with legacy android support usages! You can say Bye Bye Jetifier. *")
+            LoggerHelper.lifeCycle("=====================================================================================")
         }
     }
 }

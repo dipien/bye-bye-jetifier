@@ -24,6 +24,7 @@ class ProjectAnalyzer(
 
         var includeSupportLibrary = false
         var thereAreSupportLibraryDependencies = false
+        var hasExternalDependencies = false
 
         LoggerHelper.lifeCycle("========================================")
         LoggerHelper.lifeCycle("Project: ${project.name}")
@@ -61,6 +62,7 @@ class ProjectAnalyzer(
                 } else {
                     LoggerHelper.lifeCycle(" * No legacy android support usages found")
                 }
+                hasExternalDependencies = true
             }
 
         val legacyArtifacts = externalDependencies
@@ -82,7 +84,7 @@ class ProjectAnalyzer(
             }
         }
 
-        if (!thereAreSupportLibraryDependencies && !includeSupportLibrary) {
+        if (!thereAreSupportLibraryDependencies && !includeSupportLibrary && !hasExternalDependencies) {
             LoggerHelper.lifeCycle(" * No legacy android support usages found")
         }
 
@@ -105,9 +107,9 @@ class ProjectAnalyzer(
                 firstLevelDependencies = resolvedConfiguration.firstLevelModuleDependencies
             }
         } catch (e: Throwable) {
-            if (name.endsWith("Metadata")) {
+            if (name.endsWith("Metadata") || name.endsWith("archives")) {
                 // TODO analyze errors from Configurations whose name ends in "metadata"
-                LoggerHelper.warn("Error when accessing configuration $name" + e.message)
+                LoggerHelper.info("Error when accessing configuration $name" + e.message)
             } else {
                 throw e
             }
