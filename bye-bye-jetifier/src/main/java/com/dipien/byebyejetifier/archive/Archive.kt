@@ -29,8 +29,6 @@ class Archive(
 
     override val fileName: String = relativePath.fileName.toString()
 
-    override fun dependsOnSupportLibrary(): Boolean = files.any { it.dependsOnSupportLibrary() }
-
     override fun accept(visitor: ArchiveItemVisitor, scanResults: MutableList<ScanResult>) {
         visitor.visit(this, scanResults)
     }

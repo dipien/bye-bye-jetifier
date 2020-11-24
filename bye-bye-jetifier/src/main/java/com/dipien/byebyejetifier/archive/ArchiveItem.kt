@@ -19,7 +19,5 @@ interface ArchiveItem {
 
     val fileName: String
 
-    fun dependsOnSupportLibrary(): Boolean
-
     fun accept(visitor: ArchiveItemVisitor, scanResults: MutableList<ScanResult>)
 }

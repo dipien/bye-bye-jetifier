@@ -52,7 +52,6 @@ class XmlResourceScanner(
             while (matcher.find()) {
                 val candidate = matcher.group(PATTERN_TYPE_GROUP)
                 scannerHelper.verifySupportLibraryDependency(candidate)?.let {
-                    archiveFile.dependsOnSupportLibrary = true
                     legacyDependencies.add(candidate)
                 }
             }

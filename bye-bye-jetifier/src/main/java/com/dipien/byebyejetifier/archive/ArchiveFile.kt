@@ -17,10 +17,6 @@ class ArchiveFile(relativePath: Path, data: ByteArray) : ArchiveItem {
     var data: ByteArray = data
         private set
 
-    var dependsOnSupportLibrary: Boolean = false
-
-    override fun dependsOnSupportLibrary(): Boolean = dependsOnSupportLibrary
-
     override fun accept(visitor: ArchiveItemVisitor, scanResults: MutableList<ScanResult>) {
         visitor.visit(this, scanResults)
     }

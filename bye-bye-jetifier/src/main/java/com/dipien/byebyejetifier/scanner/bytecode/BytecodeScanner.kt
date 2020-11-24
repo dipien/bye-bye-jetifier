@@ -16,8 +16,6 @@ class BytecodeScanner(private val scannerHelper: ScannerHelper) : Scanner {
 
         reader.accept(visitor, 0 /* flags */)
 
-        archiveFile.dependsOnSupportLibrary = customRemapper.oldDependencies.isNotEmpty()
-
         return customRemapper.oldDependencies.map { ScanResult(archiveFile.relativePath.toString(), it) }
     }
 

@@ -2,6 +2,7 @@ package com.dipien.byebyejetifier
 
 import com.dipien.byebyejetifier.archive.Archive
 import com.dipien.byebyejetifier.common.LoggerHelper
+import com.dipien.byebyejetifier.scanner.ScanResult
 import com.dipien.byebyejetifier.scanner.ScannerProcessor
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
@@ -25,11 +26,8 @@ class ProjectAnalyzer(
         var includeSupportLibrary = false
         var thereAreSupportLibraryDependencies = false
         var hasExternalDependencies = false
+        val scanResultsCache = mutableMapOf<String, List<ScanResult>>()
 
-        LoggerHelper.lifeCycle("")
-        LoggerHelper.lifeCycle("========================================")
-        LoggerHelper.lifeCycle("Project: ${project.name}")
-        LoggerHelper.lifeCycle("========================================")
         val externalDependencies = project.configurations
             .filter {
                 !ignoredConfigurations.contains(it.name)
@@ -52,16 +50,28 @@ class ProjectAnalyzer(
             .distinct()
             .forEach {
                 val library = Archive.Builder.extract(it.file)
-                LoggerHelper.lifeCycle("")
-                LoggerHelper.lifeCycle("Scanning ${library.artifactDefinition}")
-                val scanResults = scannerProcessor.scanLibrary(library)
-                if (library.dependsOnSupportLibrary()) {
+                val scanResults = scanResultsCache.getOrPut(library.artifactDefinition) { scannerProcessor.scanLibrary(library) }
+                if (scanResults.isNotEmpty()) {
+                    if (!thereAreSupportLibraryDependencies) {
+                        LoggerHelper.lifeCycle("")
+                        LoggerHelper.lifeCycle("========================================")
+                        LoggerHelper.lifeCycle("Project: ${project.name}")
+                        LoggerHelper.lifeCycle("========================================")
+                    }
+                    LoggerHelper.lifeCycle("")
+                    LoggerHelper.lifeCycle("Scanning ${library.artifactDefinition}")
                     scanResults.forEach { scanResult ->
                         LoggerHelper.lifeCycle(" * ${scanResult.relativePath} -> ${scanResult.legacyDependency}")
                     }
                     thereAreSupportLibraryDependencies = true
                 } else {
-                    LoggerHelper.lifeCycle(" * No legacy android support usages found")
+                    LoggerHelper.info("")
+                    LoggerHelper.info("========================================")
+                    LoggerHelper.info("Project: ${project.name}")
+                    LoggerHelper.info("========================================")
+                    LoggerHelper.info("")
+                    LoggerHelper.info("Scanning ${library.artifactDefinition}")
+                    LoggerHelper.info(" * No legacy android support usages found")
                 }
                 hasExternalDependencies = true
             }
@@ -86,7 +96,7 @@ class ProjectAnalyzer(
         }
 
         if (!thereAreSupportLibraryDependencies && !includeSupportLibrary && !hasExternalDependencies) {
-            LoggerHelper.lifeCycle(" * No legacy android support usages found")
+            LoggerHelper.info(" * No legacy android support usages found")
         }
 
         if (includeSupportLibrary) {
