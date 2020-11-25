@@ -38,11 +38,7 @@ class ProjectAnalyzer(
                 !excludedConfigurations.contains(it.name)
             }
             .map {
-                val dependencies = it.getExternalDependencies()
-                if (dependencies.isNotEmpty()) {
-                    LoggerHelper.info("Dependencies for configuration ${it.name}: $dependencies")
-                }
-                dependencies
+                it.getExternalDependencies()
             }
             .flatten()
             .distinct()
