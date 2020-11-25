@@ -12,7 +12,7 @@ import java.util.Queue
 
 class ProjectAnalyzer(
     private val project: Project,
-    private var ignoredConfigurations: List<String>,
+    private var excludedConfigurations: List<String>,
     private var legacyGroupIdPrefixes: List<String>,
     private val scannerProcessor: ScannerProcessor
 ) {
@@ -30,7 +30,7 @@ class ProjectAnalyzer(
 
         val externalDependencies = project.configurations
             .filter {
-                !ignoredConfigurations.contains(it.name)
+                !excludedConfigurations.contains(it.name)
             }
             .map {
                 it.getExternalDependencies()

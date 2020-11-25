@@ -30,14 +30,18 @@ open class ByeByeJetifierTask : AbstractTask() {
 
     @get:Input
     @get:Optional
-    var ignoredPackages: List<String> = emptyList()
+    var excludedLegacyPackagesPrefixes: List<String> = emptyList()
 
     @get:Input
     @get:Optional
-    var ignoredConfigurations: List<String> = emptyList()
+    var excludedFilesFromScanning: List<String> = emptyList()
+
+    @get:Input
+    @get:Optional
+    var excludedConfigurations: List<String> = emptyList()
 
     private val scannerProcessor by lazy {
-        val scannerHelper = ScannerHelper(legacyPackagesPrefixes, ignoredPackages)
+        val scannerHelper = ScannerHelper(legacyPackagesPrefixes, excludedLegacyPackagesPrefixes, excludedFilesFromScanning)
         val scannerList = listOf(BytecodeScanner(scannerHelper), XmlResourceScanner(scannerHelper))
         ScannerProcessor(scannerList)
     }
@@ -53,11 +57,13 @@ open class ByeByeJetifierTask : AbstractTask() {
             throw GradleException("This task needs to be run with Jetifier disabled: ./gradlew $TASK_NAME -P$ENABLE_JETIFIER_PROPERTY=false")
         }
 
-        LoggerHelper.log("ignoredPackages: $ignoredPackages")
-        LoggerHelper.log("ignoredConfigurations: $ignoredConfigurations")
+        LoggerHelper.log("legacyPackagesPrefixes: $legacyPackagesPrefixes")
+        LoggerHelper.log("excludedLegacyPackagesPrefixes: $excludedLegacyPackagesPrefixes")
+        LoggerHelper.log("excludedConfigurations: $excludedConfigurations")
+        LoggerHelper.log("excludedConfigurations: $excludedConfigurations")
 
         project.allprojects.forEach {
-            ProjectAnalyzer(it, ignoredConfigurations, legacyGroupIdPrefixes, scannerProcessor).analyze()
+            ProjectAnalyzer(it, excludedConfigurations, legacyGroupIdPrefixes, scannerProcessor).analyze()
         }
 
         if (ProjectAnalyzerResult.thereAreSupportLibraryDependencies || ProjectAnalyzerResult.includeSupportLibrary) {
