@@ -30,14 +30,18 @@ open class ByeByeJetifierTask : AbstractTask() {
 
     @get:Input
     @get:Optional
-    var ignoredPackages: List<String> = emptyList()
+    var ignoredLegacyPackagesPrefixes: List<String> = emptyList()
+
+    @get:Input
+    @get:Optional
+    var excludedFilesFromScanning: List<String> = emptyList()
 
     @get:Input
     @get:Optional
     var ignoredConfigurations: List<String> = emptyList()
 
     private val scannerProcessor by lazy {
-        val scannerHelper = ScannerHelper(legacyPackagesPrefixes, ignoredPackages)
+        val scannerHelper = ScannerHelper(legacyPackagesPrefixes, ignoredLegacyPackagesPrefixes, excludedFilesFromScanning)
         val scannerList = listOf(BytecodeScanner(scannerHelper), XmlResourceScanner(scannerHelper))
         ScannerProcessor(scannerList)
     }
@@ -53,8 +57,10 @@ open class ByeByeJetifierTask : AbstractTask() {
             throw GradleException("This task needs to be run with Jetifier disabled: ./gradlew $TASK_NAME -P$ENABLE_JETIFIER_PROPERTY=false")
         }
 
-        LoggerHelper.log("ignoredPackages: $ignoredPackages")
+        LoggerHelper.log("legacyPackagesPrefixes: $legacyPackagesPrefixes")
+        LoggerHelper.log("ignoredLegacyPackagesPrefixes: $ignoredLegacyPackagesPrefixes")
         LoggerHelper.log("ignoredConfigurations: $ignoredConfigurations")
+        LoggerHelper.log("excludedFilesFromScanning: $excludedFilesFromScanning")
 
         project.allprojects.forEach {
             ProjectAnalyzer(it, ignoredConfigurations, legacyGroupIdPrefixes, scannerProcessor).analyze()

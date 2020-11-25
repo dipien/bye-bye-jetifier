@@ -2,8 +2,8 @@ package com.dipien.byebyejetifier.scanner.resource
 
 import com.dipien.byebyejetifier.archive.ArchiveFile
 import com.dipien.byebyejetifier.common.LoggerHelper
+import com.dipien.byebyejetifier.scanner.AbstractScanner
 import com.dipien.byebyejetifier.scanner.ScanResult
-import com.dipien.byebyejetifier.scanner.Scanner
 import com.dipien.byebyejetifier.scanner.ScannerHelper
 import java.io.PrintWriter
 import java.io.StringWriter
@@ -14,8 +14,8 @@ import javax.xml.stream.XMLInputFactory
 import javax.xml.stream.XMLStreamException
 
 class XmlResourceScanner(
-    private val scannerHelper: ScannerHelper
-) : Scanner {
+    scannerHelper: ScannerHelper
+) : AbstractScanner(scannerHelper) {
 
     private var legacyDependencies = mutableSetOf<String>()
 
@@ -88,5 +88,6 @@ class XmlResourceScanner(
     }
 
     override fun canScan(archiveFile: ArchiveFile): Boolean =
-            archiveFile.isLayoutResource() || archiveFile.isAndroidManifestFile()
+        super.canScan(archiveFile) &&
+            (archiveFile.isLayoutResource() || archiveFile.isAndroidManifestFile())
 }

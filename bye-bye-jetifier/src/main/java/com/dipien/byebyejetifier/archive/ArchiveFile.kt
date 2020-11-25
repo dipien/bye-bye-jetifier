@@ -21,7 +21,7 @@ class ArchiveFile(relativePath: Path, data: ByteArray) : ArchiveItem {
         visitor.visit(this, scanResults)
     }
 
-    fun isLayoutResource() = fileName.startsWith("res/layout", ignoreCase = true) &&
+    fun isLayoutResource() = relativePath.toString().startsWith("res/layout", ignoreCase = true) &&
         fileName.endsWith(".xml", ignoreCase = true)
 
     fun isAndroidManifestFile() = fileName.endsWith("AndroidManifest.xml", ignoreCase = true)
