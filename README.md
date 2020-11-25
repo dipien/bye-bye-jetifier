@@ -81,7 +81,7 @@ byeByeJetifier {
 
 ## Donations
 
-Donations are greatly appreciated. You can help us to pay for our domain and the development.
+Donations are greatly appreciated. You can help us to pay for our domain and the plugin development.
 
 * [Donate cryptocurrency](http://donations.dipien.com/)
 * [Donate with PayPal](https://www.paypal.com/paypalme/maxirosson)
