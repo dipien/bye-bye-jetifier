@@ -2,10 +2,12 @@
 Gradle Plugin to verify if you can keep Android Jetifier disabled
 
 ## Features
-This plugin verifies for each project dependency and its transitives if:
+This plugin verifies on each dependency JAR/AAR (and its transitives) if:
 * any class is using a support library import
 * any layout is referencing a support library class
 * the Android Manifest is referencing a support library class
+
+It also verifies if any support library dependency is resolved on the project.
 
 ## Setup
 
@@ -26,26 +28,34 @@ apply plugin: "com.dipien.byebyejetifier"
 
 ## Usage
 
-To validate if your project has any dependency (including transitives) using the legacy android support library, you need to execute the following task:
+To validate if your project dependencies (and its transitives) have any usage of the legacy android support library, you need to execute the following task:
 
     ./gradlew canISayByeByeJetifier -Pandroid.enableJetifier=false
 
-If you have any legacy android support library usage in your project, the task will fail and print a report with all the details. For example:
+If you have any legacy android support library usage, the task will fail and print a report with all the details. For example:
 
 ```
-Scanning project: app
-com/bumptech/glide/Glide.class -> android/support/v4/app/FragmentActivity
-com/bumptech/glide/Glide.class -> android/support/v4/app/Fragment
-com/bumptech/glide/manager/RequestManagerRetriever.class -> android/support/v4/app/FragmentManager
-com/bumptech/glide/manager/RequestManagerRetriever.class -> android/support/v4/app/FragmentActivity
-com/bumptech/glide/manager/RequestManagerRetriever.class -> android/support/v4/app/Fragment
-com/bumptech/glide/manager/SupportRequestManagerFragment.class -> android/support/v4/app/Fragment
-From: com.github.bumptech.glide:glide:3.8.0
+========================================
+Project: app
+========================================
+
+Scanning com.github.bumptech.glide:glide:3.8.0
+ * com/bumptech/glide/Glide.class -> android/support/v4/app/FragmentActivity
+ * com/bumptech/glide/Glide.class -> android/support/v4/app/Fragment
+ * com/bumptech/glide/manager/RequestManagerRetriever.class -> android/support/v4/app/FragmentManager
+ * com/bumptech/glide/manager/RequestManagerRetriever.class -> android/support/v4/app/FragmentActivity
+ * com/bumptech/glide/manager/RequestManagerRetriever.class -> android/support/v4/app/Fragment
+ * com/bumptech/glide/manager/SupportRequestManagerFragment.class -> android/support/v4/app/Fragment
+
+Legacy support dependencies:
+ * com.android.support:support-annotations:28.0.0
+
+> Task :canISayByeByeJetifier FAILED
 ```
 
-If you don't have any legacy android support library the task will finish successfully, and you can remove the `android.enableJetifier` flag from your `gradle.properties`.
+If you don't have any legacy android support library usages, the task will finish successfully, so it's safe to remove the `android.enableJetifier` flag from your `gradle.properties`.
 
-Once you disable jetifier, you don't want to add any dependency with the support library by mistake. So, I recommend to execute this task on your CI tools as part of the PR checks.
+Once you disable jetifier, you don't want to add any new dependency with the support library by mistake. So, I recommend to execute this task on your CI tools as part of the PR checks.
 
 # Advanced configuration
 You can configure the plugin using the `byeByeJetifier` extension. These are the default values for each property:
@@ -65,6 +75,7 @@ byeByeJetifier {
     ]
     ignoredConfigurations = ["lintClassPath"]
     ignoredPackages = ["android.support.v4.media", "android.support.FILE_PROVIDER_PATHS"]
+    verbose = false
 }
 ```
 
