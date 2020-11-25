@@ -30,7 +30,7 @@ open class ByeByeJetifierTask : AbstractTask() {
 
     @get:Input
     @get:Optional
-    var ignoredLegacyPackagesPrefixes: List<String> = emptyList()
+    var excludedLegacyPackagesPrefixes: List<String> = emptyList()
 
     @get:Input
     @get:Optional
@@ -38,10 +38,10 @@ open class ByeByeJetifierTask : AbstractTask() {
 
     @get:Input
     @get:Optional
-    var ignoredConfigurations: List<String> = emptyList()
+    var excludedConfigurations: List<String> = emptyList()
 
     private val scannerProcessor by lazy {
-        val scannerHelper = ScannerHelper(legacyPackagesPrefixes, ignoredLegacyPackagesPrefixes, excludedFilesFromScanning)
+        val scannerHelper = ScannerHelper(legacyPackagesPrefixes, excludedLegacyPackagesPrefixes, excludedFilesFromScanning)
         val scannerList = listOf(BytecodeScanner(scannerHelper), XmlResourceScanner(scannerHelper))
         ScannerProcessor(scannerList)
     }
@@ -58,12 +58,12 @@ open class ByeByeJetifierTask : AbstractTask() {
         }
 
         LoggerHelper.log("legacyPackagesPrefixes: $legacyPackagesPrefixes")
-        LoggerHelper.log("ignoredLegacyPackagesPrefixes: $ignoredLegacyPackagesPrefixes")
-        LoggerHelper.log("ignoredConfigurations: $ignoredConfigurations")
-        LoggerHelper.log("excludedFilesFromScanning: $excludedFilesFromScanning")
+        LoggerHelper.log("excludedLegacyPackagesPrefixes: $excludedLegacyPackagesPrefixes")
+        LoggerHelper.log("excludedConfigurations: $excludedConfigurations")
+        LoggerHelper.log("excludedConfigurations: $excludedConfigurations")
 
         project.allprojects.forEach {
-            ProjectAnalyzer(it, ignoredConfigurations, legacyGroupIdPrefixes, scannerProcessor).analyze()
+            ProjectAnalyzer(it, excludedConfigurations, legacyGroupIdPrefixes, scannerProcessor).analyze()
         }
 
         if (ProjectAnalyzerResult.thereAreSupportLibraryDependencies || ProjectAnalyzerResult.includeSupportLibrary) {
