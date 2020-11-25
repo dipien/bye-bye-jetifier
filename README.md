@@ -57,7 +57,7 @@ If you don't have any legacy android support library usages, the task will finis
 
 Once you disable jetifier, you don't want to add any new dependency with the support library by mistake. So, I recommend to execute this task on your CI tools as part of the PR checks.
 
-# Advanced configuration
+## Advanced configuration
 You can configure the plugin using the `byeByeJetifier` extension. These are the default values for each property:
 
 ```groovy
