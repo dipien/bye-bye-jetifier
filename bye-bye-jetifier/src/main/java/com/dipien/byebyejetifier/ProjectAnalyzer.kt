@@ -28,12 +28,21 @@ class ProjectAnalyzer(
         var hasExternalDependencies = false
         val scanResultsCache = mutableMapOf<String, List<ScanResult>>()
 
+        LoggerHelper.lifeCycle("")
+        LoggerHelper.lifeCycle("========================================")
+        LoggerHelper.lifeCycle("Project: ${project.name}")
+        LoggerHelper.lifeCycle("========================================")
+
         val externalDependencies = project.configurations
             .filter {
                 !excludedConfigurations.contains(it.name)
             }
             .map {
-                it.getExternalDependencies()
+                val dependencies = it.getExternalDependencies()
+                if (dependencies.isNotEmpty()) {
+                    LoggerHelper.info("Dependencies for configuration ${it.name}: $dependencies")
+                }
+                dependencies
             }
             .flatten()
             .distinct()
@@ -52,24 +61,14 @@ class ProjectAnalyzer(
                 val library = Archive.Builder.extract(it.file)
                 val scanResults = scanResultsCache.getOrPut(library.artifactDefinition) { scannerProcessor.scanLibrary(library) }
                 if (scanResults.isNotEmpty()) {
-                    if (!thereAreSupportLibraryDependencies) {
-                        LoggerHelper.lifeCycle("")
-                        LoggerHelper.lifeCycle("========================================")
-                        LoggerHelper.lifeCycle("Project: ${project.name}")
-                        LoggerHelper.lifeCycle("========================================")
-                    }
                     LoggerHelper.lifeCycle("")
                     LoggerHelper.lifeCycle("Scanning ${library.artifactDefinition}")
+                    LoggerHelper.lifeCycle("${library.relativePath}")
                     scanResults.forEach { scanResult ->
                         LoggerHelper.lifeCycle(" * ${scanResult.relativePath} -> ${scanResult.legacyDependency}")
                     }
                     thereAreSupportLibraryDependencies = true
                 } else {
-                    LoggerHelper.info("")
-                    LoggerHelper.info("========================================")
-                    LoggerHelper.info("Project: ${project.name}")
-                    LoggerHelper.info("========================================")
-                    LoggerHelper.info("")
                     LoggerHelper.info("Scanning ${library.artifactDefinition}")
                     LoggerHelper.info(" * No legacy android support usages found")
                 }
@@ -96,7 +95,7 @@ class ProjectAnalyzer(
         }
 
         if (!thereAreSupportLibraryDependencies && !includeSupportLibrary && !hasExternalDependencies) {
-            LoggerHelper.info(" * No legacy android support usages found")
+            LoggerHelper.lifeCycle(" * No legacy android support usages found")
         }
 
         if (includeSupportLibrary) {

@@ -9,11 +9,11 @@ object LoggerHelper {
     var verbose = false
 
     fun debug(message: String) {
-        logger.log(LogLevel.DEBUG, message)
+        logger.log(getLogLevel(LogLevel.DEBUG), message)
     }
 
     fun info(message: String) {
-        logger.log(LogLevel.INFO, message)
+        logger.log(getLogLevel(LogLevel.INFO), message)
     }
 
     fun lifeCycle(message: String) {
