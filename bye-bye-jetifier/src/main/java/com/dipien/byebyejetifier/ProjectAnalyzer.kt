@@ -65,6 +65,7 @@ class ProjectAnalyzer(
                     }
                     thereAreSupportLibraryDependencies = true
                 } else {
+                    LoggerHelper.info("")
                     LoggerHelper.info("Scanning ${library.artifactDefinition}")
                     LoggerHelper.info(" * No legacy android support usages found")
                 }
