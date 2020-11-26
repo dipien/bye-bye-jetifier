@@ -29,9 +29,9 @@ class ProjectAnalyzer(
         val scanResultsCache = mutableMapOf<String, List<ScanResult>>()
 
         LoggerHelper.lifeCycle("")
-        LoggerHelper.lifeCycle("========================================")
+        LoggerHelper.lifeCycle("=========================================")
         LoggerHelper.lifeCycle("Project: ${project.name}")
-        LoggerHelper.lifeCycle("========================================")
+        LoggerHelper.lifeCycle("=========================================")
 
         val externalDependencies = project.configurations
             .filter {
@@ -90,8 +90,14 @@ class ProjectAnalyzer(
             }
         }
 
-        if (!thereAreSupportLibraryDependencies && !includeSupportLibrary && !hasExternalDependencies) {
-            LoggerHelper.lifeCycle(" * No legacy android support usages found")
+        if (LoggerHelper.verbose) {
+            if (!includeSupportLibrary && !hasExternalDependencies && !hasExternalDependencies) {
+                LoggerHelper.info(" * No legacy android support usages found")
+            }
+        } else {
+            if (!thereAreSupportLibraryDependencies && !includeSupportLibrary) {
+                LoggerHelper.lifeCycle(" * No legacy android support usages found")
+            }
         }
 
         if (includeSupportLibrary) {
