@@ -13,7 +13,7 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import java.lang.RuntimeException
 
-open class ByeByeJetifierTask : AbstractTask() {
+open class CanISayByeByeJetifierTask : AbstractTask() {
 
     companion object {
         const val TASK_NAME = "canISayByeByeJetifier"

@@ -9,7 +9,7 @@ executors:
   jdk_executor:
     working_directory: *working_dir
     docker:
-      - image: circleci/openjdk:11-jdk
+      - image: cimg/openjdk:11.0
     environment:
       JVM_OPTS: -Xmx3200m
       GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.caching=true
