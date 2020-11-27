@@ -55,7 +55,7 @@ Legacy support dependencies:
 
 If you don't have any legacy android support library usages, the task will finish successfully, so it's safe to remove the `android.enableJetifier` flag from your `gradle.properties`.
 
-Once you disable jetifier, you don't want to add any new dependency with the support library by mistake. So, I recommend to execute this task on your CI tools as part of the PR checks.
+Once you have disabled jetifier, you don't want to add a new support-library-dependent library by mistake when adding/upgrading a dependency on your project. To avoid that kind of issues, you can run the `canISayByeByeJetifier` task on your CI tool as part of the PR checks.
 
 ## Advanced configuration
 You can configure the plugin using the `byeByeJetifier` extension. These are the default values for each property:
