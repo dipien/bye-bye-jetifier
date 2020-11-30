@@ -33,10 +33,13 @@ class ProjectAnalyzer(
         LoggerHelper.lifeCycle("Project: ${project.name}")
         LoggerHelper.lifeCycle("=========================================")
 
-        val externalDependencies = project.configurations
+        val configurations = project.configurations
             .filter {
                 !excludedConfigurations.contains(it.name)
             }
+        LoggerHelper.log("Configurations to scan: $configurations")
+
+        val externalDependencies = configurations
             .map {
                 it.getExternalDependencies()
             }
@@ -124,6 +127,7 @@ class ProjectAnalyzer(
                 // TODO analyze errors from Configurations whose name ends in "metadata"
                 LoggerHelper.info("Error when accessing configuration $name" + e.message)
             } else {
+                LoggerHelper.warn("Error when accessing configuration $name")
                 throw e
             }
         }

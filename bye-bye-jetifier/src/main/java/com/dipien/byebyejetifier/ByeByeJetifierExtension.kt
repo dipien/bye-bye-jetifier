@@ -18,7 +18,7 @@ open class ByeByeJetifierExtension {
 
     var excludedLegacyPackagesPrefixes: List<String> = listOf("android.support.v4.media", "android.support.FILE_PROVIDER_PATHS")
 
-    var excludedConfigurations: List<String> = listOf("lintClassPath")
+    var excludedConfigurations: List<String> = listOf("lintClassPath", "ktlint")
 
     var excludedFilesFromScanning: List<String> = listOf(
         // org.jetbrains.kotlin:kotlin-compiler-embeddable:1.4.20

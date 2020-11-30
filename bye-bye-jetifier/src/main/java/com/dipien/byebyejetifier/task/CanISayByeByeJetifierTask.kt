@@ -60,7 +60,7 @@ open class CanISayByeByeJetifierTask : AbstractTask() {
         LoggerHelper.log("legacyPackagesPrefixes: $legacyPackagesPrefixes")
         LoggerHelper.log("excludedLegacyPackagesPrefixes: $excludedLegacyPackagesPrefixes")
         LoggerHelper.log("excludedConfigurations: $excludedConfigurations")
-        LoggerHelper.log("excludedConfigurations: $excludedConfigurations")
+        LoggerHelper.log("excludedFilesFromScanning: $excludedFilesFromScanning")
 
         project.allprojects.forEach {
             ProjectAnalyzer(it, excludedConfigurations, legacyGroupIdPrefixes, scannerProcessor).analyze()
