@@ -6,6 +6,7 @@ import com.dipien.byebyejetifier.scanner.ScanResult
 import com.dipien.byebyejetifier.scanner.ScannerProcessor
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
+import org.gradle.api.artifacts.ProjectDependency
 import org.gradle.api.artifacts.ResolvedDependency
 import java.util.LinkedList
 import java.util.Queue
@@ -48,7 +49,7 @@ class ProjectAnalyzer(
 
         externalDependencies
             .map {
-                if (!it.isAndroidX() && !it.isLegacyAndroidSupport() && !it.isModule()) {
+                if (!it.isAndroidX() && !it.isLegacyAndroidSupport()) {
                     it.moduleArtifacts
                 } else {
                     emptySet()
@@ -133,9 +134,10 @@ class ProjectAnalyzer(
         }
 
         val resolvedDependencies = mutableSetOf<ResolvedDependency>()
+        val projectDependencies = allDependencies.filterIsInstance(ProjectDependency::class.java)
         firstLevelDependencies
             .forEach { firstLevelDependency ->
-                if (!firstLevelDependency.isModule()) {
+                if (firstLevelDependency.isExternalDependency(projectDependencies)) {
                     resolvedDependencies.add(firstLevelDependency)
                     resolvedDependencies.traverseAndAddChildren(firstLevelDependency)
                 }
@@ -161,8 +163,11 @@ class ProjectAnalyzer(
         }
     }
 
-    private fun ResolvedDependency.isModule(): Boolean =
-        moduleGroup == project.rootProject.name
+    private fun ResolvedDependency.isExternalDependency(projectDependencies: List<ProjectDependency>): Boolean {
+        return projectDependencies.none { projectDependency ->
+            projectDependency.group == this.moduleGroup && projectDependency.name == this.moduleName
+        }
+    }
 
     private fun ResolvedDependency.isLegacyAndroidSupport(): Boolean =
         legacyGroupIdPrefixes.any { moduleGroup.startsWith(it) }
