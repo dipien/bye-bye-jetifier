@@ -17,8 +17,6 @@ class XmlResourceScanner(
     scannerHelper: ScannerHelper
 ) : AbstractScanner(scannerHelper) {
 
-    private var legacyDependencies = mutableSetOf<String>()
-
     companion object {
         const val PATTERN_TYPE_GROUP = 1
     }
@@ -44,6 +42,8 @@ class XmlResourceScanner(
     )
 
     override fun scan(archiveFile: ArchiveFile): List<ScanResult> {
+        val legacyDependencies = mutableSetOf<String>()
+
         val charset = getCharset(archiveFile)
         val dataStr = archiveFile.data.toString(charset)
 
