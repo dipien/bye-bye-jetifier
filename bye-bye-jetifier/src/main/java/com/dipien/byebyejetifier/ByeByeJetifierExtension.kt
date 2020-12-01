@@ -6,13 +6,9 @@ open class ByeByeJetifierExtension {
 
     // https://developer.android.com/jetpack/androidx/migrate/class-mappings#androidsupport
     var legacyPackagesPrefixes: List<String> = listOf(
-        "com.executor",
-        "lifecycle",
-        "paging",
-        "persistence.db",
-        "persistence.room",
-        "android.databinding",
+        "android.arch",
         "android.support",
+        "android.databinding",
         "android.test.espresso"
     )
 
