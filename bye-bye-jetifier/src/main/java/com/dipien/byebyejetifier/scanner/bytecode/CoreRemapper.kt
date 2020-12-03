@@ -8,6 +8,8 @@ class CoreRemapper(private val context: ScannerContext) {
 
     companion object {
 
+        const val TAG = "CoreRemapper"
+
         val AMBIGUOUS_STRINGS = setOf(
             JavaType.fromDotVersion("android.support.v4"),
             JavaType.fromDotVersion("android.support.v4.content"),
@@ -27,7 +29,7 @@ class CoreRemapper(private val context: ScannerContext) {
             return result
         }
 
-        LoggerHelper.error("No mapping for: $type")
+        context.reportNoMappingFoundFailure(TAG, type)
         return type
     }
 

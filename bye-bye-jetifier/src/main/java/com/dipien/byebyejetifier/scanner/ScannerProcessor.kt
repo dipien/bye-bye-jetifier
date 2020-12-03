@@ -13,6 +13,7 @@ class ScannerProcessor(
     fun scanLibrary(archive: Archive): List<ScanResult> {
         LoggerHelper.debug("")
         LoggerHelper.debug("Artifact: ${archive.artifactDefinition}")
+        LoggerHelper.debug("Path: ${archive.relativePath}")
 
         val scanResults = mutableListOf<ScanResult>()
         archive.accept(this, scanResults)

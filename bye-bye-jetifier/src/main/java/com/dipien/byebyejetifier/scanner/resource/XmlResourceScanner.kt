@@ -22,6 +22,8 @@ class XmlResourceScanner(
 
     companion object {
 
+        const val TAG = "XmlResourceScanner"
+
         const val PATTERN_TYPE_GROUP = 1
 
         /***
@@ -134,7 +136,7 @@ class XmlResourceScanner(
             return result.toDotNotation()
         }
 
-        LoggerHelper.error("No mapping for: $type")
+        context.reportNoMappingFoundFailure(TAG, type)
         return typeName
     }
 

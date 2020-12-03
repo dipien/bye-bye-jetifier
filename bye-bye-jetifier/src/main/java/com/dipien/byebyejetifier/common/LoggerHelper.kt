@@ -20,16 +20,16 @@ object LoggerHelper {
         logger.log(LogLevel.LIFECYCLE, message)
     }
 
-    fun warn(message: String) {
-        logger.log(LogLevel.WARN, message)
+    fun warn(message: String, tag: String = "") {
+        logger.log(LogLevel.WARN, "[WARNING] [$tag] $message")
     }
 
     fun quiet(message: String) {
         logger.log(LogLevel.QUIET, message)
     }
 
-    fun error(message: String) {
-        logger.log(LogLevel.ERROR, message)
+    fun error(message: String, tag: String = "") {
+        logger.log(LogLevel.ERROR, "[ERROR] [$tag] $message")
     }
 
     fun log(message: String, logLevel: LogLevel = LogLevel.INFO) {
