@@ -5,7 +5,10 @@ import com.dipien.byebyejetifier.archive.ArchiveFile
 import com.dipien.byebyejetifier.archive.ArchiveItemVisitor
 import com.dipien.byebyejetifier.common.LoggerHelper
 
-class ScannerProcessor(private val scannerList: List<Scanner>) : ArchiveItemVisitor {
+class ScannerProcessor(
+    private val context: ScannerContext,
+    private val scannerList: List<Scanner>
+) : ArchiveItemVisitor {
 
     fun scanLibrary(archive: Archive): List<ScanResult> {
         LoggerHelper.debug("")
@@ -23,6 +26,11 @@ class ScannerProcessor(private val scannerList: List<Scanner>) : ArchiveItemVisi
     }
 
     override fun visit(archiveFile: ArchiveFile, scanResults: MutableList<ScanResult>) {
+        if (context.isExcludedFileFromScanning(archiveFile)) {
+            LoggerHelper.debug("Excluded for scanning: ${archiveFile.relativePath}")
+            return
+        }
+
         var fileLogged = false
 
         scannerList.forEach {

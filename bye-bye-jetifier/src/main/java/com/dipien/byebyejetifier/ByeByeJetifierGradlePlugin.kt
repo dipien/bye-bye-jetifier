@@ -17,6 +17,7 @@ class ByeByeJetifierGradlePlugin : Plugin<Project> {
         project.afterEvaluate {
             canISayByeByeJetifierTask.legacyGroupIdPrefixes = extension.legacyGroupIdPrefixes
             canISayByeByeJetifierTask.excludedConfigurations = extension.excludedConfigurations
+            canISayByeByeJetifierTask.excludedFilesFromScanning = extension.excludedFilesFromScanning
             canISayByeByeJetifierTask.verbose = extension.verbose
         }
     }

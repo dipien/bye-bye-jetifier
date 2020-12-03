@@ -31,12 +31,16 @@ open class CanISayByeByeJetifierTask : AbstractTask() {
     @get:Optional
     var excludedConfigurations: List<String> = emptyList()
 
+    @get:Input
+    @get:Optional
+    var excludedFilesFromScanning: List<String> = emptyList()
+
     private val scannerProcessor by lazy {
         val inputStream = javaClass.classLoader.getResourceAsStream(DEFAULT_CONFIG)
         val config = ConfigParser.loadFromFile(inputStream)
-        val scannerContext = ScannerContext(config)
+        val scannerContext = ScannerContext(config, excludedFilesFromScanning)
         val scannerList = listOf(BytecodeScanner(scannerContext), XmlResourceScanner(scannerContext))
-        ScannerProcessor(scannerList)
+        ScannerProcessor(scannerContext, scannerList)
     }
 
     init {
