@@ -134,7 +134,7 @@ class XmlResourceScanner(
             return result.toDotNotation()
         }
 
-        LoggerHelper.warn("No mapping for: $type")
+        LoggerHelper.error("No mapping for: $type")
         return typeName
     }
 
