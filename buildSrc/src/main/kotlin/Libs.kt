@@ -7,4 +7,7 @@ object Libs {
 
     // https://github.com/junit-team/junit4/releases
     const val JUNIT = "junit:junit:4.13"
+
+    // https://github.com/google/gson/releases
+    const val GSON = "com.google.code.gson:gson:2.8.6"
 }

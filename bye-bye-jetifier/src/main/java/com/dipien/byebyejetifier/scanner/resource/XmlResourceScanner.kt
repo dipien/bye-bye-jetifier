@@ -2,23 +2,32 @@ package com.dipien.byebyejetifier.scanner.resource
 
 import com.dipien.byebyejetifier.archive.ArchiveFile
 import com.dipien.byebyejetifier.common.LoggerHelper
-import com.dipien.byebyejetifier.scanner.AbstractScanner
+import com.dipien.byebyejetifier.core.type.JavaType
+import com.dipien.byebyejetifier.core.type.PackageName
 import com.dipien.byebyejetifier.scanner.ScanResult
-import com.dipien.byebyejetifier.scanner.ScannerHelper
+import com.dipien.byebyejetifier.scanner.Scanner
+import com.dipien.byebyejetifier.scanner.ScannerContext
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
+import java.nio.file.Path
 import java.util.regex.Pattern
 import javax.xml.stream.XMLInputFactory
 import javax.xml.stream.XMLStreamException
 
 class XmlResourceScanner(
-    scannerHelper: ScannerHelper
-) : AbstractScanner(scannerHelper) {
+    private val context: ScannerContext
+) : Scanner {
 
     companion object {
+
         const val PATTERN_TYPE_GROUP = 1
+
+        /***
+         * Matches anything that could be java type or package
+         */
+        val JAVA_TOKEN_MATCHER = "^[a-zA-Z0-9.\$_]+$".toRegex()
     }
 
     /**
@@ -35,29 +44,17 @@ class XmlResourceScanner(
      * much about comments.
      */
     private val patterns = listOf(
-            Pattern.compile("</?([a-zA-Z0-9.]+)"), // </{candidate} or <{candidate}
-            Pattern.compile("[a-zA-Z0-9:]+=\"([^\"]+)\""), // any="{candidate}"
-            Pattern.compile(">\\s*([a-zA-Z0-9.\$_]+)<"), // >{candidate}<
-            Pattern.compile("\\{@link\\s*([a-zA-Z0-9.\$_]+)(#[^}]*)?}") // @{link {candidate}#*}
+        Pattern.compile("</?([a-zA-Z0-9.]+)"), // </{candidate} or <{candidate}
+        Pattern.compile("[a-zA-Z0-9:]+=\"([^\"]+)\""), // any="{candidate}"
+        Pattern.compile(">\\s*([a-zA-Z0-9.\$_]+)<"), // >{candidate}<
+        Pattern.compile("\\{@link\\s*([a-zA-Z0-9.\$_]+)(#[^}]*)?}") // @{link {candidate}#*}
     )
 
     override fun scan(archiveFile: ArchiveFile): List<ScanResult> {
-        val legacyDependencies = mutableSetOf<String>()
-
         val charset = getCharset(archiveFile)
         val dataStr = archiveFile.data.toString(charset)
 
-        for (pattern in patterns) {
-            val matcher = pattern.matcher(dataStr)
-            while (matcher.find()) {
-                val candidate = matcher.group(PATTERN_TYPE_GROUP)
-                scannerHelper.verifySupportLibraryDependency(candidate)?.let {
-                    legacyDependencies.add(candidate)
-                }
-            }
-        }
-
-        return legacyDependencies.map { ScanResult(archiveFile.relativePath.toString(), it) }
+        return replaceWithPatterns(dataStr, patterns, archiveFile.relativePath)
     }
 
     private fun getCharset(file: ArchiveFile): Charset {
@@ -79,7 +76,7 @@ class XmlResourceScanner(
             // causes our encoding detection to crash. However these files are otherwise valid UTF-8
             // files so we at least try to recover by defaulting to UTF-8.
             LoggerHelper.warn("Received malformed sequence exception when trying to detect the encoding " +
-                    "for ${file.fileName}. Defaulting to UTF-8.")
+                "for ${file.fileName}. Defaulting to UTF-8.")
             val tracePrinter = StringWriter()
             e.printStackTrace(PrintWriter(tracePrinter))
             LoggerHelper.warn(tracePrinter.toString())
@@ -87,7 +84,81 @@ class XmlResourceScanner(
         }
     }
 
+    /**
+     * For each pattern in [patterns] matching a portion of the string represented by [sb], applies
+     * [mappingFunction] to the match and puts the result back into [sb].
+     */
+    private fun replaceWithPatterns(
+        dataStr: String,
+        patterns: List<Pattern>,
+        filePath: Path
+    ): List<ScanResult> {
+        val result = mutableListOf<ScanResult>()
+
+        for (pattern in patterns) {
+            val matcher = pattern.matcher(dataStr)
+            while (matcher.find()) {
+                val toReplace = matcher.group(PATTERN_TYPE_GROUP)
+                val replacement =
+                    if (toReplace.matches(JAVA_TOKEN_MATCHER)) {
+                        if (isPackage(toReplace)) {
+                            rewritePackage(toReplace, filePath)
+                        } else {
+                            rewriteType(toReplace)
+                        }
+                    } else {
+                        toReplace
+                    }
+
+                if (replacement != toReplace) {
+                    result.add(ScanResult(filePath.toString(), toReplace))
+                }
+            }
+        }
+
+        return result
+    }
+
+    private fun isPackage(token: String): Boolean {
+        return !token.any { it.isUpperCase() }
+    }
+
+    private fun rewriteType(typeName: String): String {
+        if (typeName.contains(" ")) {
+            return typeName
+        }
+
+        val type = JavaType.fromDotVersion(typeName)
+        val result = context.typeRewriter.rewriteType(type)
+        if (result != null) {
+            return result.toDotNotation()
+        }
+
+        LoggerHelper.warn("No mapping for: $type")
+        return typeName
+    }
+
+    private fun rewritePackage(packageName: String, filePath: Path): String {
+        if (!packageName.contains('.')) {
+            // Single word packages are not something we need or should rewrite
+            return packageName
+        }
+
+        val pckg = PackageName.fromDotVersion(packageName)
+
+        val result = context.config.packageMap.getPackageFor(pckg)
+        if (result != null) {
+            LoggerHelper.debug("Map package: $packageName -> $result")
+            return result.toDotNotation()
+        }
+
+        if (context.config.isEligibleForRewrite(pckg)) {
+            LoggerHelper.error("No mapping for package '$packageName' in '$filePath', keeping identity")
+        }
+
+        return packageName
+    }
+
     override fun canScan(archiveFile: ArchiveFile): Boolean =
-        super.canScan(archiveFile) &&
-            (archiveFile.isLayoutResource() || archiveFile.isAndroidManifestFile())
+        archiveFile.isLayoutResource() || archiveFile.isAndroidManifestFile()
 }
