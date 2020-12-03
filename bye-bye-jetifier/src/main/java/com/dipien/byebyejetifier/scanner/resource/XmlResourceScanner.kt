@@ -93,7 +93,7 @@ class XmlResourceScanner(
         patterns: List<Pattern>,
         filePath: Path
     ): List<ScanResult> {
-        val result = mutableListOf<ScanResult>()
+        val result = mutableSetOf<ScanResult>()
 
         for (pattern in patterns) {
             val matcher = pattern.matcher(dataStr)
@@ -116,7 +116,7 @@ class XmlResourceScanner(
             }
         }
 
-        return result
+        return result.toList()
     }
 
     private fun isPackage(token: String): Boolean {
