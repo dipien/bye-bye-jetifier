@@ -55,6 +55,7 @@ open class CanISayByeByeJetifierTask : AbstractTask() {
         }
 
         LoggerHelper.log("excludedConfigurations: $excludedConfigurations")
+        LoggerHelper.log("excludedFilesFromScanning: $excludedFilesFromScanning")
 
         project.allprojects.forEach {
             ProjectAnalyzer(it, excludedConfigurations, legacyGroupIdPrefixes, scannerProcessor).analyze()
