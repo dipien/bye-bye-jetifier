@@ -4,7 +4,10 @@ import com.dipien.byebyejetifier.common.LoggerHelper
 import com.dipien.byebyejetifier.core.type.JavaType
 import com.dipien.byebyejetifier.scanner.ScannerContext
 
-class CoreRemapper(private val context: ScannerContext) {
+class CoreRemapper(
+    private val context: ScannerContext,
+    private val archiveFilePath: String
+) {
 
     companion object {
 
@@ -54,12 +57,16 @@ class CoreRemapper(private val context: ScannerContext) {
 
         // Verify that we did not make an ambiguous mapping, see b/116745353
         if (AMBIGUOUS_STRINGS.contains(type)) {
-            throw AmbiguousStringJetifierException(
-                "The given artifact contains a string literal " +
-                    "with a package reference '$value' that cannot be safely rewritten. " +
+            LoggerHelper.warn(
+                "The file '$archiveFilePath' contains a string literal " +
+                    "with a package reference '$value'. " +
                     "Libraries using reflection such as annotation processors need to be " +
-                    "updated manually to add support for androidx."
+                    "updated manually to add support for androidx. " +
+                    "But if you are sure there is no need to transform this package reference " +
+                    "you can ignore this message or exclude this file from scanning using " +
+                    "the 'excludedFilesFromScanning' property."
             )
+            return value
         }
 
         // Strings map has a priority over types map
@@ -102,8 +109,3 @@ class CoreRemapper(private val context: ScannerContext) {
         return value
     }
 }
-
-/**
- * Thrown when jetifier finds a string reference to a package that has ambiguous mapping.
- */
-class AmbiguousStringJetifierException(message: String) : Exception(message)

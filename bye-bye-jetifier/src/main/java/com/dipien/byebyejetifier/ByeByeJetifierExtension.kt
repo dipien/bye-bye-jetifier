@@ -16,13 +16,7 @@ open class ByeByeJetifierExtension {
         // org.jetbrains.kotlin:kotlin-android-extensions:1.4.20
         "org/jetbrains/kotlin/android/synthetic/AndroidConst",
         "org/jetbrains/kotlin/android/synthetic/codegen/AndroidIrTransformer",
-        "org/jetbrains/kotlin/android/synthetic/codegen/ResourcePropertyStackValue",
-
-        // org.robolectric:robolectric:4.4
-        "org/robolectric/internal/AndroidConfigurer",
-
-        // org.robolectric:sandbox:4.4
-        "org/robolectric/internal/bytecode/InvocationProfile"
+        "org/jetbrains/kotlin/android/synthetic/codegen/ResourcePropertyStackValue"
     )
 
     var verbose = false

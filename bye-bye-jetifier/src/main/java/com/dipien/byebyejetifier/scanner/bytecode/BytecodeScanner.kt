@@ -11,14 +11,16 @@ import org.objectweb.asm.commons.ClassRemapper
 class BytecodeScanner(private val context: ScannerContext) : Scanner {
 
     override fun scan(archiveFile: ArchiveFile): List<ScanResult> {
+        val relativePath = archiveFile.relativePath.toString()
+
         val reader = ClassReader(archiveFile.data)
         val writer = ClassWriter(0 /* flags */)
-        val customRemapper = CustomRemapper(CoreRemapper(context))
+        val customRemapper = CustomRemapper(CoreRemapper(context, relativePath))
         val visitor = ClassRemapper(writer, customRemapper)
 
         reader.accept(visitor, 0 /* flags */)
 
-        return customRemapper.legacyDependencies.map { ScanResult(archiveFile.relativePath.toString(), it) }
+        return customRemapper.legacyDependencies.map { ScanResult(relativePath, it) }
     }
 
     override fun canScan(archiveFile: ArchiveFile): Boolean = archiveFile.isClassFile()
