@@ -16,10 +16,8 @@ class ByeByeJetifierGradlePlugin : Plugin<Project> {
         val canISayByeByeJetifierTask = project.tasks.create(CanISayByeByeJetifierTask.TASK_NAME, CanISayByeByeJetifierTask::class.java)
         project.afterEvaluate {
             canISayByeByeJetifierTask.legacyGroupIdPrefixes = extension.legacyGroupIdPrefixes
-            canISayByeByeJetifierTask.legacyPackagesPrefixes = extension.legacyPackagesPrefixes
-            canISayByeByeJetifierTask.excludedLegacyPackagesPrefixes = extension.excludedLegacyPackagesPrefixes
-            canISayByeByeJetifierTask.excludedFilesFromScanning = extension.excludedFilesFromScanning
             canISayByeByeJetifierTask.excludedConfigurations = extension.excludedConfigurations
+            canISayByeByeJetifierTask.excludedFilesFromScanning = extension.excludedFilesFromScanning
             canISayByeByeJetifierTask.verbose = extension.verbose
         }
     }

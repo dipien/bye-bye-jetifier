@@ -20,16 +20,16 @@ object LoggerHelper {
         logger.log(LogLevel.LIFECYCLE, message)
     }
 
-    fun warn(message: String) {
-        logger.log(LogLevel.WARN, message)
+    fun warn(message: String, tag: String = "") {
+        logger.log(LogLevel.WARN, formatMessage(message, tag, LogLevel.WARN))
     }
 
     fun quiet(message: String) {
         logger.log(LogLevel.QUIET, message)
     }
 
-    fun error(message: String) {
-        logger.log(LogLevel.ERROR, message)
+    fun error(message: String, tag: String = "") {
+        logger.log(LogLevel.ERROR, formatMessage(message, tag, LogLevel.ERROR))
     }
 
     fun log(message: String, logLevel: LogLevel = LogLevel.INFO) {
@@ -50,5 +50,13 @@ object LoggerHelper {
         } else {
             logLevel
         }
+    }
+
+    private fun formatMessage(message: String, tag: String, level: LogLevel): String {
+        var formattedTag = ""
+        if (tag.isNotEmpty()) {
+            formattedTag = " [$tag]"
+        }
+        return "[${level.name}]$formattedTag $message"
     }
 }

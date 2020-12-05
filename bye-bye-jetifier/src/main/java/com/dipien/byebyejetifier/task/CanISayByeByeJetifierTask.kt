@@ -5,7 +5,8 @@ import com.dipien.byebyejetifier.ProjectAnalyzerResult
 import com.dipien.byebyejetifier.scanner.ScannerProcessor
 import com.dipien.byebyejetifier.common.AbstractTask
 import com.dipien.byebyejetifier.common.LoggerHelper
-import com.dipien.byebyejetifier.scanner.ScannerHelper
+import com.dipien.byebyejetifier.core.config.ConfigParser
+import com.dipien.byebyejetifier.scanner.ScannerContext
 import com.dipien.byebyejetifier.scanner.bytecode.BytecodeScanner
 import com.dipien.byebyejetifier.scanner.resource.XmlResourceScanner
 import org.gradle.api.GradleException
@@ -18,6 +19,8 @@ open class CanISayByeByeJetifierTask : AbstractTask() {
     companion object {
         const val TASK_NAME = "canISayByeByeJetifier"
         const val ENABLE_JETIFIER_PROPERTY = "android.enableJetifier"
+
+        private const val DEFAULT_CONFIG = "default.config"
     }
 
     @get:Input
@@ -26,24 +29,18 @@ open class CanISayByeByeJetifierTask : AbstractTask() {
 
     @get:Input
     @get:Optional
-    var legacyPackagesPrefixes: List<String> = emptyList()
-
-    @get:Input
-    @get:Optional
-    var excludedLegacyPackagesPrefixes: List<String> = emptyList()
+    var excludedConfigurations: List<String> = emptyList()
 
     @get:Input
     @get:Optional
     var excludedFilesFromScanning: List<String> = emptyList()
 
-    @get:Input
-    @get:Optional
-    var excludedConfigurations: List<String> = emptyList()
-
     private val scannerProcessor by lazy {
-        val scannerHelper = ScannerHelper(legacyPackagesPrefixes, excludedLegacyPackagesPrefixes, excludedFilesFromScanning)
-        val scannerList = listOf(BytecodeScanner(scannerHelper), XmlResourceScanner(scannerHelper))
-        ScannerProcessor(scannerList)
+        val inputStream = javaClass.classLoader.getResourceAsStream(DEFAULT_CONFIG)
+        val config = ConfigParser.loadFromFile(inputStream)
+        val scannerContext = ScannerContext(config, excludedFilesFromScanning)
+        val scannerList = listOf(BytecodeScanner(scannerContext), XmlResourceScanner(scannerContext))
+        ScannerProcessor(scannerContext, scannerList)
     }
 
     init {
@@ -57,8 +54,6 @@ open class CanISayByeByeJetifierTask : AbstractTask() {
             throw GradleException("This task needs to be run with Jetifier disabled: ./gradlew $TASK_NAME -P$ENABLE_JETIFIER_PROPERTY=false")
         }
 
-        LoggerHelper.log("legacyPackagesPrefixes: $legacyPackagesPrefixes")
-        LoggerHelper.log("excludedLegacyPackagesPrefixes: $excludedLegacyPackagesPrefixes")
         LoggerHelper.log("excludedConfigurations: $excludedConfigurations")
         LoggerHelper.log("excludedFilesFromScanning: $excludedFilesFromScanning")
 

@@ -1,21 +1,21 @@
 package com.dipien.byebyejetifier.scanner.bytecode
 
-import com.dipien.byebyejetifier.scanner.ScannerHelper
+import com.dipien.byebyejetifier.core.type.JavaType
 import org.objectweb.asm.commons.Remapper
 
 class CustomRemapper(
-    private val scannerHelper: ScannerHelper
+    private val remapper: CoreRemapper
 ) : Remapper() {
 
-    var oldDependencies = mutableSetOf<String>()
+    var legacyDependencies = mutableSetOf<String>()
 
     override fun map(typeName: String): String {
-        onDiscoveredType(typeName)
+        verifyType(JavaType(typeName))
         return super.map(typeName)
     }
 
     override fun mapPackageName(name: String): String {
-        onDiscoveredType(name)
+        verifyType(JavaType(name))
         return super.mapPackageName(name)
     }
 
@@ -27,7 +27,7 @@ class CustomRemapper(
 
         fun mapPoolReferenceType(typeDeclaration: String): String {
             if (!typeDeclaration.contains(".")) {
-                onDiscoveredType(typeDeclaration)
+                verifyType(JavaType(typeDeclaration))
                 return typeDeclaration
             }
 
@@ -37,7 +37,7 @@ class CustomRemapper(
             }
 
             val toRewrite = typeDeclaration.replace(".", "/")
-            onDiscoveredType(toRewrite)
+            verifyType(JavaType(toRewrite))
             return typeDeclaration
         }
 
@@ -61,13 +61,19 @@ class CustomRemapper(
             return super.mapValue(value)
         }
 
-        onDiscoveredType(stringVal)
+        verifyString(stringVal)
         return super.mapValue(value)
     }
 
-    private fun onDiscoveredType(type: String) {
-        scannerHelper.verifySupportLibraryDependency(type)?.let {
-            oldDependencies.add(type)
+    private fun verifyType(type: JavaType) {
+        if (remapper.rewriteType(type) != type) {
+            legacyDependencies.add(type.fullName)
+        }
+    }
+
+    private fun verifyString(value: String) {
+        if (remapper.rewriteString(value) != value) {
+            legacyDependencies.add(value)
         }
     }
 }
