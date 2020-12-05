@@ -16,7 +16,10 @@ open class ByeByeJetifierExtension {
         // org.jetbrains.kotlin:kotlin-android-extensions:1.4.20
         "org/jetbrains/kotlin/android/synthetic/AndroidConst",
         "org/jetbrains/kotlin/android/synthetic/codegen/AndroidIrTransformer",
-        "org/jetbrains/kotlin/android/synthetic/codegen/ResourcePropertyStackValue"
+        "org/jetbrains/kotlin/android/synthetic/codegen/ResourcePropertyStackValue",
+
+        // org.jetbrains.kotlin:kotlin-compiler-embeddable:1.4.10
+        "org/jetbrains/kotlin/com/intellij/codeInsight/NullableNotNullManager"
     )
 
     var verbose = false
