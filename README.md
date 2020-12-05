@@ -63,18 +63,7 @@ You can configure the plugin using the `byeByeJetifier` extension. These are the
 ```groovy
 byeByeJetifier {
     legacyGroupIdPrefixes = ["android.arch", "com.android.support"]
-    legacyPackagesPrefixes = [
-        "com.executor",
-        "lifecycle",
-        "paging",
-        "persistence.db",
-        "persistence.room",
-        "android.databinding",
-        "android.support",
-        "android.test.espresso"
-    ]
     excludedConfigurations = ["lintClassPath"]
-    excludedLegacyPackagesPrefixes = ["android.support.v4.media", "android.support.FILE_PROVIDER_PATHS"]
     excludedFilesFromScanning = [
         // org.jetbrains.kotlin:kotlin-compiler-embeddable:1.4.20
         "org/jetbrains/kotlin/load/java/JvmAnnotationNamesKt",
@@ -85,13 +74,7 @@ byeByeJetifier {
         // org.jetbrains.kotlin:kotlin-android-extensions:1.4.20
         "org/jetbrains/kotlin/android/synthetic/AndroidConst",
         "org/jetbrains/kotlin/android/synthetic/codegen/AndroidIrTransformer",
-        "org/jetbrains/kotlin/android/synthetic/codegen/ResourcePropertyStackValue",
-
-        // org.robolectric:robolectric:4.4
-        "org/robolectric/internal/AndroidConfigurer",
-
-        // org.robolectric:sandbox:4.4
-        "org/robolectric/internal/bytecode/InvocationProfile"
+        "org/jetbrains/kotlin/android/synthetic/codegen/ResourcePropertyStackValue"
     ]
     verbose = false
 }
