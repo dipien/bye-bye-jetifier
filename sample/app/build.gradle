@@ -34,6 +34,7 @@ dependencies {
 	api(project(":library"))
 	implementation(Libs.KOTLIN)
 	implementation(Libs.ANDROIDX_APPCOMPAT)
+	implementation(Libs.GOOGLE_MATERIAL)
 //	implementation("com.github.bumptech.glide:glide:3.8.0")
 //	implementation("com.github.Raizlabs.DBFlow:dbflow-rx2:4.2.4")
 //	implementation("android.arch.core:core-testing:1.1.1")
