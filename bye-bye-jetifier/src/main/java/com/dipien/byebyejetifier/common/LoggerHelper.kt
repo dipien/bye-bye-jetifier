@@ -42,7 +42,7 @@ object LoggerHelper {
 
     private fun getLogLevel(logLevel: LogLevel): LogLevel {
         return if (verbose) {
-            if (logLevel.ordinal < LogLevel.LIFECYCLE.ordinal) {
+            if (logLevel != LogLevel.DEBUG) {
                 LogLevel.LIFECYCLE
             } else {
                 logLevel
