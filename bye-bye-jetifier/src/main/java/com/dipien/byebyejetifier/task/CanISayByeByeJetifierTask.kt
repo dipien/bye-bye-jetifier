@@ -37,7 +37,7 @@ open class CanISayByeByeJetifierTask : AbstractTask() {
 
     @get:Input
     @get:Optional
-    var excludeSupportAnnotations = false
+    var excludeSupportAnnotations = true
 
     private val scannerProcessor by lazy {
         val inputStream = javaClass.classLoader.getResourceAsStream(DEFAULT_CONFIG)
