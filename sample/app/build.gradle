@@ -1,7 +1,6 @@
-plugins {
-	id 'com.android.application'
-	id 'kotlin-android'
-}
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-kapt"
 
 android {
 	compileSdkVersion 30
@@ -9,7 +8,7 @@ android {
 
 	defaultConfig {
 		applicationId "com.sample.application"
-		minSdkVersion 16
+		minSdkVersion 21
 		targetSdkVersion 30
 		versionCode 1
 		versionName "1.0"
@@ -21,17 +20,27 @@ android {
 	kotlinOptions {
 		jvmTarget = '1.8'
 	}
+
+	packagingOptions {
+		exclude "META-INF/metadata.jvm.kotlin_module"
+		exclude "META-INF/AL2.0"
+		exclude "META-INF/LGPL2.1"
+		exclude "META-INF/gradle/incremental.annotation.processors"
+		exclude "META-INF/metadata.kotlin_module"
+	}
 }
 
 dependencies {
 	api(project(":library"))
-	implementation("com.github.bumptech.glide:glide:3.8.0")
-	implementation("com.github.Raizlabs.DBFlow:dbflow-rx2:4.2.4")
-	implementation("android.arch.core:core-testing:1.1.1")
-	implementation("com.github.JakeWharton:ViewPagerIndicator:2.4.1")
-	implementation("cz.kinst.jakub:stateful-layout:1.1.5")
-	implementation("com.jakewharton.rxbinding:rxbinding:1.0.1")
-	implementation("com.afollestad.material-dialogs:core:0.8.6.2")
-	implementation("com.andrognito.flashbar:flashbar:1.0.3")
-	implementation("com.squareup.rx.idler:rx2-idler:0.9.1")
+	implementation(Libs.KOTLIN)
+	implementation(Libs.ANDROIDX_APPCOMPAT)
+//	implementation("com.github.bumptech.glide:glide:3.8.0")
+//	implementation("com.github.Raizlabs.DBFlow:dbflow-rx2:4.2.4")
+//	implementation("android.arch.core:core-testing:1.1.1")
+//	implementation("com.github.JakeWharton:ViewPagerIndicator:2.4.1")
+//	implementation("cz.kinst.jakub:stateful-layout:1.1.5")
+//	implementation("com.jakewharton.rxbinding:rxbinding:1.0.1")
+//	implementation("com.afollestad.material-dialogs:core:0.8.6.2")
+//	implementation("com.andrognito.flashbar:flashbar:1.0.3")
+//	implementation("com.squareup.rx.idler:rx2-idler:0.9.1")
 }
