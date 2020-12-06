@@ -36,7 +36,6 @@ open class CanISayByeByeJetifierTask : AbstractTask() {
     var excludedFilesFromScanning: List<String> = emptyList()
 
     @get:Input
-    @get:Optional
     var excludeSupportAnnotations = true
 
     private val scannerProcessor by lazy {
