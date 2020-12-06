@@ -79,6 +79,7 @@ byeByeJetifier {
         // org.jetbrains.kotlin:kotlin-compiler-embeddable:1.4.10
         "org/jetbrains/kotlin/com/intellij/codeInsight/NullableNotNullManager"
     ]
+    excludeSupportAnnotations = true
     verbose = false
 }
 ```

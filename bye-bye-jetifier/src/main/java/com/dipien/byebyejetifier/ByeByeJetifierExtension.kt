@@ -19,7 +19,10 @@ open class ByeByeJetifierExtension {
         "org/jetbrains/kotlin/android/synthetic/codegen/ResourcePropertyStackValue",
 
         // org.jetbrains.kotlin:kotlin-compiler-embeddable:1.4.10
-        "org/jetbrains/kotlin/com/intellij/codeInsight/NullableNotNullManager"
+        "org/jetbrains/kotlin/com/intellij/codeInsight/NullableNotNullManager",
+
+        // com.facebook.android:facebook-core:8.1.0
+        "com/facebook/appevents/codeless/internal/ViewHierarchy"
     )
 
     var excludeSupportAnnotations = true
