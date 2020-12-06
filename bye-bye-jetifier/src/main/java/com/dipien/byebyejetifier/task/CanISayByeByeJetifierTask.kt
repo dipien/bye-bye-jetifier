@@ -35,6 +35,9 @@ open class CanISayByeByeJetifierTask : AbstractTask() {
     @get:Optional
     var excludedFilesFromScanning: List<String> = emptyList()
 
+    @get:Input
+    var excludeSupportAnnotations = true
+
     private val scannerProcessor by lazy {
         val inputStream = javaClass.classLoader.getResourceAsStream(DEFAULT_CONFIG)
         val config = ConfigParser.loadFromFile(inputStream)
@@ -56,9 +59,10 @@ open class CanISayByeByeJetifierTask : AbstractTask() {
 
         LoggerHelper.log("excludedConfigurations: $excludedConfigurations")
         LoggerHelper.log("excludedFilesFromScanning: $excludedFilesFromScanning")
+        LoggerHelper.log("excludeSupportAnnotations: $excludeSupportAnnotations")
 
         project.allprojects.forEach {
-            ProjectAnalyzer(it, excludedConfigurations, legacyGroupIdPrefixes, scannerProcessor).analyze()
+            ProjectAnalyzer(it, excludedConfigurations, legacyGroupIdPrefixes, scannerProcessor, excludeSupportAnnotations).analyze()
         }
 
         if (ProjectAnalyzerResult.thereAreSupportLibraryDependencies || ProjectAnalyzerResult.includeSupportLibrary) {

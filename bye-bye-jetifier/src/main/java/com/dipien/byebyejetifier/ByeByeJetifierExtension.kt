@@ -22,5 +22,7 @@ open class ByeByeJetifierExtension {
         "org/jetbrains/kotlin/com/intellij/codeInsight/NullableNotNullManager"
     )
 
+    var excludeSupportAnnotations = true
+
     var verbose = false
 }

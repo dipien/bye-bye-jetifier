@@ -15,7 +15,8 @@ class ProjectAnalyzer(
     private val project: Project,
     private var excludedConfigurations: List<String>,
     private var legacyGroupIdPrefixes: List<String>,
-    private val scannerProcessor: ScannerProcessor
+    private val scannerProcessor: ScannerProcessor,
+    private val excludeSupportAnnotations: Boolean
 ) {
 
     companion object {
@@ -59,7 +60,8 @@ class ProjectAnalyzer(
             .distinct()
             .forEach {
                 val library = Archive.Builder.extract(it.file)
-                scanResultsCache[library] = scannerProcessor.scanLibrary(library)
+                val scanResults = scannerProcessor.scanLibrary(library)
+                scanResultsCache[library] = filterSupportAnnotationsIfNeeded(scanResults)
                 hasExternalDependencies = true
             }
 
@@ -114,6 +116,16 @@ class ProjectAnalyzer(
         if (thereAreSupportLibraryDependencies) {
             ProjectAnalyzerResult.thereAreSupportLibraryDependencies = true
         }
+    }
+
+    private fun filterSupportAnnotationsIfNeeded(results: List<ScanResult>): List<ScanResult> {
+        if (excludeSupportAnnotations) {
+            return results.filter { scanResult ->
+                !scanResult.legacyDependency.startsWith("android/support/annotation") &&
+                    !scanResult.legacyDependency.startsWith("android.support.annotation")
+            }
+        }
+        return results
     }
 
     private fun ResolvedDependency.isAndroidX(): Boolean {
