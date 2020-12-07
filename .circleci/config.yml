@@ -135,7 +135,7 @@ jobs:
   gradleProfiler:
     executor: android_config_xlarge
     steps:
-      - dojo_checkout
+      - checkout
       - run:
           name: Download Gradle Profiler
           command: |
