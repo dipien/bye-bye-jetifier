@@ -20,7 +20,7 @@ parameters:
 
   gradleProfilerFlags:
     type: string
-    default: "--benchmark --cold-daemon --profile buildscan --iterations=10 --measure-config-time --measure-gc"
+    default: "--benchmark --no-daemon --profile buildscan --iterations=10 --measure-config-time --measure-gc"
 
 references:
 
