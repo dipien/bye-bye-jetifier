@@ -1,11 +1,13 @@
 # Scenarios are run in alphabetical order
-branch {
+jetified_enabled {
     tasks = ["compileDebugKotlin"]
     gradle-args = ["-Pandroid.enableJetifier=true"]
+    clear-transform-cache-before = BUILD
     warm-ups = 2
 }
-master {
+jetified_disabled {
     tasks = ["compileDebugKotlin"]
     gradle-args = ["-Pandroid.enableJetifier=false"]
+    clear-transform-cache-before = BUILD
     warm-ups = 2
 }

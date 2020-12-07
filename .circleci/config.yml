@@ -18,6 +18,10 @@ parameters:
     type: string
     default: ".circleci/gradle_profiler/default_scenario.txt"
 
+  gradleProfilerFlags:
+    type: string
+    default: "--benchmark --cold-daemon --profile buildscan --iterations=10 --measure-config-time --measure-gc"
+
 references:
 
   working_dir: &working_dir
@@ -151,7 +155,7 @@ jobs:
             unzip gradle-profiler-<< pipeline.parameters.gradleProfilerVersion >>.zip -d .
       - run:
           name: Profile
-          command: gradle-profiler-<< pipeline.parameters.gradleProfilerVersion >>/bin/gradle-profiler --benchmark --cold-daemon --profile buildscan --iterations=10 --measure-config-time --measure-gc --scenario-file ./<< pipeline.parameters.gradleProfilerScenarioFile >> --project-dir ./sample
+          command: gradle-profiler-<< pipeline.parameters.gradleProfilerVersion >>/bin/gradle-profiler << pipeline.parameters.gradleProfilerFlags >> --scenario-file ./<< pipeline.parameters.gradleProfilerScenarioFile >> --project-dir ./sample
       - store_artifacts:
           path: ./profile-out/
           destination: profile-out
