@@ -1,12 +1,10 @@
 # Scenarios are run in alphabetical order
 branch {
-    cleanup-tasks = ["clean"]
     tasks = ["compileDebugKotlin"]
     gradle-args = ["-Pandroid.enableJetifier=true"]
     warm-ups = 2
 }
 master {
-    cleanup-tasks = ["clean"]
     tasks = ["compileDebugKotlin"]
     gradle-args = ["-Pandroid.enableJetifier=false"]
     warm-ups = 2

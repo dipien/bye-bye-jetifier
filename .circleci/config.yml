@@ -153,7 +153,7 @@ jobs:
           name: Profile
           command: gradle-profiler-<< pipeline.parameters.gradleProfilerVersion >>/bin/gradle-profiler --benchmark --cold-daemon --profile buildscan --iterations=10 --measure-config-time --measure-gc --scenario-file ./<< pipeline.parameters.gradleProfilerScenarioFile >> --project-dir ./sample
       - store_artifacts:
-          path: ./gradle-profiler-<< pipeline.parameters.gradleProfilerVersion >>/bin/profile-out/
+          path: ./profile-out/
           destination: profile-out
 
 workflows:
