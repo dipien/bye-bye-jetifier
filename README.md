@@ -88,8 +88,8 @@ byeByeJetifier {
 
 Donations are greatly appreciated. You can help us to pay for our domain and the plugin development.
 
-* [Donate cryptocurrency](http://donations.dipien.com/)
-* [Donate with PayPal](https://www.paypal.com/paypalme/maxirosson)
+* [Donate cryptocurrency](http://coinbase.dipien.com/)
+* [Donate with PayPal](http://paypal.dipien.com/)
 
 ## Follow us
 * [Twitter](https://twitter.com/dipien_)
