@@ -83,6 +83,9 @@ byeByeJetifier {
     verbose = false
 }
 ```
+## Versioning
+
+This project uses the [Semantic Versioning guidelines](http://semver.org/) for transparency into our release cycle.
 
 ## Donations
 
@@ -92,6 +95,6 @@ Donations are greatly appreciated. You can help us to pay for our domain and thi
 * [Donate with PayPal](http://paypal.dipien.com/)
 
 ## Follow us
-* [Twitter](https://twitter.dipien.com)
-* [Medium](https://medium.dipien.com)
-* [Blog](https://blog.dipien.com)
+* [Twitter](http://twitter.dipien.com)
+* [Medium](http://medium.dipien.com)
+* [Blog](http://blog.dipien.com)
