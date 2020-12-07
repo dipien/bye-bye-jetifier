@@ -32,6 +32,14 @@ executors:
       JVM_OPTS: -Xmx3200m
       GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.caching=true
 
+  android_executor:
+    working_directory: *working_dir
+    docker:
+      - image: circleci/android:api-29
+    environment:
+      JVM_OPTS: -Xmx3200m
+      GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.caching=true
+
 commands:
 
   attach_to_workspace:
@@ -133,7 +141,7 @@ jobs:
           command: ./gradlew upgradeDependencies -PpullRequestEnabled=true --stacktrace
 
   gradleProfiler:
-    executor: android_config_xlarge
+    executor: android_executor
     steps:
       - checkout
       - run:
