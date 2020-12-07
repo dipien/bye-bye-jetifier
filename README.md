@@ -86,11 +86,12 @@ byeByeJetifier {
 
 ## Donations
 
-Donations are greatly appreciated. You can help us to pay for our domain and the plugin development.
+Donations are greatly appreciated. You can help us to pay for our domain and this project development.
 
 * [Donate cryptocurrency](http://coinbase.dipien.com/)
 * [Donate with PayPal](http://paypal.dipien.com/)
 
 ## Follow us
-* [Twitter](https://twitter.com/dipien_)
-* [Medium](https://medium.com/dipien)
+* [Twitter](https://twitter.dipien.com)
+* [Medium](https://medium.dipien.com)
+* [Blog](https://blog.dipien.com)
