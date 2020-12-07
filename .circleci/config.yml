@@ -1,5 +1,23 @@
 version: 2.1
 
+parameters:
+
+  api:
+    type: boolean
+    default: false
+
+  gradleProfiler:
+    type: boolean
+    default: false
+
+  gradleProfilerVersion:
+    type: string
+    default: "0.15.0"
+
+  gradleProfilerScenarioFile:
+    type: string
+    default: ".circleci/gradle_profiler/default_scenario.txt"
+
 references:
 
   working_dir: &working_dir
@@ -114,8 +132,25 @@ jobs:
           name: Upgrade Dependencies
           command: ./gradlew upgradeDependencies -PpullRequestEnabled=true --stacktrace
 
+  gradleProfiler:
+    executor: android_config_xlarge
+    steps:
+      - dojo_checkout
+      - run:
+          name: Download Gradle Profiler
+          command: |
+            wget https://repo.gradle.org/gradle/ext-releases-local/org/gradle/profiler/gradle-profiler/<< pipeline.parameters.gradleProfilerVersion >>/gradle-profiler-<< pipeline.parameters.gradleProfilerVersion >>.zip
+            unzip gradle-profiler-<< pipeline.parameters.gradleProfilerVersion >>.zip -d .
+      - run:
+          name: Profile
+          command: gradle-profiler-<< pipeline.parameters.gradleProfilerVersion >>/bin/gradle-profiler --benchmark --cold-daemon --profile buildscan --iterations=10 --measure-config-time --measure-gc --scenario-file ./<< pipeline.parameters.gradleProfilerScenarioFile >> --project-dir ./sample
+      - store_artifacts:
+          path: ./gradle-profiler-<< pipeline.parameters.gradleProfilerVersion >>/bin/profile-out/
+          destination: profile-out
+
 workflows:
   commit:
+    unless: << pipeline.parameters.api >>
     jobs:
       - security
       - ktlint
@@ -147,3 +182,8 @@ workflows:
                 - master
     jobs:
       - upgradeDependencies
+
+  gradleProfiler:
+    when: << pipeline.parameters.gradleProfiler >>
+    jobs:
+      - gradleProfiler
