@@ -5,4 +5,6 @@ object BuildLibs {
 
     // https://github.com/dipien/dipien-component-builder/blob/master/CHANGELOG.md
     const val DIPIEN_COMPONENT_BUILDER = "com.dipien:dipien-component-builder:3.0.0"
+
+    const val GRADLE_PLUGIN_PUBLISH_PLUGIN = "com.gradle.publish:plugin-publish-plugin:0.12.0"
 }

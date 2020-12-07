@@ -3,10 +3,12 @@ description = "Gradle Plugin to verify if you can keep Android Jetifier disable
 ext.ARTIFACT_ID = "bye-bye-jetifier"
 
 apply plugin: "com.jdroidtools.gradle.plugin"
+apply plugin: "com.gradle.plugin-publish"
 
 buildscript {
 	dependencies {
 		classpath(BuildLibs.JDROID_GRADLE_PROJECT_PLUGIN)
+		classpath(BuildLibs.GRADLE_PLUGIN_PUBLISH_PLUGIN)
 	}
 }
 
@@ -27,15 +29,20 @@ gradlePlugin {
 	}
 }
 
-//pluginBundle {
-//	website = "https://byebyejetifier.dipien.com/"
-//	vcsUrl = "https://https://github.com/dipien/bye-bye-jetifier"
-//	description = "Gradle Plugin to verify if you can keep Android Jetifier disabled"
-//	tags = ["gradle", "plugin", "jetifier", "android"]
-//
-//	plugins {
-//		byeByeJetifierPlugin {
-//			displayName = "Bye bye Jetifier"
-//		}
-//	}
-//}
+pluginBundle {
+	website = "https://byebyejetifier.dipien.com/"
+	vcsUrl = "https://github.com/dipien/bye-bye-jetifier"
+	description = "Gradle Plugin to verify if you can keep Android Jetifier disabled"
+	tags = ["gradle", "plugin", "jetifier", "android"]
+
+	plugins {
+		byeByeJetifierPlugin {
+			displayName = "Bye bye Jetifier"
+		}
+	}
+
+	mavenCoordinates {
+		groupId = group
+		artifactId = ext.ARTIFACT_ID
+	}
+}
