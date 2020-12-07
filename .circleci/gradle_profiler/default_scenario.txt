@@ -2,12 +2,10 @@
 jetified_enabled {
     tasks = ["compileDebugKotlin"]
     gradle-args = ["-Pandroid.enableJetifier=true"]
-    clear-transform-cache-before = BUILD
     warm-ups = 2
 }
 jetified_disabled {
     tasks = ["compileDebugKotlin"]
     gradle-args = ["-Pandroid.enableJetifier=false"]
-    clear-transform-cache-before = BUILD
     warm-ups = 2
 }
