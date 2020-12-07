@@ -1,4 +1,4 @@
-version = '1.0.0'
+version = '1.1.0'
 
 ext.GITHUB_REPOSITORY_NAME = "bye-bye-jetifier"
 
