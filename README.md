@@ -13,6 +13,12 @@ This plugin verifies on each dependency JAR/AAR (and its transitives) if:
 
 It also verifies if any support library dependency is resolved on the project.
 
+#### Why should I use this plugin instead of can-i-drop-jetifier?
+
+The [can-i-drop-jetifier](https://github.com/plnice/can-i-drop-jetifier) plugin only checks for legacy support libaries on the dependencies graph. That's not enough to decide if you can drop Jetifier. Lots of libraries don't properly declare on their POMs the legacy support libraries they use as transitive dependencies. So, for those cases, `can-i-drop-jetifier` says that you can disable Jetifier. But, if you do that, then you are going to have runtime errors when the logic using the legacy support library is executed.
+
+`Bye bye Jetifier` inspects each JAR/AAR, searching for legacy support libraries usages, so it will find more libraries than `can-i-drop-jetifier`, and you will avoid those runtime errors.
+
 ## Setup
 
 Add the following configuration to your root `build.gradle`, replacing X.Y.Z by the [latest version](https://github.com/dipien/bye-bye-jetifier/releases/latest)
