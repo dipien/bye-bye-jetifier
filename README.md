@@ -95,6 +95,7 @@ Donations are greatly appreciated. You can help us to pay for our domain and thi
 
 * [Donate cryptocurrency](http://coinbase.dipien.com/)
 * [Donate with PayPal](http://paypal.dipien.com/)
+* [Donate on Patreon](http://patreon.dipien.com/)
 
 ## Follow us
 * [Twitter](http://twitter.dipien.com)
