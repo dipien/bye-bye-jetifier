@@ -3,6 +3,8 @@
 # Bye Bye Jetifier Gradle Plugin
 Gradle Plugin to verify if you can keep Android Jetifier disabled
 
+You can read more details about this plugin on this [article](https://medium.com/dipien/say-bye-bye-to-android-jetifier-a7e0d388f5d6).
+
 ## Features
 This plugin verifies on each dependency JAR/AAR (and its transitives) if:
 * any class is using a support library import
