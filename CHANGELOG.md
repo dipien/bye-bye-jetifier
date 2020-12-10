@@ -7,10 +7,6 @@
 
 - Memory leak issue on ProjectAnalyzerResult [\#18](https://github.com/dipien/bye-bye-jetifier/issues/18)
 
-**Closed issues:**
-
-- False positives found when libs use reflection [\#15](https://github.com/dipien/bye-bye-jetifier/issues/15)
-
 ## [v1.0.0](https://github.com/dipien/bye-bye-jetifier/tree/v1.0.0) (2020-12-06)
 **Implemented enhancements:**
 
