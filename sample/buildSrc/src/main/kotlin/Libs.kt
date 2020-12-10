@@ -68,7 +68,7 @@ object Libs {
 
     const val BILLING = "com.android.billingclient:billing:3.0.2"
 
-    const val KOTLIN = "org.jetbrains.kotlin:kotlin-stdlib:1.4.20"
+    const val KOTLIN = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.20"
     const val KOTLIN_REFLECT = "org.jetbrains.kotlin:kotlin-reflect:1.4.20"
     const val KOTLIN_COROUTINES_ANDROID = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1"
     const val KOTLIN_COROUTINES_TEST = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.1"
