@@ -39,7 +39,7 @@ open class CanISayByeByeJetifierTask : AbstractTask() {
     var excludeSupportAnnotations = true
 
     private val scannerProcessor by lazy {
-        val inputStream = javaClass.classLoader.getResourceAsStream(DEFAULT_CONFIG)
+        val inputStream = javaClass.classLoader.getResourceAsStream(DEFAULT_CONFIG)!!
         val config = ConfigParser.loadFromFile(inputStream)
         val scannerContext = ScannerContext(config, excludedFilesFromScanning)
         val scannerList = listOf(BytecodeScanner(scannerContext), XmlResourceScanner(scannerContext))
@@ -52,7 +52,6 @@ open class CanISayByeByeJetifierTask : AbstractTask() {
     }
 
     override fun onExecute() {
-
         if (project.hasProperty(ENABLE_JETIFIER_PROPERTY) && project.property(ENABLE_JETIFIER_PROPERTY) == "true") {
             throw GradleException("This task needs to be run with Jetifier disabled: ./gradlew $TASK_NAME -P$ENABLE_JETIFIER_PROPERTY=false")
         }
@@ -61,11 +60,12 @@ open class CanISayByeByeJetifierTask : AbstractTask() {
         LoggerHelper.log("excludedFilesFromScanning: $excludedFilesFromScanning")
         LoggerHelper.log("excludeSupportAnnotations: $excludeSupportAnnotations")
 
+        val projectAnalyzerResult = ProjectAnalyzerResult()
         project.allprojects.forEach {
-            ProjectAnalyzer(it, excludedConfigurations, legacyGroupIdPrefixes, scannerProcessor, excludeSupportAnnotations).analyze()
+            ProjectAnalyzer(it, excludedConfigurations, legacyGroupIdPrefixes, scannerProcessor, excludeSupportAnnotations).analyze(projectAnalyzerResult)
         }
 
-        if (ProjectAnalyzerResult.thereAreSupportLibraryDependencies || ProjectAnalyzerResult.includeSupportLibrary) {
+        if (projectAnalyzerResult.thereAreSupportLibraryDependencies || projectAnalyzerResult.includeSupportLibrary) {
             throw RuntimeException("You can not say Bye Bye Jetifier")
         } else {
             LoggerHelper.lifeCycle("")
