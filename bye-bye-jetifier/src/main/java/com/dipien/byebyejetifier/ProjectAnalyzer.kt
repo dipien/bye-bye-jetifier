@@ -18,12 +18,11 @@ class ProjectAnalyzer(
     private val scannerProcessor: ScannerProcessor,
     private val excludeSupportAnnotations: Boolean
 ) {
-
     companion object {
         private const val ANDROIDX_GROUP_ID_PREFIX = "androidx"
     }
 
-    fun analyze() {
+    fun analyze(projectAnalyzerResult: ProjectAnalyzerResult) {
 
         var includeSupportLibrary = false
         var thereAreSupportLibraryDependencies = false
@@ -111,10 +110,10 @@ class ProjectAnalyzer(
         }
 
         if (includeSupportLibrary) {
-            ProjectAnalyzerResult.includeSupportLibrary = true
+            projectAnalyzerResult.includeSupportLibrary = true
         }
         if (thereAreSupportLibraryDependencies) {
-            ProjectAnalyzerResult.thereAreSupportLibraryDependencies = true
+            projectAnalyzerResult.thereAreSupportLibraryDependencies = true
         }
     }
 

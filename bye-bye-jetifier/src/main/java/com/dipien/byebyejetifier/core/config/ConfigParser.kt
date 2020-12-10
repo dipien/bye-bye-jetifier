@@ -11,13 +11,13 @@ object ConfigParser {
 
     private val gson = GsonBuilder().setPrettyPrinting().create()
 
-    fun parseFromString(inputText: String): Config? {
-        LoggerHelper.info("Parsing config file")
-        return gson.fromJson(inputText, Config.JsonData::class.java).toConfig()
-    }
-
     fun loadFromFile(configInputStream: InputStream): Config {
         return parseFromString(readText(configInputStream)) ?: throw RuntimeException("Failed to parseFromString the config file")
+    }
+
+    private fun parseFromString(inputText: String): Config? {
+        LoggerHelper.info("Parsing config file")
+        return gson.fromJson(inputText, Config.JsonData::class.java).toConfig()
     }
 
     private fun readText(configInputStream: InputStream): String {
