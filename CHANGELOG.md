@@ -1,9 +1,16 @@
 # Change Log
 
+## [v1.0.1](https://github.com/dipien/bye-bye-jetifier/tree/v1.0.1) (2020-12-10)
+[Full Changelog](https://github.com/dipien/bye-bye-jetifier/compare/v1.0.0...v1.0.1)
+
+**Fixed bugs:**
+
+- Memory leak issue on ProjectAnalyzerResult [\#18](https://github.com/dipien/bye-bye-jetifier/issues/18)
+
 ## [v1.0.0](https://github.com/dipien/bye-bye-jetifier/tree/v1.0.0) (2020-12-06)
 **Implemented enhancements:**
 
-- New canISayByeByeJetifier to verify support library usages [\#3](https://github.com/dipien/bye-bye-jetifier/issues/3)
+- Add canISayByeByeJetifier task to verify support library usages [\#3](https://github.com/dipien/bye-bye-jetifier/issues/3)
 
 
 
