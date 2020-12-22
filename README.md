@@ -49,16 +49,18 @@ If you have any legacy android support library usage, the task will fail and pri
 Project: app
 ========================================
 
-Scanning com.github.bumptech.glide:glide:3.8.0
- * com/bumptech/glide/Glide.class -> android/support/v4/app/FragmentActivity
- * com/bumptech/glide/Glide.class -> android/support/v4/app/Fragment
- * com/bumptech/glide/manager/RequestManagerRetriever.class -> android/support/v4/app/FragmentManager
- * com/bumptech/glide/manager/RequestManagerRetriever.class -> android/support/v4/app/FragmentActivity
- * com/bumptech/glide/manager/RequestManagerRetriever.class -> android/support/v4/app/Fragment
- * com/bumptech/glide/manager/SupportRequestManagerFragment.class -> android/support/v4/app/Fragment
+Scanning com.squareup.rx.idler:rx2-idler:0.9.1
+ * com/squareup/rx2/idler/DelegatingIdlingResourceScheduler.class -> android/support/test/espresso/IdlingResource$ResourceCallback
+ * com/squareup/rx2/idler/DelegatingIdlingResourceScheduler.class -> android/support/test/espresso/IdlingResource
+ * com/squareup/rx2/idler/IdlingResourceScheduler.class -> android/support/test/espresso/IdlingResource
+ * com/squareup/rx2/idler/Rx2Idler$1.class -> android/support/test/espresso/IdlingResource
+ * com/squareup/rx2/idler/Rx2Idler$1.class -> android/support/test/espresso/Espresso
+ * pom -> com.android.support.test.espresso:espresso-core:2.2.2
+ * pom -> com.android.support:support-annotations:26.1.0
 
-Legacy support dependencies:
- * com.android.support:support-annotations:28.0.0
+Direct declarations of legacy support dependencies:
+ * android.arch.core:common:1.1.1
+ * android.arch.lifecycle:common:1.1.0
 
 > Task :canISayByeByeJetifier FAILED
 ```

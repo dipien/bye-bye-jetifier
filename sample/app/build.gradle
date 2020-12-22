@@ -44,4 +44,9 @@ dependencies {
 //	implementation("com.afollestad.material-dialogs:core:0.8.6.2")
 //	implementation("com.andrognito.flashbar:flashbar:1.0.3")
 //	implementation("com.squareup.rx.idler:rx2-idler:0.9.1")
+
+	// Direct declarations of legacy support dependencies
+	implementation("android.arch.core:common:1.1.1")
+	implementation("android.arch.lifecycle:common:1.1.0")
+
 }
