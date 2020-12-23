@@ -22,7 +22,13 @@ open class ByeByeJetifierExtension {
         "org/jetbrains/kotlin/com/intellij/codeInsight/NullableNotNullManager",
 
         // com.facebook.android:facebook-core:8.1.0
-        "com/facebook/appevents/codeless/internal/ViewHierarchy"
+        "com/facebook/appevents/codeless/internal/ViewHierarchy",
+
+        // com.squareup.leakcanary:shark-android:2.5
+        "shark/AndroidReferenceMatchers",
+
+        // com.squareup.leakcanary:leakcanary-object-watcher-android-support-fragments:2.5
+        "leakcanary/internal/AndroidSupportFragmentDestroyWatcher"
     )
 
     var excludeSupportAnnotations = true

@@ -78,4 +78,9 @@ object Libs {
     const val TRUTH = "com.google.truth:truth:1.0.1"
 
     const val ROBOLECTRIC = "org.robolectric:robolectric:4.4"
+
+    const val LEAKCANARY_OBJECT_WATCHER = "com.squareup.leakcanary:leakcanary-object-watcher-android-support-fragments:2.5"
+    const val LEAKCANARY_SHARK_ANDROID = "com.squareup.leakcanary:shark-android:2.5"
+
+    const val FACEBOOK_ANDROID = "com.facebook.android:facebook-core:8.1.0"
 }
