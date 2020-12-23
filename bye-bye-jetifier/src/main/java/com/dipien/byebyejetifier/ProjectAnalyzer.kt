@@ -7,7 +7,6 @@ import com.dipien.byebyejetifier.scanner.ScannerProcessor
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.ProjectDependency
-import org.gradle.api.artifacts.ResolvedArtifact
 import org.gradle.api.artifacts.ResolvedDependency
 import java.util.LinkedList
 import java.util.Queue
@@ -19,9 +18,6 @@ class ProjectAnalyzer(
     private val scannerProcessor: ScannerProcessor,
     private val excludeSupportAnnotations: Boolean
 ) {
-    companion object {
-        private const val ANDROIDX_GROUP_ID_PREFIX = "androidx"
-    }
 
     fun analyze(projectAnalyzerResult: ProjectAnalyzerResult) {
 
@@ -178,46 +174,6 @@ class ProjectAnalyzer(
     private fun ResolvedDependency.isExternalDependency(projectDependencies: List<ProjectDependency>): Boolean {
         return projectDependencies.none { projectDependency ->
             projectDependency.group == this.moduleGroup && projectDependency.name == this.moduleName
-        }
-    }
-
-    private sealed class ExternalDependency(
-        private val dependency: ResolvedDependency,
-        private val legacyGroupIdPrefixes: List<String>
-    ) {
-
-        data class FirstLevel(
-            val dependency: ResolvedDependency,
-            val legacyGroupIdPrefixes: List<String>
-        ) : ExternalDependency(dependency, legacyGroupIdPrefixes)
-
-        data class Child(
-            val dependency: ResolvedDependency,
-            val legacyGroupIdPrefixes: List<String>
-        ) : ExternalDependency(dependency, legacyGroupIdPrefixes)
-
-        val artifactDefinition: String by lazy {
-            "${dependency.moduleGroup}:${dependency.moduleName}:${dependency.moduleVersion}"
-        }
-
-        val isLegacyAndroidSupport: Boolean by lazy {
-            legacyGroupIdPrefixes.any { dependency.moduleGroup.startsWith(it) }
-        }
-
-        val moduleArtifacts: List<ResolvedArtifact> by lazy {
-            dependency.moduleArtifacts.toList()
-        }
-
-        val children: List<ExternalDependency> by lazy {
-            dependency.children.map { Child(it, legacyGroupIdPrefixes) }
-        }
-
-        val isFirstLevel: Boolean by lazy {
-            this is FirstLevel
-        }
-
-        val isAndroidX: Boolean by lazy {
-            dependency.moduleGroup.startsWith(ANDROIDX_GROUP_ID_PREFIX)
         }
     }
 }
