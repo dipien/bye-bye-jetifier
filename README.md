@@ -50,13 +50,17 @@ Project: app
 ========================================
 
 Scanning com.squareup.rx.idler:rx2-idler:0.9.1
+ Absoulute path: ~/.gradle/caches/modules-2/files-2.1/com.squareup.rx.idler/rx2-idler/0.9.1/378e25e3c2f/rx2-idler-0.9.1.aar
+ Graphs to this dependency:
+ +---com.squareup.rx.idler:rx2-idler:0.9.1
+ Issues found:
  * com/squareup/rx2/idler/DelegatingIdlingResourceScheduler.class -> android/support/test/espresso/IdlingResource$ResourceCallback
  * com/squareup/rx2/idler/DelegatingIdlingResourceScheduler.class -> android/support/test/espresso/IdlingResource
  * com/squareup/rx2/idler/IdlingResourceScheduler.class -> android/support/test/espresso/IdlingResource
  * com/squareup/rx2/idler/Rx2Idler$1.class -> android/support/test/espresso/IdlingResource
  * com/squareup/rx2/idler/Rx2Idler$1.class -> android/support/test/espresso/Espresso
  * pom -> com.android.support.test.espresso:espresso-core:2.2.2
- * pom -> com.android.support:support-annotations:26.1.0
+ * pom -> com.android.support:support-annotations:25.4.0
 
 Explicit declarations of legacy support dependencies on this project:
  * android.arch.core:common:1.1.1
