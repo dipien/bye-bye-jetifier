@@ -26,7 +26,7 @@ Add the following configuration to your root `build.gradle`, replacing X.Y.Z by 
 ```groovy
 buildscript {
     repositories {
-        mavenCentral() // or gradlePluginPortal()
+        mavenCentral()
     }
     dependencies {
         classpath("com.dipien:bye-bye-jetifier:X.Y.Z")
