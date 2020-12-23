@@ -1,5 +1,18 @@
 # Change Log
 
+## [v1.1.0](https://github.com/dipien/bye-bye-jetifier/tree/v1.1.0) (2020-12-23)
+[Full Changelog](https://github.com/dipien/bye-bye-jetifier/compare/v1.0.1...v1.1.0)
+
+**Implemented enhancements:**
+
+- Add LeakCanary exclusions to default configuration [\#22](https://github.com/dipien/bye-bye-jetifier/issues/22)
+- Indicate the dependencies graph of each scanned library with issues [\#21](https://github.com/dipien/bye-bye-jetifier/issues/21)
+- Indicate the support dependencies declared by a library [\#20](https://github.com/dipien/bye-bye-jetifier/issues/20)
+
+**Fixed bugs:**
+
+- Avoid inspecting the same artifacts more than once time [\#17](https://github.com/dipien/bye-bye-jetifier/issues/17)
+
 ## [v1.0.1](https://github.com/dipien/bye-bye-jetifier/tree/v1.0.1) (2020-12-10)
 [Full Changelog](https://github.com/dipien/bye-bye-jetifier/compare/v1.0.0...v1.0.1)
 
