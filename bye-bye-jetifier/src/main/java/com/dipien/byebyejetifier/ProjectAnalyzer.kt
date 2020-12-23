@@ -94,7 +94,7 @@ class ProjectAnalyzer(
         if (legacyArtifactsFirstLevel.isNotEmpty()) {
             includeSupportLibrary = true
             LoggerHelper.lifeCycle("")
-            LoggerHelper.lifeCycle("Direct declarations of legacy support dependencies:")
+            LoggerHelper.lifeCycle("Explicit declarations of legacy support dependencies on this project:")
             legacyArtifactsFirstLevel.sortedBy { it.artifactDefinition }.forEach {
                 LoggerHelper.lifeCycle(" * ${it.artifactDefinition}")
             }

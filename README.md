@@ -58,7 +58,7 @@ Scanning com.squareup.rx.idler:rx2-idler:0.9.1
  * pom -> com.android.support.test.espresso:espresso-core:2.2.2
  * pom -> com.android.support:support-annotations:26.1.0
 
-Direct declarations of legacy support dependencies:
+Explicit declarations of legacy support dependencies on this project:
  * android.arch.core:common:1.1.1
  * android.arch.lifecycle:common:1.1.0
 
