@@ -31,7 +31,7 @@ allprojects {
 apply plugin: "com.dipien.byebyejetifier"
 
 byeByeJetifier {
-	verbose = false
+	verbose = true
 }
 
 wrapper {
