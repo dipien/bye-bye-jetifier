@@ -42,7 +42,7 @@ pluginBundle {
 	}
 
 	mavenCoordinates {
-		groupId = group
+		groupId = "com.dipien"
 		artifactId = ext.ARTIFACT_ID
 	}
 }
