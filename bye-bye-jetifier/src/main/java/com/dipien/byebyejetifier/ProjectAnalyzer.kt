@@ -24,7 +24,7 @@ class ProjectAnalyzer(
         var includeSupportLibrary = false
         var thereAreSupportLibraryDependencies = false
         var hasExternalDependencies = false
-        val projectScanResult = mutableMapOf<ExternalDependency, MutableList<ScanResult>>()
+        val projectScanResult = mutableMapOf<ExternalDependency, List<ScanResult>>()
 
         LoggerHelper.lifeCycle("")
         LoggerHelper.lifeCycle("=========================================")
@@ -53,9 +53,7 @@ class ProjectAnalyzer(
                     externalDependency.moduleArtifacts.forEach {
                         hasExternalDependencies = true
                         val library = Archive.Builder.extract(it.file)
-                        var scanResults = scannerProcessor.scanLibrary(library)
-                        scanResults = filterSupportAnnotationsIfNeeded(scanResults)
-                        result.addAll(scanResults)
+                        result.addAll(projectAnalyzerResult.scanResultsCache.getOrPut(library.relativePath) { filterSupportAnnotationsIfNeeded(scannerProcessor.scanLibrary(library)) })
                     }
 
                     externalDependency.children.forEach {
