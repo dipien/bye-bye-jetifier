@@ -11,7 +11,7 @@
 
 **Fixed bugs:**
 
-- Avoid inspecting the same artifacts more than once time [\#17](https://github.com/dipien/bye-bye-jetifier/issues/17)
+- Avoid inspecting the same artifacts multiple times [\#17](https://github.com/dipien/bye-bye-jetifier/issues/17)
 
 ## [v1.0.1](https://github.com/dipien/bye-bye-jetifier/tree/v1.0.1) (2020-12-10)
 [Full Changelog](https://github.com/dipien/bye-bye-jetifier/compare/v1.0.0...v1.0.1)
