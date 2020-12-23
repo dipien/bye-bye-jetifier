@@ -8,7 +8,6 @@ import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.ProjectDependency
 import org.gradle.api.artifacts.ResolvedDependency
-import java.nio.file.Path
 import java.util.LinkedList
 import java.util.Queue
 
@@ -20,7 +19,7 @@ class ProjectAnalyzer(
     private val excludeSupportAnnotations: Boolean
 ) {
 
-    fun analyze(projectAnalyzerResult: ProjectAnalyzerResult, scanResultsCache: MutableMap<Path, List<ScanResult>>) {
+    fun analyze(projectAnalyzerResult: ProjectAnalyzerResult) {
 
         var includeSupportLibrary = false
         var thereAreSupportLibraryDependencies = false
@@ -54,7 +53,7 @@ class ProjectAnalyzer(
                     externalDependency.moduleArtifacts.forEach {
                         hasExternalDependencies = true
                         val library = Archive.Builder.extract(it.file)
-                        result.addAll(scanResultsCache.getOrPut(library.relativePath) { filterSupportAnnotationsIfNeeded(scannerProcessor.scanLibrary(library)) })
+                        result.addAll(projectAnalyzerResult.scanResultsCache.getOrPut(library.relativePath) { filterSupportAnnotationsIfNeeded(scannerProcessor.scanLibrary(library)) })
                     }
 
                     externalDependency.children.forEach {
