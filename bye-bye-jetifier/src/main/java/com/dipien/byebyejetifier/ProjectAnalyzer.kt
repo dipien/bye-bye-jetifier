@@ -18,16 +18,13 @@ class ProjectAnalyzer(
     private val scannerProcessor: ScannerProcessor,
     private val excludeSupportAnnotations: Boolean
 ) {
-    companion object {
-        private const val ANDROIDX_GROUP_ID_PREFIX = "androidx"
-    }
 
     fun analyze(projectAnalyzerResult: ProjectAnalyzerResult) {
 
         var includeSupportLibrary = false
         var thereAreSupportLibraryDependencies = false
         var hasExternalDependencies = false
-        val scanResultsCache = mutableMapOf<Archive, List<ScanResult>>()
+        val projectScanResult = mutableMapOf<ExternalDependency, MutableList<ScanResult>>()
 
         LoggerHelper.lifeCycle("")
         LoggerHelper.lifeCycle("=========================================")
@@ -40,67 +37,67 @@ class ProjectAnalyzer(
             }
         LoggerHelper.log("Configurations to scan: $configurations")
 
-        val externalDependencies = configurations
+        val legacyArtifactsFirstLevel = mutableListOf<ExternalDependency>()
+        configurations
             .map {
                 it.getExternalDependencies()
             }
             .flatten()
-            .distinct()
+            .distinctBy { it.artifactDefinition }
+            .forEach { externalDependency ->
+                if (!externalDependency.isAndroidX && !externalDependency.isLegacyAndroidSupport) {
+                    val result = mutableListOf<ScanResult>()
 
-        externalDependencies
-            .map {
-                if (!it.isAndroidX() && !it.isLegacyAndroidSupport()) {
-                    it.moduleArtifacts
-                } else {
-                    emptySet()
+                    externalDependency.moduleArtifacts.forEach {
+                        hasExternalDependencies = true
+                        val library = Archive.Builder.extract(it.file)
+                        var scanResults = scannerProcessor.scanLibrary(library)
+                        scanResults = filterSupportAnnotationsIfNeeded(scanResults)
+                        result.addAll(scanResults)
+                    }
+
+                    externalDependency.children.forEach {
+                        if (it.isLegacyAndroidSupport) {
+                            includeSupportLibrary = true
+                            result.add(ScanResult("pom", it.artifactDefinition))
+                        }
+                    }
+
+                    projectScanResult[externalDependency] = result
+                } else if (externalDependency.isFirstLevel && externalDependency.isLegacyAndroidSupport) {
+                    legacyArtifactsFirstLevel.add(externalDependency)
                 }
             }
-            .flatten()
-            .distinct()
-            .forEach {
-                val library = Archive.Builder.extract(it.file)
-                val scanResults = scannerProcessor.scanLibrary(library)
-                scanResultsCache[library] = filterSupportAnnotationsIfNeeded(scanResults)
-                hasExternalDependencies = true
-            }
 
-        scanResultsCache.forEach { (library, scanResults) ->
+        projectScanResult.forEach { (resolvedDependency, scanResults) ->
             if (scanResults.isNotEmpty()) {
                 LoggerHelper.lifeCycle("")
-                LoggerHelper.lifeCycle("Scanning ${library.artifactDefinition}")
-                LoggerHelper.lifeCycle("${library.relativePath}")
+                LoggerHelper.lifeCycle("Scanning ${resolvedDependency.artifactDefinition}")
+                resolvedDependency.moduleArtifacts.forEach {
+                    LoggerHelper.lifeCycle("${it.file}")
+                }
                 scanResults.forEach { scanResult ->
                     LoggerHelper.lifeCycle(" * ${scanResult.relativePath} -> ${scanResult.legacyDependency}")
                 }
                 thereAreSupportLibraryDependencies = true
             } else {
                 LoggerHelper.info("")
-                LoggerHelper.info("Scanning ${library.artifactDefinition}")
+                LoggerHelper.info("Scanning ${resolvedDependency.artifactDefinition}")
                 LoggerHelper.info(" * No legacy android support usages found")
             }
         }
 
-        val legacyArtifacts = externalDependencies
-            .mapNotNull {
-                if (it.isLegacyAndroidSupport()) {
-                    it
-                } else {
-                    null
-                }
-            }
-            .distinctBy { it.name }
-
-        if (legacyArtifacts.isNotEmpty()) {
+        if (legacyArtifactsFirstLevel.isNotEmpty()) {
             includeSupportLibrary = true
             LoggerHelper.lifeCycle("")
-            LoggerHelper.lifeCycle("Legacy support dependencies:")
-            legacyArtifacts.sortedBy { it.name }.forEach {
-                LoggerHelper.lifeCycle(" * ${it.name}")
+            LoggerHelper.lifeCycle("Explicit declarations of legacy support dependencies on this project:")
+            legacyArtifactsFirstLevel.sortedBy { it.artifactDefinition }.forEach {
+                LoggerHelper.lifeCycle(" * ${it.artifactDefinition}")
             }
         }
 
         if (LoggerHelper.verbose) {
-            if (!includeSupportLibrary && !hasExternalDependencies && !hasExternalDependencies) {
+            if (!includeSupportLibrary && !hasExternalDependencies) {
                 LoggerHelper.info(" * No legacy android support usages found")
             }
         } else {
@@ -127,11 +124,7 @@ class ProjectAnalyzer(
         return results
     }
 
-    private fun ResolvedDependency.isAndroidX(): Boolean {
-        return moduleGroup.startsWith(ANDROIDX_GROUP_ID_PREFIX)
-    }
-
-    private fun Configuration.getExternalDependencies(): Set<ResolvedDependency> {
+    private fun Configuration.getExternalDependencies(): Set<ExternalDependency> {
         var firstLevelDependencies = emptySet<ResolvedDependency>()
         try {
             if (isCanBeResolved) {
@@ -147,21 +140,22 @@ class ProjectAnalyzer(
             }
         }
 
-        val resolvedDependencies = mutableSetOf<ResolvedDependency>()
+        val resolvedDependencies = mutableSetOf<ExternalDependency>()
         val projectDependencies = allDependencies.filterIsInstance(ProjectDependency::class.java)
         firstLevelDependencies
             .forEach { firstLevelDependency ->
                 if (firstLevelDependency.isExternalDependency(projectDependencies)) {
-                    resolvedDependencies.add(firstLevelDependency)
-                    resolvedDependencies.traverseAndAddChildren(firstLevelDependency)
+                    val externalDependencyFirstLevel = ExternalDependency.FirstLevel(firstLevelDependency, legacyGroupIdPrefixes)
+                    resolvedDependencies.add(externalDependencyFirstLevel)
+                    resolvedDependencies.traverseAndAddChildren(externalDependencyFirstLevel)
                 }
             }
         return resolvedDependencies
     }
 
-    private data class QueueElement(val children: Set<ResolvedDependency>)
+    private data class QueueElement(val children: List<ExternalDependency>)
 
-    private fun MutableSet<ResolvedDependency>.traverseAndAddChildren(firstLevelDependency: ResolvedDependency) {
+    private fun MutableSet<ExternalDependency>.traverseAndAddChildren(firstLevelDependency: ExternalDependency) {
         val queue: Queue<QueueElement> = LinkedList()
 
         queue.offer(QueueElement(firstLevelDependency.children))
@@ -169,7 +163,7 @@ class ProjectAnalyzer(
         while (queue.isNotEmpty()) {
             val element = queue.poll()
             element.children.forEach { child ->
-                if (!child.isAndroidX()) {
+                if (!child.isAndroidX) {
                     add(child)
                     queue.offer(QueueElement(child.children))
                 }
@@ -182,7 +176,4 @@ class ProjectAnalyzer(
             projectDependency.group == this.moduleGroup && projectDependency.name == this.moduleName
         }
     }
-
-    private fun ResolvedDependency.isLegacyAndroidSupport(): Boolean =
-        legacyGroupIdPrefixes.any { moduleGroup.startsWith(it) }
 }
