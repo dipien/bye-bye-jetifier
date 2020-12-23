@@ -89,7 +89,13 @@ byeByeJetifier {
         "org/jetbrains/kotlin/android/synthetic/codegen/ResourcePropertyStackValue",
 
         // org.jetbrains.kotlin:kotlin-compiler-embeddable:1.4.10
-        "org/jetbrains/kotlin/com/intellij/codeInsight/NullableNotNullManager"
+        "org/jetbrains/kotlin/com/intellij/codeInsight/NullableNotNullManager",
+        
+        // com.squareup.leakcanary:shark-android:2.5
+        "shark/AndroidReferenceMatchers",
+
+        // com.squareup.leakcanary:leakcanary-object-watcher-android-support-fragments:2.5
+        "leakcanary/internal/AndroidSupportFragmentDestroyWatcher"
     ]
     excludeSupportAnnotations = true
     verbose = false
