@@ -38,11 +38,13 @@ class ProjectAnalyzer(
         LoggerHelper.log("Configurations to scan: $configurations")
 
         val legacyArtifactsFirstLevel = mutableListOf<ExternalDependency>()
-        configurations
+        val allExternalDependencies = configurations
             .map {
                 it.getExternalDependencies()
             }
             .flatten()
+
+        allExternalDependencies
             .distinctBy { it.artifactDefinition }
             .forEach { externalDependency ->
                 if (!externalDependency.isAndroidX && !externalDependency.isLegacyAndroidSupport) {
@@ -69,20 +71,35 @@ class ProjectAnalyzer(
                 }
             }
 
-        projectScanResult.forEach { (resolvedDependency, scanResults) ->
+        projectScanResult.forEach { (dependencyToReport, scanResults) ->
             if (scanResults.isNotEmpty()) {
                 LoggerHelper.lifeCycle("")
-                LoggerHelper.lifeCycle("Scanning ${resolvedDependency.artifactDefinition}")
-                resolvedDependency.moduleArtifacts.forEach {
-                    LoggerHelper.lifeCycle("${it.file}")
+                LoggerHelper.lifeCycle("Scanning ${dependencyToReport.artifactDefinition}")
+
+                // Artifact paths
+                dependencyToReport.moduleArtifacts.forEach {
+                    LoggerHelper.lifeCycle(" Absoulute path: ${it.file}")
                 }
+
+                // All possible graphs
+                LoggerHelper.lifeCycle(" Graphs to this dependency:")
+                allExternalDependencies
+                    .filter { it.artifactDefinition == dependencyToReport.artifactDefinition }
+                    .map { it.buildDependencyGraphs() }
+                    .flatten()
+                    .distinctBy { graph -> graph.toString() }
+                    .forEach { it.print() }
+
+                // Issues found
+                LoggerHelper.lifeCycle(" Issues found:")
                 scanResults.forEach { scanResult ->
                     LoggerHelper.lifeCycle(" * ${scanResult.relativePath} -> ${scanResult.legacyDependency}")
                 }
+
                 thereAreSupportLibraryDependencies = true
             } else {
                 LoggerHelper.info("")
-                LoggerHelper.info("Scanning ${resolvedDependency.artifactDefinition}")
+                LoggerHelper.info("Scanning ${dependencyToReport.artifactDefinition}")
                 LoggerHelper.info(" * No legacy android support usages found")
             }
         }
