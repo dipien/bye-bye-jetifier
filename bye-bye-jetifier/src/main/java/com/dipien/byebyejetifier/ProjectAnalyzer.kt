@@ -8,6 +8,7 @@ import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.ProjectDependency
 import org.gradle.api.artifacts.ResolvedDependency
+import java.nio.file.Path
 import java.util.LinkedList
 import java.util.Queue
 
@@ -19,12 +20,12 @@ class ProjectAnalyzer(
     private val excludeSupportAnnotations: Boolean
 ) {
 
-    fun analyze(projectAnalyzerResult: ProjectAnalyzerResult) {
+    fun analyze(projectAnalyzerResult: ProjectAnalyzerResult, scanResultsCache: MutableMap<Path, List<ScanResult>>) {
 
         var includeSupportLibrary = false
         var thereAreSupportLibraryDependencies = false
         var hasExternalDependencies = false
-        val projectScanResult = mutableMapOf<ExternalDependency, MutableList<ScanResult>>()
+        val projectScanResult = mutableMapOf<ExternalDependency, List<ScanResult>>()
 
         LoggerHelper.lifeCycle("")
         LoggerHelper.lifeCycle("=========================================")
@@ -53,9 +54,7 @@ class ProjectAnalyzer(
                     externalDependency.moduleArtifacts.forEach {
                         hasExternalDependencies = true
                         val library = Archive.Builder.extract(it.file)
-                        var scanResults = scannerProcessor.scanLibrary(library)
-                        scanResults = filterSupportAnnotationsIfNeeded(scanResults)
-                        result.addAll(scanResults)
+                        result.addAll(scanResultsCache.getOrPut(library.relativePath) { filterSupportAnnotationsIfNeeded(scannerProcessor.scanLibrary(library)) })
                     }
 
                     externalDependency.children.forEach {

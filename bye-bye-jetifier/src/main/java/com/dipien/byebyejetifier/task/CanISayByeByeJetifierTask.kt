@@ -6,6 +6,7 @@ import com.dipien.byebyejetifier.scanner.ScannerProcessor
 import com.dipien.byebyejetifier.common.AbstractTask
 import com.dipien.byebyejetifier.common.LoggerHelper
 import com.dipien.byebyejetifier.core.config.ConfigParser
+import com.dipien.byebyejetifier.scanner.ScanResult
 import com.dipien.byebyejetifier.scanner.ScannerContext
 import com.dipien.byebyejetifier.scanner.bytecode.BytecodeScanner
 import com.dipien.byebyejetifier.scanner.resource.XmlResourceScanner
@@ -13,6 +14,7 @@ import org.gradle.api.GradleException
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import java.lang.RuntimeException
+import java.nio.file.Path
 
 open class CanISayByeByeJetifierTask : AbstractTask() {
 
@@ -61,8 +63,9 @@ open class CanISayByeByeJetifierTask : AbstractTask() {
         LoggerHelper.log("excludeSupportAnnotations: $excludeSupportAnnotations")
 
         val projectAnalyzerResult = ProjectAnalyzerResult()
+        val scanResultsCache = mutableMapOf<Path, List<ScanResult>>()
         project.allprojects.forEach {
-            ProjectAnalyzer(it, excludedConfigurations, legacyGroupIdPrefixes, scannerProcessor, excludeSupportAnnotations).analyze(projectAnalyzerResult)
+            ProjectAnalyzer(it, excludedConfigurations, legacyGroupIdPrefixes, scannerProcessor, excludeSupportAnnotations).analyze(projectAnalyzerResult, scanResultsCache)
         }
 
         if (projectAnalyzerResult.thereAreSupportLibraryDependencies || projectAnalyzerResult.includeSupportLibrary) {
