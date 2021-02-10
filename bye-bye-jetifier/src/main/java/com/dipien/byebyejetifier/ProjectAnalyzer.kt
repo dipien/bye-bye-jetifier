@@ -2,6 +2,7 @@ package com.dipien.byebyejetifier
 
 import com.dipien.byebyejetifier.archive.Archive
 import com.dipien.byebyejetifier.common.LoggerHelper
+import com.dipien.byebyejetifier.common.toFilePath
 import com.dipien.byebyejetifier.scanner.ScanResult
 import com.dipien.byebyejetifier.scanner.ScannerProcessor
 import org.gradle.api.Project
@@ -132,7 +133,7 @@ class ProjectAnalyzer(
     private fun filterSupportAnnotationsIfNeeded(results: List<ScanResult>): List<ScanResult> {
         if (excludeSupportAnnotations) {
             return results.filter { scanResult ->
-                !scanResult.legacyDependency.startsWith("android/support/annotation") &&
+                !scanResult.legacyDependency.startsWith("android/support/annotation".toFilePath()) &&
                     !scanResult.legacyDependency.startsWith("android.support.annotation")
             }
         }
