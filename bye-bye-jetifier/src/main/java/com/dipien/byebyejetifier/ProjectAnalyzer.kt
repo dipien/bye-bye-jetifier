@@ -22,7 +22,7 @@ class ProjectAnalyzer(
 
     companion object {
         val ANDROID_SUPPORT_ANNOTATION_PATH = "android/support/annotation".toFilePath()
-        val ANDROID_SUPPORT_ANNOTATION_PACKAGE = "android.support.annotation"
+        const val ANDROID_SUPPORT_ANNOTATION_PACKAGE = "android.support.annotation"
     }
 
     fun analyze(projectAnalyzerResult: ProjectAnalyzerResult) {
