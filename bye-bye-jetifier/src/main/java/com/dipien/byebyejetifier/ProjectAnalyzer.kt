@@ -20,6 +20,11 @@ class ProjectAnalyzer(
     private val excludeSupportAnnotations: Boolean
 ) {
 
+    companion object {
+        val ANDROID_SUPPORT_ANNOTATION_PATH = "android/support/annotation".toFilePath()
+        val ANDROID_SUPPORT_ANNOTATION_PACKAGE = "android.support.annotation"
+    }
+
     fun analyze(projectAnalyzerResult: ProjectAnalyzerResult) {
 
         var includeSupportLibrary = false
@@ -133,8 +138,8 @@ class ProjectAnalyzer(
     private fun filterSupportAnnotationsIfNeeded(results: List<ScanResult>): List<ScanResult> {
         if (excludeSupportAnnotations) {
             return results.filter { scanResult ->
-                !scanResult.legacyDependency.startsWith("android/support/annotation".toFilePath()) &&
-                    !scanResult.legacyDependency.startsWith("android.support.annotation")
+                !scanResult.legacyDependency.startsWith(ANDROID_SUPPORT_ANNOTATION_PATH) &&
+                    !scanResult.legacyDependency.startsWith(ANDROID_SUPPORT_ANNOTATION_PACKAGE)
             }
         }
         return results

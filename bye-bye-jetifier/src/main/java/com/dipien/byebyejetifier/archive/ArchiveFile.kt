@@ -9,6 +9,10 @@ import java.nio.file.Path
  */
 class ArchiveFile(relativePath: Path, data: ByteArray) : ArchiveItem {
 
+    companion object {
+        val RES_LAYOUT_PATH = "res/layout".toFilePath()
+    }
+
     override var relativePath = relativePath
         private set
 
@@ -22,7 +26,7 @@ class ArchiveFile(relativePath: Path, data: ByteArray) : ArchiveItem {
         visitor.visit(this, scanResults)
     }
 
-    fun isLayoutResource() = relativePath.toString().startsWith("res/layout".toFilePath(), ignoreCase = true) &&
+    fun isLayoutResource() = relativePath.toString().startsWith(RES_LAYOUT_PATH, ignoreCase = true) &&
         fileName.endsWith(".xml", ignoreCase = true)
 
     fun isAndroidManifestFile() = fileName.endsWith("AndroidManifest.xml", ignoreCase = true)
