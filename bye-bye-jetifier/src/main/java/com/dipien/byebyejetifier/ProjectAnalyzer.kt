@@ -2,6 +2,7 @@ package com.dipien.byebyejetifier
 
 import com.dipien.byebyejetifier.archive.Archive
 import com.dipien.byebyejetifier.common.LoggerHelper
+import com.dipien.byebyejetifier.common.toFilePath
 import com.dipien.byebyejetifier.scanner.ScanResult
 import com.dipien.byebyejetifier.scanner.ScannerProcessor
 import org.gradle.api.Project
@@ -18,6 +19,11 @@ class ProjectAnalyzer(
     private val scannerProcessor: ScannerProcessor,
     private val excludeSupportAnnotations: Boolean
 ) {
+
+    companion object {
+        val ANDROID_SUPPORT_ANNOTATION_PATH = "android/support/annotation".toFilePath()
+        const val ANDROID_SUPPORT_ANNOTATION_PACKAGE = "android.support.annotation"
+    }
 
     fun analyze(projectAnalyzerResult: ProjectAnalyzerResult) {
 
@@ -140,8 +146,8 @@ class ProjectAnalyzer(
     private fun filterSupportAnnotationsIfNeeded(results: List<ScanResult>): List<ScanResult> {
         if (excludeSupportAnnotations) {
             return results.filter { scanResult ->
-                !scanResult.legacyDependency.startsWith("android/support/annotation") &&
-                    !scanResult.legacyDependency.startsWith("android.support.annotation")
+                !scanResult.legacyDependency.startsWith(ANDROID_SUPPORT_ANNOTATION_PATH) &&
+                    !scanResult.legacyDependency.startsWith(ANDROID_SUPPORT_ANNOTATION_PACKAGE)
             }
         }
         return results
