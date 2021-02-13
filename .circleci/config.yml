@@ -44,6 +44,9 @@ executors:
       JVM_OPTS: -Xmx3200m
       GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.caching=true
 
+orbs:
+  queue: eddiewebb/queue@1.5.0
+
 commands:
 
   attach_to_workspace:
@@ -129,6 +132,8 @@ jobs:
     steps:
       - checkout
       - attach_to_workspace
+      - queue/until_front_of_line:
+          only-on-branch: master
       - run:
           name: Uploading to Nexus Sonatype
           command: ./gradlew publish -PLOCAL_UPLOAD=false --refresh-dependencies --stacktrace
