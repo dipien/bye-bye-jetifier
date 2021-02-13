@@ -9,12 +9,10 @@ buildscript {
 		maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 	}
 
-	buildscript {
-		dependencies {
-			classpath(BuildLibs.ANDROID_GRADLE_PLUGIN)
-			classpath(BuildLibs.KOTLIN_GRADLE_PLUGIN)
-			classpath(BuildLibs.BYE_BYE_JETIFIER_GRADLE_PLUGIN)
-		}
+	dependencies {
+		classpath(BuildLibs.ANDROID_GRADLE_PLUGIN)
+		classpath(BuildLibs.KOTLIN_GRADLE_PLUGIN)
+		classpath(BuildLibs.BYE_BYE_JETIFIER_GRADLE_PLUGIN)
 	}
 }
 
