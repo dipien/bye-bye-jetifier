@@ -51,8 +51,12 @@ class ProjectAnalyzer(
             .flatten()
 
         allExternalDependencies
-            .distinctBy { it.artifactDefinition }
-            .forEach { externalDependency ->
+            // Gradle does not resolve the entire tree of dependencies for each Configuration.
+            // Then an artifact can appear in an Configurations without children and in other with children.
+            .groupBy { it.artifactDefinition }
+            .forEach { (_, groupedExtDependencies) ->
+                val externalDependency = groupedExtDependencies.first()
+
                 if (!externalDependency.isAndroidX && !externalDependency.isLegacyAndroidSupport) {
                     val result = mutableListOf<ScanResult>()
 
@@ -62,11 +66,15 @@ class ProjectAnalyzer(
                         result.addAll(projectAnalyzerResult.scanResultsCache.getOrPut(library.relativePath) { filterSupportAnnotationsIfNeeded(scannerProcessor.scanLibrary(library)) })
                     }
 
-                    externalDependency.children.forEach {
-                        if (it.isLegacyAndroidSupport) {
-                            includeSupportLibrary = true
-                            result.add(ScanResult("pom", it.artifactDefinition))
-                        }
+                    groupedExtDependencies
+                        .map { it.children }
+                        .flatten()
+                        .distinct()
+                        .forEach {
+                            if (it.isLegacyAndroidSupport) {
+                                includeSupportLibrary = true
+                                result.add(ScanResult("pom", it.artifactDefinition))
+                            }
                     }
 
                     projectScanResult[externalDependency] = result
