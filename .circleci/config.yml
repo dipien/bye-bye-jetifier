@@ -45,7 +45,7 @@ executors:
       GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.caching=true
 
 orbs:
-  // https://circleci.com/developer/orbs/orb/eddiewebb/queue
+  # https://circleci.com/developer/orbs/orb/eddiewebb/queue
   queue: eddiewebb/queue@1.5.0
 
 commands:
