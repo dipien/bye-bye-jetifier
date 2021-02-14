@@ -134,6 +134,7 @@ jobs:
       - checkout
       - attach_to_workspace
       - queue/until_front_of_line:
+          block-workflow: true
           only-on-branch: master
       - run:
           name: Uploading to Nexus Sonatype
