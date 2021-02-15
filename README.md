@@ -21,7 +21,7 @@ The [can-i-drop-jetifier](https://github.com/plnice/can-i-drop-jetifier) plugin 
 
 ## Setup
 
-Add the following configuration to your root `build.gradle`, replacing X.Y.Z by the [latest version](https://github.com/dipien/bye-bye-jetifier/releases/latest)
+Add the following configuration to your root `build.gradle`, replacing X.Y.Z with the [latest version](https://github.com/dipien/bye-bye-jetifier/releases/latest)
 
 ```groovy
 buildscript {
