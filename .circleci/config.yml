@@ -164,21 +164,21 @@ jobs:
       - run:
           name: Create GitHub Release
           command: ./gradlew :createGitHubRelease << pipeline.parameters.releaseGradleFlags >>
-#      - run:
-#          name: Generate Changelog
-#          command: ./gradlew :generateChangelog << pipeline.parameters.releaseGradleFlags >>
+      - run:
+          name: Generate Changelog
+          command: ./gradlew :generateChangelog << pipeline.parameters.releaseGradleFlags >>
       - run:
           name: Copy Signing secret key ring file
           command: sudo bash -c "echo '$SIGNING_SECRET_KEY_RING' | base64 -d > '$SIGNING_SECRET_KEY_RING_FILE'"
       - run:
           name: Publish on Maven Central
           command: ./gradlew publish << pipeline.parameters.releaseGradleFlags >>
-#      - run:
-#          name: Close and Release Repository
-#          command: ./gradlew closeAndReleaseRepository << pipeline.parameters.releaseGradleFlags >>
       - run:
           name: Publish on Gradle Plugins Portal
-          command: ./gradlew publishPlugins << pipeline.parameters.releaseGradleFlags >>
+          command: ./gradlew publishPlugins -PGRADLE_PLUGIN_PORTAL_ENABLED=true << pipeline.parameters.releaseGradleFlags >>
+      - run:
+          name: Close and Release Repository
+          command: ./gradlew closeAndReleaseRepository << pipeline.parameters.releaseGradleFlags >>
 
   upgradeDependencies:
     executor: jdk_executor
