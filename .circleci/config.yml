@@ -55,6 +55,7 @@ executors:
 orbs:
   # https://circleci.com/developer/orbs/orb/eddiewebb/queue
   queue: eddiewebb/queue@1.5.0
+  ruby: circleci/ruby@1.1.2
 
 commands:
 
