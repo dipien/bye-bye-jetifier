@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.1.1](https://github.com/dipien/bye-bye-jetifier/tree/v1.1.1) (2021-02-15)
+[Full Changelog](https://github.com/dipien/bye-bye-jetifier/compare/v1.1.0...v1.1.1)
+
+**Fixed bugs:**
+
+- Fix Windows support [\#28](https://github.com/dipien/bye-bye-jetifier/issues/28)
+- False negatives \(jwtdecode, xzing\) that do get found with other tool [\#27](https://github.com/dipien/bye-bye-jetifier/issues/27)
+
 ## [v1.1.0](https://github.com/dipien/bye-bye-jetifier/tree/v1.1.0) (2020-12-23)
 [Full Changelog](https://github.com/dipien/bye-bye-jetifier/compare/v1.0.1...v1.1.0)
 
@@ -11,6 +19,7 @@
 
 **Fixed bugs:**
 
+- Group id on Gradle Portal should be com.dipien, instead of gradle.plugin.com.dipien [\#19](https://github.com/dipien/bye-bye-jetifier/issues/19)
 - Avoid inspecting the same artifacts multiple times [\#17](https://github.com/dipien/bye-bye-jetifier/issues/17)
 
 ## [v1.0.1](https://github.com/dipien/bye-bye-jetifier/tree/v1.0.1) (2020-12-10)
