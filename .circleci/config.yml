@@ -155,9 +155,17 @@ jobs:
       - run:
           name: Close GitHub Milestone
           command: ./gradlew :closeGitHubMilestone << pipeline.parameters.releaseGradleFlags >>
+      - ruby/install:
+          version: '2.7'
+      - run:
+          name: Install github_changelog_generator
+          command: gem install github_changelog_generator -v 1.13.2
       - run:
           name: Create GitHub Release
           command: ./gradlew :createGitHubRelease << pipeline.parameters.releaseGradleFlags >>
+#      - run:
+#          name: Generate Changelog
+#          command: ./gradlew :generateChangelog << pipeline.parameters.releaseGradleFlags >>
       - run:
           name: Copy Signing secret key ring file
           command: sudo bash -c "echo '$SIGNING_SECRET_KEY_RING' | base64 -d > '$SIGNING_SECRET_KEY_RING_FILE'"
