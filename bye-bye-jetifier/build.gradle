@@ -2,6 +2,13 @@ ext.PROJECT_NAME = "Bye bye Jetifier"
 description = "Gradle Plugin to verify if you can keep Android Jetifier disabled"
 ext.ARTIFACT_ID = "bye-bye-jetifier"
 
+boolean isCI = System.getenv("CI") == "true"
+if (isCI) {
+	ext["signing.keyId"] = System.getenv('SIGNING_KEY_ID')
+	ext["signing.password"] = System.getenv('SIGNING_PASSWORD')
+	ext["signing.secretKeyRingFile"] = System.getenv('SIGNING_SECRET_KEY_RING_FILE')
+}
+
 apply plugin: "com.jdroidtools.gradle.plugin"
 apply plugin: "com.gradle.plugin-publish"
 

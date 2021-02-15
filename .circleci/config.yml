@@ -2,7 +2,15 @@ version: 2.1
 
 parameters:
 
+  releaseGradleFlags:
+    type: string
+    default: "--max-workers 1 -PSNAPSHOT=false -PLOCAL_UPLOAD=false -PRELEASE_BUILD_TYPE_ENABLED=true -PRELEASE_FAKE_ENABLED=true -PACCEPT_SNAPSHOT_DEPENDENCIES=false -Dorg.gradle.internal.publish.checksums.insecure=true --stacktrace"
+
   api:
+    type: boolean
+    default: false
+
+  release:
     type: boolean
     default: false
 
@@ -140,6 +148,17 @@ jobs:
           name: Uploading to Nexus Sonatype
           command: ./gradlew publish -PLOCAL_UPLOAD=false --refresh-dependencies --stacktrace
 
+  release:
+    executor: jdk_executor
+    steps:
+      - checkout
+      - run:
+          name: Copy Signing secret key ring file
+          command: sudo bash -c "echo '$SIGNING_SECRET_KEY_RING' | base64 -d > '$SIGNING_SECRET_KEY_RING_FILE'"
+      - run:
+          name: Publish
+          command: ./gradlew publish << pipeline.parameters.releaseGradleFlags >>
+
   upgradeDependencies:
     executor: jdk_executor
     steps:
@@ -201,6 +220,11 @@ workflows:
                 - master
     jobs:
       - upgradeDependencies
+
+  release:
+    when: << pipeline.parameters.release >>
+    jobs:
+      - release
 
   gradleProfiler:
     when: << pipeline.parameters.gradleProfiler >>
