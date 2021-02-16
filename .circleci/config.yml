@@ -171,13 +171,13 @@ jobs:
           name: Copy Signing secret key ring file
           command: sudo bash -c "echo '$SIGNING_SECRET_KEY_RING' | base64 -d > '$SIGNING_SECRET_KEY_RING_FILE'"
       - run:
-          name: Publish on Maven Central
+          name: Publish on Sonatype
           command: ./gradlew publish << pipeline.parameters.releaseGradleFlags >>
       - run:
           name: Publish on Gradle Plugins Portal
           command: ./gradlew publishPlugins -PGRADLE_PLUGIN_PORTAL_ENABLED=true << pipeline.parameters.releaseGradleFlags >>
       - run:
-          name: Close and Release Repository
+          name: Close and Release Sonatype Repository
           command: ./gradlew closeAndReleaseRepository << pipeline.parameters.releaseGradleFlags >>
       - run:
           name: Send merge pull request
