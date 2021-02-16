@@ -1,9 +1,9 @@
 ext.PROJECT_NAME = "Bye bye Jetifier"
 description = "Gradle Plugin to verify if you can keep Android Jetifier disabled"
 ext.ARTIFACT_ID = "bye-bye-jetifier"
+ext.GRADLE_PLUGIN_ID = "com.dipien.byebyejetifier"
+ext.GRADLE_PLUGIN_IMPLEMENTATION_CLASS = "com.dipien.byebyejetifier.ByeByeJetifierGradlePlugin"
 ext.GRADLE_PLUGIN_PORTAL_TAGS = ["gradle", "plugin", "jetifier", "android"]
-ext.GRADLE_PLUGIN_PORTAL_ID = "com.dipien.byebyejetifier"
-ext.GRADLE_PLUGIN_PORTAL_IMPLEMENTATION_CLASS = "com.dipien.byebyejetifier.ByeByeJetifierGradlePlugin"
 
 apply plugin: "com.jdroidtools.gradle.plugin"
 
