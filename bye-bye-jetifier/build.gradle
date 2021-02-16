@@ -1,23 +1,17 @@
 ext.PROJECT_NAME = "Bye bye Jetifier"
 description = "Gradle Plugin to verify if you can keep Android Jetifier disabled"
 ext.ARTIFACT_ID = "bye-bye-jetifier"
-
-boolean isCI = System.getenv("CI") == "true"
-if (isCI) {
-	ext["signing.keyId"] = System.getenv('SIGNING_KEY_ID')
-	ext["signing.password"] = System.getenv('SIGNING_PASSWORD')
-	ext["signing.secretKeyRingFile"] = System.getenv('SIGNING_SECRET_KEY_RING_FILE')
-	ext["gradle.publish.key"] = System.getenv('GRADLE_PUBLISH_KEY')
-	ext["gradle.publish.secret"] = System.getenv('GRADLE_PUBLISH_SECRET')
-}
+ext.GRADLE_PLUGIN_PORTAL_TAGS = ["gradle", "plugin", "jetifier", "android"]
+ext.GRADLE_PLUGIN_PORTAL_ID = "com.dipien.byebyejetifier"
+ext.GRADLE_PLUGIN_PORTAL_IMPLEMENTATION_CLASS = "com.dipien.byebyejetifier.ByeByeJetifierGradlePlugin"
 
 apply plugin: "com.jdroidtools.gradle.plugin"
-apply plugin: "com.gradle.plugin-publish"
+apply plugin: "com.dipien.releasegradleplugin"
 
 buildscript {
 	dependencies {
 		classpath(BuildLibs.JDROID_GRADLE_PROJECT_PLUGIN)
-		classpath(BuildLibs.GRADLE_PLUGIN_PUBLISH_PLUGIN)
+		classpath(BuildLibs.RELEASE_GRADLE_PLUGIN)
 	}
 }
 
@@ -27,33 +21,4 @@ dependencies {
 	implementation(Libs.ASM_COMMONS)
 	implementation(Libs.GSON)
 	testImplementation(Libs.JUNIT)
-}
-
-if (project.hasProperty("GRADLE_PLUGIN_PORTAL_ENABLED") && project.property("GRADLE_PLUGIN_PORTAL_ENABLED") == "true") {
-	gradlePlugin {
-		plugins {
-			byeByeJetifierPlugin {
-				id = "com.dipien.byebyejetifier"
-				implementationClass = "com.dipien.byebyejetifier.ByeByeJetifierGradlePlugin"
-			}
-		}
-	}
-
-	pluginBundle {
-		website = "https://byebyejetifier.dipien.com/"
-		vcsUrl = "https://github.com/dipien/bye-bye-jetifier"
-		description = "Gradle Plugin to verify if you can keep Android Jetifier disabled"
-		tags = ["gradle", "plugin", "jetifier", "android"]
-
-		plugins {
-			byeByeJetifierPlugin {
-				displayName = "Bye bye Jetifier"
-			}
-		}
-
-		mavenCoordinates {
-			groupId = "com.dipien"
-			artifactId = ext.ARTIFACT_ID
-		}
-	}
 }

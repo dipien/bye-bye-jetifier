@@ -4,7 +4,7 @@ parameters:
 
   releaseGradleFlags:
     type: string
-    default: "--max-workers 1 -PSNAPSHOT=false -PLOCAL_UPLOAD=false -PRELEASE_BUILD_TYPE_ENABLED=true -PRELEASE_FAKE_ENABLED=true -PACCEPT_SNAPSHOT_DEPENDENCIES=false -Dorg.gradle.internal.publish.checksums.insecure=true --stacktrace"
+    default: "--max-workers 1 -PSNAPSHOT=false -PLOCAL_UPLOAD=false -PRELEASE_BUILD_TYPE_ENABLED=true -PRELEASE_FAKE_ENABLED=true -PACCEPT_SNAPSHOT_DEPENDENCIES=false --stacktrace"
 
   api:
     type: boolean
@@ -179,6 +179,9 @@ jobs:
       - run:
           name: Close and Release Repository
           command: ./gradlew closeAndReleaseRepository << pipeline.parameters.releaseGradleFlags >>
+      - run:
+          name: Send merge pull request
+          command: ./gradlew sendMergePullRequest --stacktrace
 
   upgradeDependencies:
     executor: jdk_executor
