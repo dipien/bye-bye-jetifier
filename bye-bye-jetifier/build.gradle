@@ -6,12 +6,10 @@ ext.GRADLE_PLUGIN_PORTAL_ID = "com.dipien.byebyejetifier"
 ext.GRADLE_PLUGIN_PORTAL_IMPLEMENTATION_CLASS = "com.dipien.byebyejetifier.ByeByeJetifierGradlePlugin"
 
 apply plugin: "com.jdroidtools.gradle.plugin"
-apply plugin: "com.dipien.releasegradleplugin"
 
 buildscript {
 	dependencies {
 		classpath(BuildLibs.JDROID_GRADLE_PROJECT_PLUGIN)
-		classpath(BuildLibs.RELEASE_GRADLE_PLUGIN)
 	}
 }
 

@@ -4,6 +4,7 @@ ext.GITHUB_REPOSITORY_NAME = "bye-bye-jetifier"
 
 apply plugin: "com.dipien.component.builder"
 apply plugin: 'com.jdroidtools.root'
+apply plugin: "com.dipien.releasegradleplugin"
 
 buildscript {
 	repositories {
@@ -24,6 +25,7 @@ buildscript {
 	dependencies {
 		classpath(BuildLibs.DIPIEN_COMPONENT_BUILDER)
 		classpath(BuildLibs.JDROID_GRADLE_ROOT_PLUGIN)
+		classpath(BuildLibs.RELEASE_GRADLE_PLUGIN)
 	}
 }
 
