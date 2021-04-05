@@ -119,8 +119,8 @@ Donations are greatly appreciated. You can help us to pay for our domain and thi
 
 ## Follow us
 * [Twitter](http://twitter.dipien.com)
-* [Medium](http://instagram.dipien.com)
-* [Instagram](http://pinterest.dipien.com)
+* [Medium](http://medium.dipien.com)
+* [Instagram](http://instagram.dipien.com)
 * [Pinterest](http://pinterest.dipien.com)
 * [GitHub](http://github.dipien.com)
 * [Blog](http://blog.dipien.com)
