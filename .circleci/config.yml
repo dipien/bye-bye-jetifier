@@ -187,9 +187,6 @@ jobs:
     executor: jdk_executor
     steps:
       - checkout
-      - add_ssh_keys:
-          fingerprints:
-            - "83:20:2b:71:67:9c:01:43:fe:ad:82:dc:e0:b6:b4:61"
       - run:
           name: Upgrade Dependencies
           command: ./gradlew upgradeDependencies -PpullRequestEnabled=true --stacktrace
