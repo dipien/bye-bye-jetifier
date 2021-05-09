@@ -6,7 +6,7 @@ object Libs {
     const val ASM_COMMONS = "org.ow2.asm:asm-commons:9.1"
 
     // https://github.com/junit-team/junit4/releases
-    const val JUNIT = "junit:junit:4.13"
+    const val JUNIT = "junit:junit:4.13.2"
 
     // https://github.com/google/gson/releases
     const val GSON = "com.google.code.gson:gson:2.8.6"
