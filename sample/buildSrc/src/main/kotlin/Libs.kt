@@ -77,7 +77,7 @@ object Libs {
     const val JUNIT = "junit:junit:4.13"
     const val TRUTH = "com.google.truth:truth:1.0.1"
 
-    const val ROBOLECTRIC = "org.robolectric:robolectric:4.4"
+    const val ROBOLECTRIC = "org.robolectric:robolectric:4.5.1"
 
     const val LEAKCANARY_OBJECT_WATCHER = "com.squareup.leakcanary:leakcanary-object-watcher-android-support-fragments:2.5"
     const val LEAKCANARY_SHARK_ANDROID = "com.squareup.leakcanary:shark-android:2.5"
