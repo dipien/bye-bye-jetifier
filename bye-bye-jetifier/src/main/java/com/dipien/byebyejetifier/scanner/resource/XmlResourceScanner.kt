@@ -79,9 +79,11 @@ class XmlResourceScanner(
             // files so we at least try to recover by defaulting to UTF-8.
             LoggerHelper.warn("Received malformed sequence exception when trying to detect the encoding " +
                 "for ${file.fileName}. Defaulting to UTF-8.")
-            val tracePrinter = StringWriter()
-            e.printStackTrace(PrintWriter(tracePrinter))
-            LoggerHelper.warn(tracePrinter.toString())
+            if (LoggerHelper.verbose) {
+                val tracePrinter = StringWriter()
+                e.printStackTrace(PrintWriter(tracePrinter))
+                LoggerHelper.warn(tracePrinter.toString())
+            }
             return StandardCharsets.UTF_8
         }
     }
