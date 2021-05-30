@@ -35,26 +35,23 @@ dependencies {
 	implementation(Libs.KOTLIN)
 	implementation(Libs.ANDROIDX_APPCOMPAT)
 	implementation(Libs.GOOGLE_MATERIAL)
+	testImplementation(Libs.ROBOLECTRIC)
 
 	implementation("com.github.Raizlabs.DBFlow:dbflow-rx2:4.2.4")
 	implementation("android.arch.core:core-testing:1.1.1")
 	implementation("com.github.JakeWharton:ViewPagerIndicator:2.4.1")
-	implementation("cz.kinst.jakub:stateful-layout:1.1.5")
 	implementation("com.jakewharton.rxbinding:rxbinding:1.0.1")
 	implementation("com.afollestad.material-dialogs:core:0.8.6.2")
-	implementation("com.andrognito.flashbar:flashbar:1.0.3")
-	implementation("com.squareup.rx.idler:rx2-idler:0.9.1")
+	implementation("com.squareup.rx.idler:rx2-idler:0.11.0")
 
 	// Direct declarations of legacy support dependencies
 	implementation("android.arch.core:common:1.1.1")
-	implementation("android.arch.lifecycle:common:1.1.0")
+	implementation("android.arch.lifecycle:common:1.1.1")
 
 	// Different usages of glide to print graphs
 	implementation("com.github.bumptech.glide:glide:3.8.0")
 	implementation("com.github.bumptech.glide:okhttp-integration:1.5.0")
-	implementation("com.gengqiquan:photoalbum:1.0.0")
 
 	// The following libraries declare legacy dependencies in some transitive dependency pom file
-	implementation ("me.dm7.barcodescanner:zxing:1.9.13")
 	implementation ("com.auth0.android:jwtdecode:1.4.0")
 }
