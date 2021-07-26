@@ -156,6 +156,7 @@ class ProjectAnalyzer(
         } catch (e: Throwable) {
             if (name.endsWith("Metadata") || name.endsWith("archives")) {
                 // TODO analyze errors from Configurations whose name ends in "metadata"
+                // https://github.com/gradle/gradle/issues/5426
                 LoggerHelper.info("Error when accessing configuration $name" + e.message)
             } else {
                 LoggerHelper.warn("Error when accessing configuration $name")
