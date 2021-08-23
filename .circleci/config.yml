@@ -40,14 +40,9 @@ executors:
     working_directory: *working_dir
     docker:
       - image: cimg/openjdk:11.0
-    environment:
-      JVM_OPTS: -Xmx3200m
-      GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.caching=true
-
-  android_executor:
-    working_directory: *working_dir
-    docker:
-      - image: circleci/android:api-29
+        auth:
+          username: $DOCKERHUB_USER
+          password: $DOCKERHUB_PASSWORD
     environment:
       JVM_OPTS: -Xmx3200m
       GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.caching=true
@@ -55,7 +50,8 @@ executors:
 orbs:
   # https://circleci.com/developer/orbs/orb/eddiewebb/queue
   queue: eddiewebb/queue@1.5.0
-  ruby: circleci/ruby@1.1.2
+  # https://circleci.com/developer/orbs/orb/circleci/ruby
+  ruby: circleci/ruby@1.1.4
 
 commands:
 
@@ -71,12 +67,26 @@ commands:
           paths:
             - gradle-build-cache
 
+  custom_checkout:
+    parameters:
+      switchToGradleBinaryDistributionEnabled:
+        type: boolean
+        default: true
+    steps:
+      - checkout
+      - when:
+          condition: << parameters.switchToGradleBinaryDistributionEnabled >>
+          steps:
+            - run:
+                name: Switch to Gradle Binary Distribution
+                command: sed -i -e 's/-all.zip/-bin.zip/' gradle/wrapper/gradle-wrapper.properties
+
 jobs:
 
   ktlint:
     executor: jdk_executor
     steps:
-      - checkout
+      - custom_checkout
       - run:
           name: Ktlint
           command: ./gradlew ktlint --stacktrace
@@ -84,7 +94,7 @@ jobs:
   security:
     executor: jdk_executor
     steps:
-      - checkout
+      - custom_checkout
       - run:
           name: Verify the integrity of the Gradle Wrapper JAR
           command: |
@@ -98,7 +108,7 @@ jobs:
   build:
     executor: jdk_executor
     steps:
-      - checkout
+      - custom_checkout
       - attach_to_workspace
       - run:
           name: Assemble
@@ -111,7 +121,7 @@ jobs:
   test:
     executor: jdk_executor
     steps:
-      - checkout
+      - custom_checkout
       - attach_to_workspace
       - run:
           name: Run tests
@@ -131,7 +141,7 @@ jobs:
   validatePlugins:
     executor: jdk_executor
     steps:
-      - checkout
+      - custom_checkout
       - attach_to_workspace
       - run:
           name: Validate plugins
@@ -140,7 +150,7 @@ jobs:
   publish:
     executor: jdk_executor
     steps:
-      - checkout
+      - custom_checkout
       - attach_to_workspace
       - queue/until_front_of_line:
           block-workflow: true
@@ -152,7 +162,7 @@ jobs:
   release:
     executor: jdk_executor
     steps:
-      - checkout
+      - custom_checkout
       - run:
           name: Close GitHub Milestone
           command: ./gradlew :closeGitHubMilestone << pipeline.parameters.releaseGradleFlags >>
@@ -164,9 +174,9 @@ jobs:
       - run:
           name: Create GitHub Release
           command: ./gradlew :createGitHubRelease << pipeline.parameters.releaseGradleFlags >>
-#      - run:
-#          name: Generate Changelog
-#          command: ./gradlew :generateChangelog << pipeline.parameters.releaseGradleFlags >>
+      #      - run:
+      #          name: Generate Changelog
+      #          command: ./gradlew :generateChangelog << pipeline.parameters.releaseGradleFlags >>
       - run:
           name: Copy Signing secret key ring file
           command: sudo bash -c "echo '$SIGNING_SECRET_KEY_RING' | base64 -d > '$SIGNING_SECRET_KEY_RING_FILE'"
@@ -186,7 +196,7 @@ jobs:
   upgradeDependencies:
     executor: jdk_executor
     steps:
-      - checkout
+      - custom_checkout
       - run:
           name: Upgrade Dependencies
           command: ./gradlew upgradeDependencies -PpullRequestEnabled=true --stacktrace
@@ -239,6 +249,11 @@ workflows:
             branches:
               only:
                 - master
+    jobs:
+      - upgradeDependencies
+
+  upgradeDependencies:
+    when: << pipeline.parameters.upgradeDependencies >>
     jobs:
       - upgradeDependencies
 
