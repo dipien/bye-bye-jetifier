@@ -40,10 +40,10 @@ references:
                  ~/project
 
 executors:
-  jdk_executor:
+  android_executor:
     working_directory: *working_dir
     docker:
-      - image: cimg/openjdk:11.0
+      - image: circleci/android:api-29
         auth:
           username: $DOCKERHUB_USER
           password: $DOCKERHUB_PASSWORD
@@ -88,7 +88,7 @@ commands:
 jobs:
 
   ktlint:
-    executor: jdk_executor
+    executor: android_executor
     steps:
       - custom_checkout
       - run:
@@ -96,7 +96,7 @@ jobs:
           command: ./gradlew ktlint --stacktrace
 
   security:
-    executor: jdk_executor
+    executor: android_executor
     steps:
       - custom_checkout
       - run:
@@ -110,7 +110,7 @@ jobs:
             sha256sum --check gradle-wrapper.jar.sha256
 
   build:
-    executor: jdk_executor
+    executor: android_executor
     steps:
       - custom_checkout
       - attach_to_workspace
@@ -123,7 +123,7 @@ jobs:
           destination: jars
 
   test:
-    executor: jdk_executor
+    executor: android_executor
     steps:
       - custom_checkout
       - attach_to_workspace
@@ -143,7 +143,7 @@ jobs:
           destination: tests
 
   validatePlugins:
-    executor: jdk_executor
+    executor: android_executor
     steps:
       - custom_checkout
       - attach_to_workspace
@@ -152,7 +152,7 @@ jobs:
           command: ./gradlew validatePlugins --stacktrace
 
   publish:
-    executor: jdk_executor
+    executor: android_executor
     steps:
       - custom_checkout
       - attach_to_workspace
@@ -164,7 +164,7 @@ jobs:
           command: ./gradlew publish -PLOCAL_UPLOAD=false --refresh-dependencies --stacktrace
 
   release:
-    executor: jdk_executor
+    executor: android_executor
     steps:
       - custom_checkout
       - run:
@@ -198,7 +198,7 @@ jobs:
           command: ./gradlew sendMergePullRequest --stacktrace
 
   upgradeDependencies:
-    executor: jdk_executor
+    executor: android_executor
     steps:
       - custom_checkout
       - run:
