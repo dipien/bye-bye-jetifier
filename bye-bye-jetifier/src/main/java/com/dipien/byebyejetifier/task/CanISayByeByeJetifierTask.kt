@@ -36,6 +36,10 @@ open class CanISayByeByeJetifierTask : AbstractTask() {
     var excludedFilesFromScanning: List<String> = emptyList()
 
     @get:Input
+    @get:Optional
+    var excludedProjectsFromScanning: List<String> = emptyList()
+
+    @get:Input
     var excludeSupportAnnotations = true
 
     private val scannerProcessor by lazy {
@@ -61,7 +65,7 @@ open class CanISayByeByeJetifierTask : AbstractTask() {
         LoggerHelper.log("excludeSupportAnnotations: $excludeSupportAnnotations")
 
         val projectAnalyzerResult = ProjectAnalyzerResult()
-        project.allprojects.forEach {
+        project.allprojects.filter { !excludedProjectsFromScanning.contains(it.name) }.forEach {
             ProjectAnalyzer(it, excludedConfigurations, legacyGroupIdPrefixes, scannerProcessor, excludeSupportAnnotations).analyze(projectAnalyzerResult)
         }
 
