@@ -19,6 +19,7 @@ class ByeByeJetifierGradlePlugin : Plugin<Project> {
             canISayByeByeJetifierTask.excludedConfigurations = extension.excludedConfigurations
             canISayByeByeJetifierTask.excludedFilesFromScanning = extension.excludedFilesFromScanning
             canISayByeByeJetifierTask.excludeSupportAnnotations = extension.excludeSupportAnnotations
+            canISayByeByeJetifierTask.excludedProjectsFromScanning = extension.excludedProjectsFromScanning
             canISayByeByeJetifierTask.verbose = extension.verbose
         }
     }

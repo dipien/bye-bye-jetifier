@@ -101,6 +101,7 @@ byeByeJetifier {
         // com.squareup.leakcanary:leakcanary-object-watcher-android-support-fragments:2.5
         "leakcanary/internal/AndroidSupportFragmentDestroyWatcher"
     ]
+	excludedProjectsFromScanning = [] // Here you can define a list of Gradle project names to be excluded from the scanning analysis
     excludeSupportAnnotations = true
     verbose = false
 }

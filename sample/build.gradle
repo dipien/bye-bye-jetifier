@@ -30,6 +30,7 @@ apply plugin: "com.dipien.byebyejetifier"
 
 byeByeJetifier {
 	verbose = false
+	//excludedProjectsFromScanning = ["app", "library"]
 }
 
 wrapper {

@@ -31,6 +31,8 @@ open class ByeByeJetifierExtension {
         "leakcanary/internal/AndroidSupportFragmentDestroyWatcher"
     )
 
+    var excludedProjectsFromScanning: List<String> = emptyList()
+
     var excludeSupportAnnotations = true
 
     var verbose = false
