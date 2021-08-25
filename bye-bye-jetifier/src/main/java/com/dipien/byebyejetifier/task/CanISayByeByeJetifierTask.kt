@@ -62,6 +62,7 @@ open class CanISayByeByeJetifierTask : AbstractTask() {
 
         LoggerHelper.log("excludedConfigurations: $excludedConfigurations")
         LoggerHelper.log("excludedFilesFromScanning: $excludedFilesFromScanning")
+        LoggerHelper.log("excludedProjectsFromScanning: $excludedProjectsFromScanning")
         LoggerHelper.log("excludeSupportAnnotations: $excludeSupportAnnotations")
 
         val projectAnalyzerResult = ProjectAnalyzerResult()
