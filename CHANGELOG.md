@@ -7,10 +7,6 @@
 
 - Support project exclusion [\#46](https://github.com/dipien/bye-bye-jetifier/issues/46)
 
-**Fixed bugs:**
-
-- Lots of encoding errors while running canISayByeByeJetifier [\#33](https://github.com/dipien/bye-bye-jetifier/issues/33)
-
 ## [v1.1.3](https://github.com/dipien/bye-bye-jetifier/tree/v1.1.3) (2021-05-24)
 [Full Changelog](https://github.com/dipien/bye-bye-jetifier/compare/v1.1.2...v1.1.3)
 
