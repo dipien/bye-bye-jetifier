@@ -1,5 +1,20 @@
 # Change Log
 
+## [v1.2.0](https://github.com/dipien/bye-bye-jetifier/tree/v1.2.0) (2021-08-25)
+[Full Changelog](https://github.com/dipien/bye-bye-jetifier/compare/v1.1.3...v1.2.0)
+
+**Implemented enhancements:**
+
+- Support project exclusion [\#46](https://github.com/dipien/bye-bye-jetifier/issues/46)
+
+## [v1.1.3](https://github.com/dipien/bye-bye-jetifier/tree/v1.1.3) (2021-05-24)
+[Full Changelog](https://github.com/dipien/bye-bye-jetifier/compare/v1.1.2...v1.1.3)
+
+**Fixed bugs:**
+
+- Execution failed [\#32](https://github.com/dipien/bye-bye-jetifier/issues/32)
+- Show "Received malformed sequence exception" warning stacktrace only when verbose is enabled [\#36](https://github.com/dipien/bye-bye-jetifier/issues/36)
+
 ## [v1.1.2](https://github.com/dipien/bye-bye-jetifier/tree/v1.1.2) (2021-02-16)
 [Full Changelog](https://github.com/dipien/bye-bye-jetifier/compare/v1.1.1...v1.1.2)
 

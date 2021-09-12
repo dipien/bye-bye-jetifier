@@ -1,4 +1,4 @@
-version = '1.2.0'
+version = "1.3.0"
 
 ext.GITHUB_REPOSITORY_NAME = "bye-bye-jetifier"
 
@@ -8,16 +8,12 @@ apply plugin: "com.dipien.release"
 
 buildscript {
 	repositories {
+		def propertyResolver = new PropertyResolver(project)
 		mavenCentral()
-		def localMavenRepoEnabled = project.hasProperty('LOCAL_MAVEN_REPO_ENABLED') ? project.ext.get('LOCAL_MAVEN_REPO_ENABLED') : System.getenv('LOCAL_MAVEN_REPO_EMABLED')
-		boolean isLocalMavenRepoEnabled = localMavenRepoEnabled != null && localMavenRepoEnabled == "true"
-		if (isLocalMavenRepoEnabled) {
-			def localMavenRepo = project.hasProperty('LOCAL_MAVEN_REPO') ? project.ext.get('LOCAL_MAVEN_REPO') : System.getenv('LOCAL_MAVEN_REPO')
-			if (localMavenRepo != null) {
-				maven { url localMavenRepo }
-			}
+		if (propertyResolver.getRequiredBooleanProp("LOCAL_MAVEN_REPO_ENABLED", false)) {
+			maven { url = propertyResolver.getRequiredStringProp("LOCAL_MAVEN_REPO") }
 		}
-		maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+		maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
 		gradlePluginPortal()
 	}
 
@@ -28,17 +24,14 @@ buildscript {
 	}
 }
 
+def propertyResolver = new PropertyResolver(project)
+
 allprojects {
 	buildscript {
 		repositories {
 			mavenCentral()
-			def localMavenRepoEnabled = project.hasProperty('LOCAL_MAVEN_REPO_ENABLED') ? project.ext.get('LOCAL_MAVEN_REPO_ENABLED') : System.getenv('LOCAL_MAVEN_REPO_EMABLED')
-			boolean isLocalMavenRepoEnabled = localMavenRepoEnabled != null && localMavenRepoEnabled == "true"
-			if (isLocalMavenRepoEnabled) {
-				def localMavenRepo = project.hasProperty('LOCAL_MAVEN_REPO') ? project.ext.get('LOCAL_MAVEN_REPO') : System.getenv('LOCAL_MAVEN_REPO')
-				if (localMavenRepo != null) {
-					maven { url localMavenRepo }
-				}
+			if (propertyResolver.getRequiredBooleanProp("LOCAL_MAVEN_REPO_ENABLED", false)) {
+				maven { url = propertyResolver.getRequiredStringProp("LOCAL_MAVEN_REPO") }
 			}
 			maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 			gradlePluginPortal()
@@ -47,14 +40,10 @@ allprojects {
 
 	repositories {
 		mavenCentral()
-		def localMavenRepoEnabled = project.hasProperty('LOCAL_MAVEN_REPO_ENABLED') ? project.ext.get('LOCAL_MAVEN_REPO_ENABLED') : System.getenv('LOCAL_MAVEN_REPO_EMABLED')
-		boolean isLocalMavenRepoEnabled = localMavenRepoEnabled != null && localMavenRepoEnabled == "true"
-		if (isLocalMavenRepoEnabled) {
-			def localMavenRepo = project.hasProperty('LOCAL_MAVEN_REPO') ? project.ext.get('LOCAL_MAVEN_REPO') : System.getenv('LOCAL_MAVEN_REPO')
-			if (localMavenRepo != null) {
-				maven { url localMavenRepo }
-			}
+		if (propertyResolver.getRequiredBooleanProp("LOCAL_MAVEN_REPO_ENABLED", false)) {
+			maven { url = propertyResolver.getRequiredStringProp("LOCAL_MAVEN_REPO") }
 		}
-		maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+		maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
 	}
 }
+

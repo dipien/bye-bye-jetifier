@@ -84,7 +84,7 @@ class ProjectAnalyzer(
 
                 // Artifact paths
                 dependencyToReport.moduleArtifacts.forEach {
-                    LoggerHelper.lifeCycle(" Absoulute path: ${it.file}")
+                    LoggerHelper.lifeCycle(" Absolute path: ${it.file}")
                 }
 
                 // All possible graphs
