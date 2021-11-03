@@ -2,19 +2,7 @@ version: 2.1
 
 parameters:
 
-  releaseGradleFlags:
-    type: string
-    default: "--max-workers 1 -PSNAPSHOT=false -PLOCAL_UPLOAD=false -PRELEASE_BUILD_TYPE_ENABLED=true -PRELEASE_FAKE_ENABLED=true -PACCEPT_SNAPSHOT_DEPENDENCIES=false --stacktrace"
-
   api:
-    type: boolean
-    default: false
-
-  release:
-    type: boolean
-    default: false
-
-  upgradeDependencies:
     type: boolean
     default: false
 
@@ -54,8 +42,6 @@ executors:
 orbs:
   # https://circleci.com/developer/orbs/orb/eddiewebb/queue
   queue: eddiewebb/queue@1.5.0
-  # https://circleci.com/developer/orbs/orb/circleci/ruby
-  ruby: circleci/ruby@1.1.4
 
 commands:
 
@@ -163,48 +149,6 @@ jobs:
           name: Uploading to Nexus Sonatype
           command: ./gradlew publish -PLOCAL_UPLOAD=false --refresh-dependencies --stacktrace
 
-  release:
-    executor: android_executor
-    steps:
-      - custom_checkout
-      - run:
-          name: Close GitHub Milestone
-          command: ./gradlew :closeGitHubMilestone << pipeline.parameters.releaseGradleFlags >>
-      - ruby/install:
-          version: '2.7'
-      - run:
-          name: Install github_changelog_generator
-          command: gem install github_changelog_generator -v 1.13.2
-      - run:
-          name: Create GitHub Release
-          command: ./gradlew :createGitHubRelease << pipeline.parameters.releaseGradleFlags >>
-      #      - run:
-      #          name: Generate Changelog
-      #          command: ./gradlew :generateChangelog << pipeline.parameters.releaseGradleFlags >>
-      - run:
-          name: Copy Signing secret key ring file
-          command: sudo bash -c "echo '$SIGNING_SECRET_KEY_RING' | base64 -d > '$SIGNING_SECRET_KEY_RING_FILE'"
-      - run:
-          name: Publish on Sonatype
-          command: ./gradlew publish << pipeline.parameters.releaseGradleFlags >>
-      - run:
-          name: Publish on Gradle Plugins Portal
-          command: ./gradlew publishPlugins -PGRADLE_PLUGIN_PORTAL_ENABLED=true << pipeline.parameters.releaseGradleFlags >>
-      - run:
-          name: Close and Release Sonatype Repository
-          command: ./gradlew closeAndReleaseRepository << pipeline.parameters.releaseGradleFlags >>
-      - run:
-          name: Send merge pull request
-          command: ./gradlew sendMergePullRequest --stacktrace
-
-  upgradeDependencies:
-    executor: android_executor
-    steps:
-      - custom_checkout
-      - run:
-          name: Upgrade Dependencies
-          command: ./gradlew upgradeDependencies -PpullRequestEnabled=true --stacktrace
-
   gradleProfiler:
     executor: android_executor
     steps:
@@ -245,26 +189,6 @@ workflows:
             - test
             - validatePlugins
             - security
-  weekly:
-    triggers:
-      - schedule:
-          cron: "0 0 * * 0"
-          filters:
-            branches:
-              only:
-                - master
-    jobs:
-      - upgradeDependencies
-
-  upgradeDependencies:
-    when: << pipeline.parameters.upgradeDependencies >>
-    jobs:
-      - upgradeDependencies
-
-  release:
-    when: << pipeline.parameters.release >>
-    jobs:
-      - release
 
   gradleProfiler:
     when: << pipeline.parameters.gradleProfiler >>

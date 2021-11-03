@@ -1,0 +1,37 @@
+name: "Upgrade Dependencies"
+on:
+  schedule:
+    - cron: "0 13 * * 3"
+  workflow_dispatch:
+    inputs:
+      pullRequestsMax:
+        description: 'The maximum amount of pull requests to create during the action execution.'
+        required: true
+        default: '20'
+      includes:
+        description: 'The dependencies to include. You can define a groupId to match all the artifacts for that group id, or groupId:artifactId to match a particular artifact. '
+        required: false
+        default: ''
+
+jobs:
+  upgradeDependencies:
+    runs-on: ubuntu-latest
+    steps:
+      # https://github.com/marketplace/actions/checkout
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # https://github.com/actions/setup-java
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: 11
+
+      - run: ./gradlew upgradeDependencies -PgitHubRepository=$GITHUB_REPOSITORY -PpullRequestsMax=${{ github.event.inputs.pullRequestsMax || '20' }} -Pincludes=${{ github.event.inputs.includes || '' }} --stacktrace
+        env:
+          gitHubWriteToken: ${{ secrets.CI_GITHUB_WRITE_TOKEN }}
+          gitUserEmail: ${{ secrets.GIT_USER_EMAIL }}
+          gitUserName: ${{ secrets.GIT_USER_NAME }}
+          userToken: ${{ secrets.RELEASES_HUB_USER_TOKEN }}
+          gitHubRepositoryOwner: ${{ github.repository_owner }}
