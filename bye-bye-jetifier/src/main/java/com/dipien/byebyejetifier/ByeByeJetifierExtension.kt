@@ -28,7 +28,10 @@ open class ByeByeJetifierExtension {
         "shark/AndroidReferenceMatchers",
 
         // com.squareup.leakcanary:leakcanary-object-watcher-android-support-fragments:2.5
-        "leakcanary/internal/AndroidSupportFragmentDestroyWatcher"
+        "leakcanary/internal/AndroidSupportFragmentDestroyWatcher",
+
+        // com.squareup.leakcanary:leakcanary-android:2.8.1
+        "curtains/internal/WindowCallbackWrapper"
     )
 
     var excludedProjectsFromScanning: List<String> = emptyList()

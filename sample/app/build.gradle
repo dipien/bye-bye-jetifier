@@ -54,4 +54,8 @@ dependencies {
 
 	// The following libraries declare legacy dependencies in some transitive dependency pom file
 	implementation ("com.auth0.android:jwtdecode:1.4.0")
+
+	// WindowCallbackWrapper should be ignored by default
+	// https://github.com/square/leakcanary/issues/2212
+	implementation('com.squareup.leakcanary:leakcanary-android:2.8.1')
 }
