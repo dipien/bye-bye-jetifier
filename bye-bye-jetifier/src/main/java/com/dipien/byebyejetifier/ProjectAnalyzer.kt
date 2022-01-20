@@ -28,7 +28,7 @@ class ProjectAnalyzer(
 
         LoggerHelper.lifeCycle("")
         LoggerHelper.lifeCycle("=========================================")
-        LoggerHelper.lifeCycle("Project: ${project.name}")
+        LoggerHelper.lifeCycle("Project: ${project.path}")
         LoggerHelper.lifeCycle("=========================================")
 
         val configurations = project.configurations
