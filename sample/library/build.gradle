@@ -86,7 +86,5 @@ dependencies {
 	implementation(Libs.KOTLIN_REFLECT)
 	implementation(Libs.KOTLINX_COROUTINES_RX2)
 
-	implementation(Libs.LEAKCANARY_SHARK_ANDROID)
-	implementation(Libs.LEAKCANARY_OBJECT_WATCHER)
 	implementation(Libs.FACEBOOK_ANDROID)
 }

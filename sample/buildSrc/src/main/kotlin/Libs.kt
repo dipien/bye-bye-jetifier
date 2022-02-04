@@ -79,8 +79,9 @@ object Libs {
 
     const val ROBOLECTRIC = "org.robolectric:robolectric:4.5.1"
 
-    const val LEAKCANARY_OBJECT_WATCHER = "com.squareup.leakcanary:leakcanary-object-watcher-android-support-fragments:2.5"
-    const val LEAKCANARY_SHARK_ANDROID = "com.squareup.leakcanary:shark-android:2.5"
+    const val LEAKCANARY_ANDROID = "com.squareup.leakcanary:leakcanary-android:2.8.1"
+    const val LEAKCANARY_SHARK_ANDROID = "com.squareup.leakcanary:shark-android:2.8.1"
+    const val LEAKCANARY_OBJECT_WATCHER = "com.squareup.leakcanary:leakcanary-object-watcher-android-support-fragments:2.8.1"
 
     const val FACEBOOK_ANDROID = "com.facebook.android:facebook-core:8.1.0"
 }
