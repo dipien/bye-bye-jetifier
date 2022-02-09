@@ -7,5 +7,5 @@ object BuildLibs {
     const val DIPIEN_COMPONENT_BUILDER = "com.dipien:dipien-component-builder:3.2.0"
 
     // https://github.com/dipien/release-gradle-plugin/blob/master/CHANGELOG.md
-    const val RELEASE_GRADLE_PLUGIN = "com.dipien:release-gradle-plugin:1.0.0-SNAPSHOT"
+    const val RELEASE_GRADLE_PLUGIN = "com.dipien:release-gradle-plugin:1.0.0"
 }
