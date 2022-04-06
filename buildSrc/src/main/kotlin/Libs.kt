@@ -2,7 +2,7 @@ object Libs {
 
     // https://asm.ow2.io/versions.html
     const val ASM = "org.ow2.asm:asm:9.3"
-    const val ASM_UTILS = "org.ow2.asm:asm-util:9.2"
+    const val ASM_UTILS = "org.ow2.asm:asm-util:9.3"
     const val ASM_COMMONS = "org.ow2.asm:asm-commons:9.3"
 
     // https://github.com/junit-team/junit4/releases
