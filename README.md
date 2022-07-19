@@ -120,11 +120,8 @@ Sponsor this open source project to help us get the funding we need to continue 
 * [Donate cryptocurrency](http://coinbase.dipien.com/)
 * [Donate with PayPal](http://paypal.dipien.com/)
 * [Donate on Patreon](http://patreon.dipien.com/)
-* [Become a member of Medium](https://maxirosson.medium.com/membership) [We will receive a portion of your membership fee]
+* [Become a member of Medium](https://membership.medium.dipien.com) [We will receive a portion of your membership fee]
 
-You can donate BTC (lightning), using this QR:
-
-![BTC](https://raw.githubusercontent.com/dipien/dipien-component-builder/master/.github/btc_lightning.png)
 
 ## Follow us
 * [Twitter](http://twitter.dipien.com)
