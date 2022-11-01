@@ -1,7 +1,5 @@
 name: "Upgrade Dependencies"
 on:
-  schedule:
-    - cron: "0 13 * * 3"
   workflow_dispatch:
     inputs:
       pullRequestsMax:
