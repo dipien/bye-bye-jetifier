@@ -9,5 +9,5 @@ object Libs {
     const val JUNIT = "junit:junit:4.13.2"
 
     // https://github.com/google/gson/releases
-    const val GSON = "com.google.code.gson:gson:2.9.0"
+    const val GSON = "com.google.code.gson:gson:2.10"
 }
